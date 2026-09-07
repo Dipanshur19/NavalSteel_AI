@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "hy100_naval_steel",
+  "paper": {
+    "title": "Development and Weldability Characterization of HY-100 High-Yield Steel Plates for Naval Vessel Construction",
+    "doi": "10.1007/BF02646543",
+    "author": "David W. Taylor Naval Ship Research and Development Center",
+    "year": 1991,
+    "institution": "U.S. Navy",
+    "section": "MIL-S-16216K"
+  },
+  "steel": {
+    "name": "HY-100",
+    "base_element": "Fe",
+    "alloy_family": "quenched and tempered high-yield martensitic naval plate steel",
+    "composition": [
+      {"element": "C", "value": 0.16, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Carbon content tailored for 100 ksi yield strength", "confidence": 0.95}},
+      {"element": "Mn", "value": 0.25, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Si", "value": 0.25, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Ni", "value": 3.00, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Elevated Ni promotes cryogenic fracture toughness", "confidence": 0.95}},
+      {"element": "Cr", "value": 1.45, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Mo", "value": 0.45, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "V", "value": 0.02, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Fe", "value": null, "unit": "wt%", "status": "MEASURED", "is_balance": true}
+    ]
+  },
+  "processing": [
+    {"step": "austenitizing", "temperature_C": 900, "time": "1 h", "cooling": "water quench"},
+    {"step": "tempering", "temperature_C": 620, "time": "2 h", "cooling": "water spray",
+     "notes": "Lower temper temperature than HY-80 to retain 100 ksi yield strength."}
+  ],
+  "microstructure": [
+    {"feature": "matrix", "phase": "fine tempered lath martensite", "size_nm": null, "formers": [],
+     "status": "MEASURED"}
+  ],
+  "properties": [
+    {"property": "yield_strength", "value": 100.0, "unit": "ksi", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "Minimum 100 ksi yield strength specification", "confidence": 0.99}},
+    {"property": "yield_strength", "value": 690.0, "unit": "MPa", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "SI equivalent minimum yield strength", "confidence": 0.99}},
+    {"property": "charpy_toughness", "value": 60.0, "unit": "ft-lb", "temperature_C": -51, "status": "MEASURED",
+     "evidence": {"claim": "Minimum 60 ft-lb Charpy V-notch energy at -51C (-60F)", "confidence": 0.95}},
+    {"property": "charpy_toughness", "value": 81.0, "unit": "J", "temperature_C": -51, "status": "MEASURED",
+     "evidence": {"claim": "SI equivalent toughness at -51C", "confidence": 0.95}}
+  ],
+  "weldability_indicators": {
+    "carbon_wt_pct": 0.16,
+    "rule_of_thumb_limit_wt_pct": 0.15,
+    "carbon_equivalent": 0.72,
+    "notes": "Higher carbon equivalent requires mandatory preheat (120-175C) and strict moisture-controlled low-hydrogen electrodes."
+  },
+  "mechanisms": [
+    {"source": "Ni", "target": "toughness", "relation": "lowers_DBTT",
+     "label": "EXPLICIT", "supporting_paper_ids": ["navsea1991"]},
+    {"source": "Cr_Mo", "target": "hardenability", "relation": "promotes_through_thickness_martensite",
+     "label": "EXPLICIT", "supporting_paper_ids": ["navsea1991"]}
+  ],
+  "design_rationale": [
+    "Increased carbon and nickel relative to HY-80 achieve 100 ksi yield strength.",
+    "Higher cracking susceptibility increases shipyard fabrication cost and preheat requirements."
+  ]
+}

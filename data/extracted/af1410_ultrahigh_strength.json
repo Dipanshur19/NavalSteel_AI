@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "af1410_ultrahigh_strength",
+  "paper": {
+    "title": "Structure-Property Relationships in AF1410 Ultrahigh-Strength Secondary-Hardening Steel",
+    "doi": "10.1007/BF02644212",
+    "author": "Air Force Materials Laboratory / Carpenter Technology",
+    "year": 1985,
+    "institution": "Wright-Patterson AFB / US Navy",
+    "section": "Technical Report AFWAL-TR-85-4034"
+  },
+  "steel": {
+    "name": "AF1410",
+    "base_element": "Fe",
+    "alloy_family": "ultrahigh-strength secondary hardening Co-Ni steel",
+    "composition": [
+      {"element": "C", "value": 0.16, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Co", "value": 14.00, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Cobalt raises Ms temperature and accelerates M2C carbide nucleation", "confidence": 0.95}},
+      {"element": "Ni", "value": 10.00, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Extreme nickel level provides high cleavage resistance and transformation toughening", "confidence": 0.95}},
+      {"element": "Cr", "value": 2.00, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Mo", "value": 1.00, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Primary M2C carbide former providing intense secondary hardening", "confidence": 0.95}},
+      {"element": "Fe", "value": null, "unit": "wt%", "status": "MEASURED", "is_balance": true}
+    ]
+  },
+  "processing": [
+    {"step": "austenitizing", "temperature_C": 885, "time": "1 h", "cooling": "oil quench"},
+    {"step": "refrigeration", "temperature_C": -73, "time": "1 h", "cooling": "dry ice/alcohol",
+     "notes": "Ensures complete conversion of retained austenite to martensite."},
+    {"step": "secondary hardening temper", "temperature_C": 510, "time": "5 h", "cooling": "air cool",
+     "notes": "Aged to coherent M2C carbide peak hardness."}
+  ],
+  "microstructure": [
+    {"feature": "matrix", "phase": "dislocated lath martensite", "size_nm": null, "formers": [],
+     "status": "MEASURED"},
+    {"feature": "M2C carbide", "phase": "hexagonal M2C carbide needles", "size_nm": 3.5, "formers": ["Mo", "Cr"],
+     "status": "MEASURED",
+     "evidence": {"claim": "Coherent M2C carbides precipitated on lath dislocations", "confidence": 0.9}}
+  ],
+  "properties": [
+    {"property": "yield_strength", "value": 160.0, "unit": "ksi", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "Nominal 160-180 ksi yield strength", "confidence": 0.95}},
+    {"property": "yield_strength", "value": 1103.0, "unit": "MPa", "temperature_C": 25, "status": "MEASURED"},
+    {"property": "charpy_toughness", "value": 60.0, "unit": "ft-lb", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "Exceptional impact toughness for an ultrahigh strength steel", "confidence": 0.9}},
+    {"property": "charpy_toughness", "value": 81.0, "unit": "J", "temperature_C": 25, "status": "MEASURED"}
+  ],
+  "weldability_indicators": {
+    "carbon_wt_pct": 0.16,
+    "rule_of_thumb_limit_wt_pct": 0.15,
+    "carbon_equivalent": 1.25,
+    "notes": "Very high alloy content and cobalt cost limits weldability and production usage to critical aerospace/naval components."
+  },
+  "mechanisms": [
+    {"source": "Co", "target": "M2C_carbide", "relation": "accelerates_nucleation",
+     "label": "EXPLICIT", "supporting_paper_ids": ["afwal1985"]},
+    {"source": "Ni", "target": "toughness", "relation": "matrix_toughening",
+     "label": "EXPLICIT", "supporting_paper_ids": ["afwal1985"]}
+  ],
+  "design_rationale": [
+    "Uses Co-Ni synergy to allow coherent M2C carbide strengthening without embrittlement.",
+    "BlastAlloy160 was subsequently designed to replace expensive Co with Cu precipitation."
+  ]
+}

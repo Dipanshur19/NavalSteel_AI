@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "blastalloy160_concept_b",
+  "paper": {
+    "title": "Systems Design of Transformation Toughened Blast-Resistant Naval Hull Steels",
+    "doi": null,
+    "author": "Arup Saha",
+    "year": 2004,
+    "institution": "Northwestern University",
+    "section": "Chapter 3 (Design Integration) and Chapter 4 (Results)"
+  },
+  "steel": {
+    "name": "BlastAlloy160 (Concept-B prototype)",
+    "base_element": "Fe",
+    "alloy_family": "secondary-hardened, transformation-toughened naval hull steel",
+    "composition": [
+      {"element": "C", "value": 0.05, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Carbon deliberately minimized for weldability", "confidence": 0.95}},
+      {"element": "Ni", "value": 6.5, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Stabilizes dispersed austenite for transformation toughening", "confidence": 0.95}},
+      {"element": "Cu", "value": 3.65, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Forms BCC precipitates and nucleates the Ni-stabilized austenite", "confidence": 0.95}},
+      {"element": "Cr", "value": 1.84, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Partitions Cu out of austenite into the precipitate phase", "confidence": 0.9}},
+      {"element": "Mo", "value": 0.60, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Primary M2C carbide former", "confidence": 0.95}},
+      {"element": "V", "value": 0.10, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Secondary M2C carbide former", "confidence": 0.9}},
+      {"element": "Fe", "value": null, "unit": "wt%", "status": "MEASURED", "is_balance": true}
+    ]
+  },
+  "processing": [
+    {"step": "solution treatment", "temperature_C": 900, "time": null, "cooling": "air-cool",
+     "notes": "Approximate solution treatment temperature reported in the dissertation."},
+    {"step": "quench", "temperature_C": null, "time": null, "cooling": "water quench, then liquid-nitrogen cooling",
+     "notes": "Used to complete the martensitic/bainitic transformation before tempering."},
+    {"step": "temper (stage 1)", "temperature_C": 550, "time": "30 min", "cooling": null,
+     "notes": "First stage of the optimized multi-step secondary-hardening temper."},
+    {"step": "temper (stage 2)", "temperature_C": 450, "time": "5 h", "cooling": null,
+     "notes": "Second stage; this two-step schedule produced the best measured strength-toughness combination."}
+  ],
+  "microstructure": [
+    {"feature": "matrix", "phase": "bainite/martensite mixture", "size_nm": null, "formers": [],
+     "status": "MEASURED"},
+    {"feature": "M2C carbide", "phase": "M2C", "size_nm": 3.0, "formers": ["Cr", "Mo", "V"],
+     "status": "TARGET",
+     "evidence": {"claim": "~3 nm particle size targeted as the Orowan-strengthening optimum", "confidence": 0.8}},
+    {"feature": "Cu precipitate", "phase": "BCC copper", "size_nm": 2.5, "formers": ["Cu"],
+     "status": "MEASURED",
+     "evidence": {"claim": "Observed at approximately 2-3 nm scale", "confidence": 0.85}},
+    {"feature": "precipitated austenite", "phase": "FCC austenite", "size_nm": 5.0, "formers": ["Ni"],
+     "status": "MEASURED",
+     "evidence": {"claim": "Reported atom-probe observation of ~5 nm fine austenite nucleated on Cu precipitates",
+                  "confidence": 0.85}}
+  ],
+  "properties": [
+    {"property": "yield_strength", "value": 165.0, "unit": "ksi", "temperature_C": 25, "status": "TARGET",
+     "evidence": {"claim": "Design target range approximately 150-180 ksi (1034-1241 MPa)", "confidence": 0.9}},
+    {"property": "charpy_toughness", "value": 85.0, "unit": "ft-lb", "temperature_C": 25, "status": "TARGET",
+     "evidence": {"claim": "Design objective: Charpy toughness above ~85 ft-lb (115 J)", "confidence": 0.9}},
+    {"property": "yield_strength", "value": 160.0, "unit": "ksi", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "Approximately 160 ksi (1100 MPa) measured on the prototype", "confidence": 0.9}},
+    {"property": "charpy_toughness", "value": 130.0, "unit": "ft-lb", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "Approximately 130 ft-lb (176 J) under the optimized multi-step temper", "confidence": 0.9}},
+    {"property": "charpy_toughness", "value": 90.0, "unit": "ft-lb", "temperature_C": -40, "status": "MEASURED",
+     "is_proxy_for": "fracture_toughness",
+     "evidence": {"claim": "Ductile behavior reported above 90 ft-lb near -40C", "confidence": 0.8}}
+  ],
+  "weldability_indicators": {
+    "carbon_wt_pct": 0.05,
+    "rule_of_thumb_limit_wt_pct": 0.15,
+    "carbon_equivalent": null,
+    "notes": "Carbon held well below the ~0.15 wt% rule-of-thumb weldability limit, at a direct cost to available M2C strengthening."
+  },
+  "mechanisms": [
+    {"source": "Ni", "target": "austenite_stability", "relation": "stabilizes",
+     "label": "EXPLICIT", "supporting_paper_ids": ["saha2004"],
+     "evidence": {"claim": "Ni enrichment stabilizes dispersed austenite", "confidence": 0.9}},
+    {"source": "austenite_stability", "target": "toughness", "relation": "transformation_toughening",
+     "label": "EXPLICIT", "supporting_paper_ids": ["saha2004"],
+     "evidence": {"claim": "Stress-induced austenite-to-martensite transformation absorbs energy at the crack tip", "confidence": 0.85}},
+    {"source": "Cu", "target": "precipitate_strengthening", "relation": "forms_BCC_precipitates",
+     "label": "EXPLICIT", "supporting_paper_ids": ["saha2004"],
+     "evidence": {"claim": "Cu precipitates give dislocation-obstruction strengthening", "confidence": 0.9}},
+    {"source": "Cu", "target": "austenite_stability", "relation": "nucleates",
+     "label": "EXPLICIT", "supporting_paper_ids": ["saha2004"],
+     "evidence": {"claim": "Ni-stabilized austenite preferentially nucleates on Cu precipitates", "confidence": 0.85}},
+    {"source": "Cr", "target": "Cu", "relation": "partitions_into_precipitate_phase",
+     "label": "INFERRED", "supporting_paper_ids": ["saha2004"],
+     "evidence": {"claim": "Cr shifts Cu out of austenite into the precipitate phase rather than aiding carbide strength directly",
+                  "confidence": 0.75}},
+    {"source": "Mo_V", "target": "M2C_carbide", "relation": "forms",
+     "label": "EXPLICIT", "supporting_paper_ids": ["saha2004"],
+     "evidence": {"claim": "Mo and V are the primary M2C carbide formers", "confidence": 0.9}}
+  ],
+  "design_rationale": [
+    "Low carbon (0.05 wt%) protects weldability at a direct cost to available M2C strengthening.",
+    "Ni stabilizes precipitated austenite for transformation toughening.",
+    "Cu serves a dual role: precipitation strengthening and austenite nucleation site.",
+    "Cr is added to partition Cu out of austenite into the precipitate phase, not for direct carbide strengthening.",
+    "Mo and V are tuned M2C carbide formers targeting a ~3 nm particle size for maximum precipitation strengthening."
+  ]
+}

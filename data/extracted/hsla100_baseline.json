@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "hsla100_baseline",
+  "paper": {
+    "title": "Systems Design of Transformation Toughened Blast-Resistant Naval Hull Steels",
+    "doi": null,
+    "author": "Arup Saha",
+    "year": 2004,
+    "institution": "Northwestern University",
+    "section": "Chapter 3 (benchmark/reference alloy discussion)"
+  },
+  "steel": {
+    "name": "HSLA-100",
+    "base_element": "Fe",
+    "alloy_family": "U.S. Navy HSLA benchmark steel",
+    "composition": [
+      {"element": "C", "value": 0.06, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Mn", "value": 0.90, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Si", "value": 0.40, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Ni", "value": 3.50, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Cu", "value": 1.60, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Mo", "value": 0.60, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Nb", "value": 0.03, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Fe", "value": null, "unit": "wt%", "status": "MEASURED", "is_balance": true}
+    ]
+  },
+  "processing": [],
+  "microstructure": [],
+  "properties": [
+    {"property": "yield_strength", "value": null, "unit": "ksi", "status": "UNKNOWN",
+     "evidence": {"claim": "Referenced as the existing U.S. Navy benchmark alloy in Saha (2004); a specific yield-strength value was not extracted from the available source text.", "confidence": 0.3}},
+    {"property": "charpy_toughness", "value": null, "unit": "ft-lb", "status": "UNKNOWN",
+     "evidence": {"claim": "Referenced as the existing U.S. Navy benchmark alloy in Saha (2004); a specific Charpy value was not extracted from the available source text.", "confidence": 0.3}}
+  ],
+  "weldability_indicators": {
+    "carbon_wt_pct": 0.06,
+    "rule_of_thumb_limit_wt_pct": 0.15,
+    "carbon_equivalent": null,
+    "notes": "Low carbon composition consistent with a weldable HSLA plate steel; no explicit carbon-equivalent value extracted yet."
+  },
+  "mechanisms": [],
+  "design_rationale": [
+    "Included as the incumbent Navy benchmark alloy that BlastAlloy160 is designed to outperform on the strength-toughness trade-off.",
+    "Composition is fully documented in the source dissertation; mechanical property values are intentionally left UNKNOWN here rather than estimated, pending extraction from a dedicated HSLA-100 characterization paper."
+  ]
+}

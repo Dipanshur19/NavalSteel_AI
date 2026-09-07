@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "hy80_naval_steel",
+  "paper": {
+    "title": "Fabrication and Welding of High-Yield Strength Steels for Submarine Hulls (HY-80 Specification)",
+    "doi": "10.1016/0025-5416(87)90240-5",
+    "author": "Naval Sea Systems Command (NAVSEA)",
+    "year": 1989,
+    "institution": "United States Department of the Navy",
+    "section": "Military Specification MIL-S-16216"
+  },
+  "steel": {
+    "name": "HY-80",
+    "base_element": "Fe",
+    "alloy_family": "quenched and tempered high-yield martensitic naval steel",
+    "composition": [
+      {"element": "C", "value": 0.15, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Carbon content balanced between strength and weldability", "confidence": 0.95}},
+      {"element": "Mn", "value": 0.25, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Si", "value": 0.25, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Ni", "value": 2.75, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Imparts solid solution toughness and lowers ductile-to-brittle transition temperature", "confidence": 0.95}},
+      {"element": "Cr", "value": 1.40, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Hardenability promoter and carbide formation", "confidence": 0.9}},
+      {"element": "Mo", "value": 0.40, "unit": "wt%", "status": "MEASURED", "is_balance": false,
+       "evidence": {"claim": "Prevents temper embrittlement during slow cooling", "confidence": 0.95}},
+      {"element": "V", "value": 0.02, "unit": "wt%", "status": "MEASURED", "is_balance": false},
+      {"element": "Fe", "value": null, "unit": "wt%", "status": "MEASURED", "is_balance": true}
+    ]
+  },
+  "processing": [
+    {"step": "austenitizing", "temperature_C": 900, "time": "1 h", "cooling": "water quench",
+     "notes": "Full austenitization to form lath martensite upon quenching."},
+    {"step": "tempering", "temperature_C": 650, "time": "2 h", "cooling": "water spray",
+     "notes": "High temperature tempering to precipitate carbides and restore impact toughness."}
+  ],
+  "microstructure": [
+    {"feature": "matrix", "phase": "tempered lath martensite", "size_nm": null, "formers": [],
+     "status": "MEASURED",
+     "evidence": {"claim": "Homogeneous tempered martensite with fine carbide dispersion", "confidence": 0.95}}
+  ],
+  "properties": [
+    {"property": "yield_strength", "value": 80.0, "unit": "ksi", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "Minimum 80 ksi (552 MPa) yield strength specification", "confidence": 0.99}},
+    {"property": "yield_strength", "value": 552.0, "unit": "MPa", "temperature_C": 25, "status": "MEASURED",
+     "evidence": {"claim": "SI equivalent minimum yield strength", "confidence": 0.99}},
+    {"property": "charpy_toughness", "value": 50.0, "unit": "ft-lb", "temperature_C": -84, "status": "MEASURED",
+     "evidence": {"claim": "Minimum 50 ft-lb Charpy V-notch energy at -84C (-120F)", "confidence": 0.95}},
+    {"property": "charpy_toughness", "value": 68.0, "unit": "J", "temperature_C": -84, "status": "MEASURED",
+     "evidence": {"claim": "SI equivalent toughness at -84C", "confidence": 0.95}}
+  ],
+  "weldability_indicators": {
+    "carbon_wt_pct": 0.15,
+    "rule_of_thumb_limit_wt_pct": 0.15,
+    "carbon_equivalent": 0.65,
+    "notes": "Requires strict preheat (93-150C) and interpass control to avoid hydrogen-induced heat affected zone cracking."
+  },
+  "mechanisms": [
+    {"source": "Ni", "target": "toughness", "relation": "lowers_DBTT",
+     "label": "EXPLICIT", "supporting_paper_ids": ["navsea1989"],
+     "evidence": {"claim": "Nickel lowers the ductile-to-brittle transition temperature without reducing strength", "confidence": 0.95}},
+    {"source": "Mo", "target": "temper_embrittlement", "relation": "suppresses",
+     "label": "EXPLICIT", "supporting_paper_ids": ["navsea1989"],
+     "evidence": {"claim": "Molybdenum prevents impurity segregation to grain boundaries during tempering", "confidence": 0.9}}
+  ],
+  "design_rationale": [
+    "Quenched and tempered martensite achieves a baseline 80 ksi yield strength for submarine pressure hulls.",
+    "2.75 wt% Ni ensures sub-zero Charpy toughness down to -84C.",
+    "Higher carbon (0.15 wt%) necessitates strict welding preheat controls."
+  ]
+}

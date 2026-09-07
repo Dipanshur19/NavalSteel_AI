@@ -1,0 +1,27 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Pipeline outputs derived from source PDFs you place in data/raw/
+# (kept out of git because they can be large and, for copyrighted source
+# papers, may contain substantial extracted text of the original work).
+data/raw/*.pdf
+data/processed/*.json
+data/index/*.pkl
+
+# Keep the hand-built gold-standard records and folder structure.
+!data/extracted/*.json
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/index/.gitkeep
+
+# OS / editor
+.DS_Store
+.vscode/*.log
