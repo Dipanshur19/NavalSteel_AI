@@ -42,8 +42,7 @@ def _format_context(hits: List[tuple]) -> str:
     return "\n\n---\n\n".join(blocks)
 
 
-def _call_gemini_rag(question: str, context: str, retries: int = 3) -> str:
-    import time
+def _call_gemini_rag(question: str, context: str, retries: int = 2) -> str:
     from google import genai
     from google.genai import types
 
@@ -51,10 +50,16 @@ def _call_gemini_rag(question: str, context: str, retries: int = 3) -> str:
     system_prompt = load_rag_prompt()
     user_message = f"Question: {question}\n\nRetrieved evidence:\n\n{context}"
 
-    for attempt in range(retries):
+    models_to_try = [
+        config.GEMINI_RAG_MODEL,
+        "gemini-3.5-flash-lite",
+        "gemini-3.5-flash",
+    ]
+
+    for model_name in models_to_try:
         try:
             response = client.models.generate_content(
-                model=config.GEMINI_RAG_MODEL,
+                model=model_name,
                 contents=user_message,
                 config=types.GenerateContentConfig(
                     system_instruction=system_prompt,
@@ -62,13 +67,60 @@ def _call_gemini_rag(question: str, context: str, retries: int = 3) -> str:
                     max_output_tokens=1200,
                 ),
             )
-            return response.text or ""
-        except Exception as e:
-            if ("503" in str(e) or "429" in str(e) or "UNAVAILABLE" in str(e)) and attempt < retries - 1:
-                time.sleep(2 ** (attempt + 1))
-                continue
-            raise
+            if response and response.text:
+                return response.text
+        except Exception:
+            continue
     return ""
+
+
+def ask_ai_metallurgist(user_prompt: str) -> str:
+    """
+    In-built autonomous AI Metallurgist Agent powered by Google Gemini free tier.
+    Provides expert computational materials science and physical metallurgy reasoning
+    out-of-the-box without requiring the end user to supply any API key.
+    """
+    if not config.GEMINI_API_KEY:
+        return "AI Metallurgist Agent is in offline mode (GEMINI_API_KEY not configured in environment)."
+
+    from google import genai
+    from google.genai import types
+
+    system_instruction = (
+        "You are the NavalSteel AI Chief Metallurgist Agent, an expert in computational materials informatics, "
+        "physical metallurgy, and the systems design of high-strength naval plate steels (e.g. BlastAlloy160, HY-80, HY-100, HSLA-115, AF1410). "
+        "Ground your advice in physical principles: Ito-Bessyo cold cracking susceptibility (Pcm), Andrews Ms martensite start, "
+        "nanoscale copper precipitation strengthening, secondary M2C alloy carbide hardening, and TRIP transformation toughening via retained austenite films. "
+        "Keep your answers clear, rigorous, quantitative, and directly actionable for materials scientists and engineers."
+    )
+
+    models_to_try = [
+        config.GEMINI_RAG_MODEL,
+        "gemini-3.5-flash-lite",
+        "gemini-3.5-flash",
+    ]
+
+    client = genai.Client(api_key=config.GEMINI_API_KEY)
+    for model_name in models_to_try:
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=user_prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_instruction,
+                    temperature=0.3,
+                    max_output_tokens=1500,
+                )
+            )
+            if response and response.text:
+                return response.text
+        except Exception:
+            continue
+
+    return (
+        "The AI Metallurgist Agent is currently operating in offline mode. "
+        "Please explore the empirical physics calculations and ML surrogate predictions in Studios 1, 2, and 3."
+    )
 
 
 def _call_anthropic_rag(question: str, context: str) -> str:

@@ -157,6 +157,79 @@ def extract_record(
     return {"record": validated.model_dump(mode="json"), "valid": True, "errors": [], "raw_response": raw}
 
 
+import re
+
+
+def extract_metallurgy_info_from_doc(doc: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Extracts structured metallurgical data (composition, properties, tables)
+    from an ingested PDF document structure.
+    """
+    filename = doc.get("filename", "unknown.pdf")
+    pages = doc.get("pages", [])
+    num_pages = doc.get("num_pages", len(pages))
+    doc_hash = doc.get("doc_hash", "unknown")
+    
+    all_tables = []
+    for p in pages:
+        p_num = p.get("page", 1)
+        for t in p.get("tables", []):
+            if t and len(t) > 1:
+                all_tables.append({"page": p_num, "data": t})
+
+    full_text = " ".join(p.get("text", "") for p in pages)
+    
+    # Heuristic composition detection (element wt%)
+    elements = ["C", "Ni", "Cu", "Cr", "Mo", "Mn", "Si", "V", "B", "Co", "Fe"]
+    compositions = []
+    
+    for tbl in all_tables:
+        header = [str(cell).strip() for cell in tbl["data"][0] if cell]
+        if any(el in header for el in ["C", "Ni", "Cu", "Cr", "Fe"]):
+            for row in tbl["data"][1:6]:
+                row_dict = {}
+                for col_idx, cell in enumerate(row):
+                    if col_idx < len(header):
+                        h = header[col_idx]
+                        if any(h == el or "wt" in h.lower() for el in elements):
+                            row_dict[h] = str(cell).strip()
+                if row_dict:
+                    row_dict["Source Page"] = tbl["page"]
+                    compositions.append(row_dict)
+
+    # Heuristic properties detection
+    properties = []
+    ys_matches = re.findall(r'(?:yield\s+strength|0\.2%\s*offset\s*yield|ys)[\s:=]+(\d+(?:\.\d+)?)\s*(mpa|ksi)', full_text, re.IGNORECASE)
+    for val, unit in ys_matches[:4]:
+        properties.append({"Property": "Yield Strength", "Value": float(val), "Unit": unit.upper(), "Type": "Tensile"})
+
+    uts_matches = re.findall(r'(?:ultimate\s+tensile\s+strength|tensile\s+strength|uts)[\s:=]+(\d+(?:\.\d+)?)\s*(mpa|ksi)', full_text, re.IGNORECASE)
+    for val, unit in uts_matches[:4]:
+        properties.append({"Property": "Tensile Strength (UTS)", "Value": float(val), "Unit": unit.upper(), "Type": "Tensile"})
+
+    cvn_matches = re.findall(r'(?:charpy|impact\s+energy|cvn)[\s:=]+(\d+(?:\.\d+)?)\s*(j|joules|ft[- ]*lbs?|ft[- ]*lbf)', full_text, re.IGNORECASE)
+    for val, unit in cvn_matches[:4]:
+        properties.append({"Property": "Charpy Impact Energy", "Value": float(val), "Unit": unit.upper(), "Type": "Toughness"})
+
+    unique_props = []
+    seen = set()
+    for p in properties:
+        k = (p["Property"], p["Value"], p["Unit"])
+        if k not in seen:
+            seen.add(k)
+            unique_props.append(p)
+
+    return {
+        "filename": filename,
+        "num_pages": num_pages,
+        "num_tables": len(all_tables),
+        "doc_hash": doc_hash,
+        "compositions": compositions,
+        "properties": unique_props,
+        "sample_tables": all_tables[:4]
+    }
+
+
 def save_record(record_dict: Dict[str, Any], out_dir: Path) -> Path:
     out_path = out_dir / f"{record_dict['record_id']}.json"
     with open(out_path, "w", encoding="utf-8") as f:

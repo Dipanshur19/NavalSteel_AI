@@ -1,0 +1,34 @@
+# Python cache and environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Testing and linters
+.pytest_cache/
+.coverage
+htmlcov/
+tests/
+
+# Git and IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Local data caches and temporary exports
+data/exports/*
+!data/exports/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+!data/processed/blastalloy160_saha_2004*
+data/raw/*
+!data/raw/blastalloy160_saha_2004.pdf
+!data/raw/.gitkeep
+
+# Environment secrets
+.env
+.env.local

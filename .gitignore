@@ -16,8 +16,11 @@ data/raw/*.pdf
 data/processed/*.json
 data/index/*.pkl
 
-# Keep the hand-built gold-standard records and folder structure.
+# Keep the hand-built gold-standard records and baseline index for cloud deployment.
 !data/extracted/*.json
+!data/processed/blastalloy160_saha_2004.chunks.json
+!data/processed/blastalloy160_saha_2004.json
+!data/index/blastalloy160_saha_2004.index.pkl
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/index/.gitkeep

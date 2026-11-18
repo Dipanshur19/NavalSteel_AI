@@ -133,3 +133,225 @@ def evaluate_steel_physics(composition: list | dict) -> Dict[str, Any]:
         "martensite_start_C": ms,
         "bainite_start_C": bs,
     }
+
+
+MIL_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
+    "MIL-S-24645A (HSLA-100)": {
+        "standard": "MIL-S-24645A",
+        "title": "High-Strength Low-Alloy Structural Steel (HSLA-100)",
+        "yield_strength_min": 690.0,
+        "yield_strength_max": 830.0,
+        "tensile_strength_min": 795.0,
+        "charpy_min_neg40c": 60.0,
+        "pcm_max": 0.30,
+        "carbon_max": 0.07,
+        "chemistry": {
+            "C": (0.00, 0.07),
+            "Mn": (0.75, 1.15),
+            "Ni": (3.25, 3.75),
+            "Cu": (1.40, 1.80),
+            "Cr": (0.40, 0.80),
+            "Mo": (0.50, 0.70),
+        },
+        "description": "Copper precipitation hardened low-carbon bainitic/martensitic naval plate designed for welding with minimal preheat."
+    },
+    "MIL-S-24645A (HSLA-115)": {
+        "standard": "MIL-S-24645A",
+        "title": "High-Strength Low-Alloy Structural Steel (HSLA-115)",
+        "yield_strength_min": 795.0,
+        "yield_strength_max": 930.0,
+        "tensile_strength_min": 860.0,
+        "charpy_min_neg40c": 50.0,
+        "pcm_max": 0.32,
+        "carbon_max": 0.07,
+        "chemistry": {
+            "C": (0.00, 0.07),
+            "Ni": (3.50, 4.20),
+            "Cu": (1.40, 1.85),
+            "Mo": (0.55, 0.85),
+        },
+        "description": "Enhanced high-yield naval plate with elevated Ni/Cu balance for high strength and low-temperature toughness."
+    },
+    "MIL-S-16216 (HY-80)": {
+        "standard": "MIL-S-16216",
+        "title": "High-Yield Quenched and Tempered Steel (HY-80)",
+        "yield_strength_min": 550.0,
+        "yield_strength_max": 690.0,
+        "tensile_strength_min": 690.0,
+        "charpy_min_neg40c": 47.0,
+        "pcm_max": 0.40,
+        "carbon_max": 0.18,
+        "chemistry": {
+            "C": (0.12, 0.18),
+            "Ni": (2.00, 3.25),
+            "Cr": (1.00, 1.80),
+            "Mo": (0.20, 0.60),
+        },
+        "description": "Classic carbon-martensitic quenched and tempered submarine hull steel requiring mandatory preheat."
+    },
+    "MIL-S-16216 (HY-100)": {
+        "standard": "MIL-S-16216",
+        "title": "High-Yield Quenched and Tempered Steel (HY-100)",
+        "yield_strength_min": 690.0,
+        "yield_strength_max": 830.0,
+        "tensile_strength_min": 795.0,
+        "charpy_min_neg40c": 55.0,
+        "pcm_max": 0.45,
+        "carbon_max": 0.20,
+        "chemistry": {
+            "C": (0.14, 0.20),
+            "Ni": (2.25, 3.50),
+            "Cr": (1.40, 2.00),
+            "Mo": (0.30, 0.60),
+        },
+        "description": "High-hardenability submarine plate steel with enhanced Ni-Cr alloying."
+    },
+    "ONR BlastAlloy 160": {
+        "standard": "ONR Target",
+        "title": "Office of Naval Research Ultra-High-Strength Blast-Resistant Plate",
+        "yield_strength_min": 1100.0,
+        "yield_strength_max": 1250.0,
+        "tensile_strength_min": 1200.0,
+        "charpy_min_neg40c": 60.0,
+        "pcm_max": 0.24,
+        "carbon_max": 0.07,
+        "chemistry": {
+            "C": (0.03, 0.07),
+            "Ni": (3.50, 4.50),
+            "Cu": (1.20, 1.80),
+            "Cr": (0.20, 0.80),
+            "Mo": (0.40, 0.90),
+        },
+        "description": "Next-generation naval plate combining nanoscale Cu precipitation, secondary M2C carbides, and retained austenite TRIP toughening."
+    }
+}
+
+
+def check_military_specifications(
+    composition: list | dict,
+    predicted_properties: Optional[Dict[str, float]] = None
+) -> Dict[str, Any]:
+    """Evaluates an alloy composition and its predicted mechanical properties
+    against landmark naval military specifications (MIL-S-24645A, MIL-S-16216, ONR).
+    
+    Returns a structured dictionary with compliance status, per-specification criteria checks,
+    and the closest matching naval defense standard.
+    """
+    comp = extract_element_map(composition)
+    physics = evaluate_steel_physics(comp)
+    pcm = physics["pcm"]
+    props = predicted_properties or {}
+    
+    ys = props.get("yield_strength_mpa") or props.get("ys") or props.get("yield_strength")
+    cvn = props.get("charpy_impact_energy_j") or props.get("cvn") or props.get("charpy")
+    uts = props.get("tensile_strength_mpa") or props.get("uts") or props.get("tensile_strength")
+    
+    results: Dict[str, Any] = {}
+    best_match_name: Optional[str] = None
+    best_match_score = -1.0
+    
+    for spec_name, spec in MIL_SPECIFICATIONS.items():
+        checks = []
+        total_checks = 0
+        passed_checks = 0
+        
+        # Carbon constraint
+        c_val = comp.get("C", 0.0)
+        c_max = spec["carbon_max"]
+        c_pass = c_val <= c_max
+        checks.append({
+            "parameter": "Carbon (wt%)",
+            "required": f"<= {c_max:.2f}%",
+            "actual": f"{c_val:.3f}%",
+            "passed": c_pass
+        })
+        total_checks += 1
+        if c_pass:
+            passed_checks += 1
+            
+        # Pcm weldability constraint
+        pcm_max = spec["pcm_max"]
+        pcm_pass = pcm <= pcm_max
+        checks.append({
+            "parameter": "Pcm Weldability",
+            "required": f"<= {pcm_max:.2f}",
+            "actual": f"{pcm:.3f}",
+            "passed": pcm_pass
+        })
+        total_checks += 1
+        if pcm_pass:
+            passed_checks += 1
+            
+        # Yield Strength (if predicted properties available)
+        if ys is not None:
+            ys_min = spec["yield_strength_min"]
+            ys_max = spec["yield_strength_max"]
+            ys_pass = ys_min <= ys <= ys_max
+            checks.append({
+                "parameter": "Yield Strength (MPa)",
+                "required": f"{ys_min:.0f} - {ys_max:.0f} MPa",
+                "actual": f"{ys:.1f} MPa",
+                "passed": ys_pass
+            })
+            total_checks += 1
+            if ys_pass:
+                passed_checks += 1
+                
+        # Charpy Toughness at -40°C
+        if cvn is not None:
+            cvn_min = spec["charpy_min_neg40c"]
+            cvn_pass = cvn >= cvn_min
+            checks.append({
+                "parameter": "CVN at -40°C (J)",
+                "required": f">= {cvn_min:.0f} J",
+                "actual": f"{cvn:.1f} J",
+                "passed": cvn_pass
+            })
+            total_checks += 1
+            if cvn_pass:
+                passed_checks += 1
+                
+        # Chemistry tolerance bands
+        for el, (el_min, el_max) in spec["chemistry"].items():
+            actual_el = comp.get(el, 0.0)
+            # Only strictly check if element is present or specified
+            el_pass = el_min <= actual_el <= el_max
+            checks.append({
+                "parameter": f"{el} (wt%)",
+                "required": f"{el_min:.2f} - {el_max:.2f}%",
+                "actual": f"{actual_el:.2f}%",
+                "passed": el_pass
+            })
+            total_checks += 1
+            if el_pass:
+                passed_checks += 1
+                
+        score_pct = round((passed_checks / max(1, total_checks)) * 100.0, 1)
+        if score_pct == 100.0:
+            status = "COMPLIANT"
+        elif score_pct >= 70.0:
+            status = "NEAR_COMPLIANT"
+        else:
+            status = "NON_COMPLIANT"
+            
+        if score_pct > best_match_score:
+            best_match_score = score_pct
+            best_match_name = spec_name
+            
+        results[spec_name] = {
+            "title": spec["title"],
+            "standard": spec["standard"],
+            "description": spec["description"],
+            "status": status,
+            "compliance_score_pct": score_pct,
+            "passed_checks": passed_checks,
+            "total_checks": total_checks,
+            "checks": checks,
+        }
+        
+    return {
+        "specifications": results,
+        "best_match": best_match_name,
+        "best_match_score_pct": best_match_score,
+    }
+

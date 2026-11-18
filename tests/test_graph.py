@@ -1,5 +1,10 @@
 """Tests for the Materials Knowledge Graph engine."""
-from src.graph import build_knowledge_graph, generate_graph_html
+from src.graph import (
+    build_knowledge_graph,
+    generate_graph_html,
+    find_causal_pathways,
+    get_graph_analytics,
+)
 
 
 def test_build_knowledge_graph():
@@ -16,3 +21,15 @@ def test_build_knowledge_graph():
     html = generate_graph_html(G)
     assert "<html" in html or "<div" in html
     assert "vis-network" in html or "network" in html
+
+
+def test_graph_analytics_and_pathways():
+    G = build_knowledge_graph()
+    analytics = get_graph_analytics(G)
+    assert analytics["total_nodes"] > 5
+    assert analytics["total_edges"] > 5
+    assert "element" in analytics["node_types"]
+
+    # Test causal pathway finding
+    paths = find_causal_pathways(G, "Ni", "toughness")
+    assert isinstance(paths, list)

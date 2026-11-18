@@ -3,10 +3,11 @@
 <div align="center">
 
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![GSD Core](https://img.shields.io/badge/GSD--Core-v1.21.0%20Spec--Driven-8A2BE2?style=for-the-badge&logo=git&logoColor=white)](.planning/)
 [![PyTest](https://img.shields.io/badge/PyTest-52%20%2F%2052%20Passed%20(100%25)-success?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](streamlit_app.py)
 [![Plotly](https://img.shields.io/badge/Plotly-2D%20%2F%203D%20Interactive-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](streamlit_app.py)
-[![Google Gemini](https://img.shields.io/badge/LLM-Gemini%203.6%20Flash%20%7C%20Claude-4285F4?style=for-the-badge&logo=google&logoColor=white)](src/rag.py)
+[![Google Gemini](https://img.shields.io/badge/LLM-Gemini%203.5%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](src/rag.py)
 [![Optimization](https://img.shields.io/badge/Engine-NSGA--II%20Pareto-2ea44f?style=for-the-badge)](src/optimize.py)
 
 **An evidence-grounded computational materials informatics, physics-informed machine learning, and autonomous inverse design platform for ultra-high-strength, fracture-tough, and weldable naval hull steels.**
@@ -307,16 +308,22 @@ LLM_PROVIDER=auto
 ```bash
 streamlit run streamlit_app.py
 ```
-Open your browser at **`http://localhost:8501`** to access all 9 modules:
-* **Tab 1: Literature Search**: Query public naval steel literature via Semantic Scholar.
-* **Tab 2: Ingest & Extract**: Process source PDFs and build vector index.
-* **Tab 3: Steel Explorer**: Browse and filter validated naval steel benchmark records.
-* **Tab 4: Physics & Weldability**: Screen compositions for $P_{cm}, CE_{IIW}, M_s, B_s$, and preheat.
-* **Tab 5: ML Property Predictor**: Query the surrogate model for instant predictions and isochronal curves.
-* **Tab 6: Materials Knowledge Graph**: Explore 2D interactive causal pathways.
-* **Tab 7: Alloy Designer**: AI inverse designer retrieving nearest experimental neighbors.
-* **Tab 8: Pareto Optimizer & Dossier**: Run the NSGA-II solver, interact with 2D/3D Plotly plots, and export PDF dossiers.
-* **Tab 9: Ask (RAG)**: Evidence-grounded Q&A with exact page citations.
+Open your browser at **`http://localhost:8501`** to access the 5 unified metallurgical research studios:
+* **Studio 1: Alloy Composition & Mechanical Predictor**: Interactive composition tuning, physical weldability indices ($P_{cm}, CE_{IIW}$), martensite start ($M_s$), and sub-35ms multi-output surrogate inference with calibrated isochronal tempering trajectories ($400\text{--}650^\circ\text{C}$).
+* **Studio 2: Multi-Objective Pareto Optimizer (NSGA-II)**: High-dimensional evolutionary inverse design balancing strength, $-40^\circ\text{C}$ toughness, weldability, and cost with interactive 3D Plotly Pareto hyper-surfaces and downloadable ReportLab PDF research certification dossiers.
+* **Studio 3: Reference Steels & Benchmark Dataset**: Comprehensive metallurgical property matrices across historical naval steels (BlastAlloy 160, HSLA-100, HSLA-115, HY-80, HY-100, AF1410) with raw 40-heat experimental dataset explorer.
+* **Studio 4: Metallurgical Knowledge Graph & Mechanisms**: Causal network graph mapping alloying elements ($Cu, Ni, Mo, Nb, C$) to microstructural precipitates and ultimate mechanical failure modes.
+* **Studio 5: Scholarly Intelligence & Evidence-Grounded Assistant**: Direct literature discovery via Semantic Scholar and arXiv Open Access APIs, coupled with an embedded zero-key Google Gemini 3.5 Flash AI Metallurgist agent grounding answers in naval steel dissertations.
+
+---
+
+## 🎯 GSD Core Spec-Driven Development
+
+NavalSteel AI is structured and maintained using **GSD Core v1.21.0** context-engineering and spec-driven development loops:
+* **Codebase Map**: Canonical architectural maps in [`.planning/codebase/`](.planning/codebase/) (`STACK.md`, `INTEGRATIONS.md`, `ARCHITECTURE.md`, `STRUCTURE.md`, `CONVENTIONS.md`, `TESTING.md`, `CONCERNS.md`).
+* **Living Requirements & Roadmap**: Traceable milestones in [`.planning/REQUIREMENTS.md`](.planning/REQUIREMENTS.md) and [`.planning/ROADMAP.md`](.planning/ROADMAP.md).
+* **Onboarding & State**: Dynamic project state in [`.planning/STATE.md`](.planning/STATE.md) and [`.planning/onboarding/SUMMARY.md`](.planning/onboarding/SUMMARY.md).
+* **Workflows**: Advance or verify phases using `/gsd-plan-phase`, `/gsd-execute-phase`, `/gsd-verify-work`, or `/gsd-progress`.
 
 ---
 

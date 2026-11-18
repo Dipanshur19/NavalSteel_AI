@@ -160,3 +160,48 @@ def generate_graph_html(G: nx.MultiDiGraph, height: str = "520px") -> str:
         )
 
     return net.generate_html()
+
+
+def find_causal_pathways(G: nx.MultiDiGraph, source: str, target: str, max_depth: int = 4) -> List[List[str]]:
+    """Finds all directed causal paths between a source concept (e.g. alloying element)
+    and a target (e.g. mechanical property) up to max_depth."""
+    H = nx.DiGraph()
+    for u, v in G.edges():
+        H.add_edge(u, v)
+        
+    if not H.has_node(source) or not H.has_node(target):
+        return []
+        
+    try:
+        paths = list(nx.all_simple_paths(H, source=source, target=target, cutoff=max_depth))
+        return paths
+    except Exception:
+        return []
+
+
+def get_graph_analytics(G: nx.MultiDiGraph) -> Dict[str, Any]:
+    """Computes connectivity, topological metrics, and evidence breakdown for the knowledge graph."""
+    node_types: Dict[str, int] = {}
+    for _, d in G.nodes(data=True):
+        nt = d.get("node_type", "unknown")
+        node_types[nt] = node_types.get(nt, 0) + 1
+        
+    evidence_counts: Dict[str, int] = {}
+    for _, _, d in G.edges(data=True):
+        ev = d.get("evidence_label", "UNKNOWN")
+        evidence_counts[ev] = evidence_counts.get(ev, 0) + 1
+        
+    H = nx.DiGraph()
+    for u, v in G.edges():
+        H.add_edge(u, v)
+        
+    density = round(nx.density(H), 4) if H.number_of_nodes() > 0 else 0.0
+    
+    return {
+        "total_nodes": G.number_of_nodes(),
+        "total_edges": G.number_of_edges(),
+        "node_types": node_types,
+        "evidence_counts": evidence_counts,
+        "density": density,
+    }
+
