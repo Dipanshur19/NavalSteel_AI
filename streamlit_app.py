@@ -21,7 +21,7 @@ import streamlit.components.v1 as components
 
 from src import config
 from src.chunk import chunk_document
-from src.extract import extract_metallurgy_info_from_doc
+from src.extract import extract_metallurgy_info_from_doc, extract_from_any_file
 from src.design import find_nearest_experimental_neighbors, generate_candidate_design
 from src.dossier import (
     format_markdown_dossier,
@@ -29,7 +29,13 @@ from src.dossier import (
     generate_pdf_dossier_bytes,
 )
 from src.embed import build_index, load_index, save_index, search
-from src.graph import build_knowledge_graph, generate_graph_html, find_causal_pathways, get_graph_analytics
+from src.graph import (
+    build_knowledge_graph,
+    generate_graph_html,
+    find_causal_pathways,
+    get_graph_analytics,
+    get_causal_relations_table,
+)
 from src.ingest_pdf import ingest_pdf, save_ingested
 from src.optimize import (
     ParetoCandidate,
@@ -528,11 +534,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Primary Segmented Studio Dock (Unslopped)
-tab_studio, tab_pareto, tab_benchmarks, tab_graph, tab_literature = st.tabs([
+tab_studio, tab_pareto, tab_benchmarks, tab_graph, tab_extractor, tab_literature = st.tabs([
     "Alloy Synthesizer",
     "Pareto Optimization",
     "Benchmark Library",
     "Causal Knowledge Graph",
+    "Document & File Extractor",
     "Literature Intelligence",
 ])
 
@@ -1360,7 +1367,7 @@ with tab_benchmarks:
 # ==============================================================================
 with tab_graph:
     st.markdown("### Causal Materials Knowledge Graph")
-    st.caption("Multi-scale network mapping: Elements -> Microstructural Phases -> Physical Mechanisms -> Target Properties.")
+    st.caption("Multi-scale directed network mapping: Alloying Solutes -> Microstructural Phases -> Physical Mechanisms -> Target Properties.")
 
     col_kg_l, col_kg_r = st.columns([1, 3])
     
@@ -1373,16 +1380,33 @@ with tab_graph:
             alloy_key = st.selectbox("Target alloy:", list(all_records.keys()), format_func=lambda k: all_records[k]["steel"]["name"], key="kg_alloy_sel")
             target_recs = [all_records[alloy_key]]
 
+        st.markdown("##### Graph Architecture")
+        kg_layout = st.selectbox(
+            "Layout engine:",
+            ["Hierarchical Directed Flow (Left-to-Right DAG)", "Organic Force Network (Clustered Physics)"],
+            index=0,
+            help="Hierarchical Directed Flow arranges concepts into 4 crisp left-to-right columns (Solutes -> Phases -> Mechanisms -> Properties), eliminating overlapping text and node tangles.",
+            key="kg_layout_sel"
+        )
+        layout_mode = "hierarchical" if "Hierarchical" in kg_layout else "organic"
+
+        show_edge_labels = st.checkbox(
+            "Show text labels directly on lines",
+            value=False,
+            help="By default, relation details appear in clean hover tooltips. Enable this checkbox if you wish to render verbs directly on canvas lines.",
+            key="kg_edge_labels_toggle"
+        )
+
         st.markdown("""
-        **Semantic Nodes:**
-        * **Alloying Elements**: Ni, Cu, Mo, Cr, C, V
-        * **Microstructures**: Lath Martensite, M2C, Retained Austenite
-        * **Physical Mechanisms**: TRIP Toughening, Orowan Precipitation
-        * **Target Properties**: Yield Strength, Toughness, Weldability
+        **Network Architecture Legend:**
+        * **Tier 1 (Left, Cobalt)**: Alloying Solutes (`Ni`, `Cu`, `Mo`, `Cr`, `C`, `V`, `Co`, `Nb`)
+        * **Tier 2 (Mid-Left, Indigo)**: Microstructures (`Lath Martensite`, `M2C`, `Retained Austenite`)
+        * **Tier 3 (Mid-Right, Emerald)**: Physical Mechanisms (`TRIP Toughening`, `Orowan Precipitation`, `Grain Refinement`)
+        * **Tier 4 (Right, Amber)**: Target Properties (`Toughness`, `Yield Strength`, `Weldability`)
         
-        **Edges:**
-        * Solid: Explicit literature evidence
-        * Dashed: Inferred relationship
+        **Causal Edge Types:**
+        * **Solid Cyan Line**: Explicit peer-reviewed literature evidence
+        * **Dashed Amber Line**: Inferred physical metallurgy relationship
         """)
 
     with col_kg_r:
@@ -1395,14 +1419,16 @@ with tab_graph:
         m3.metric("Explicit Evidence", analytics["evidence_counts"].get("EXPLICIT", 0))
         m4.metric("Graph Density", f"{analytics['density']:.3f}")
         
-        html_code = generate_graph_html(G, height="520px")
-        components.html(html_code, height=530, scrolling=False)
+        # Interactive Graph Canvas (Dark Ink styling)
+        html_code = generate_graph_html(G, height="540px", layout_mode=layout_mode, show_edge_labels=show_edge_labels)
+        components.html(html_code, height=550, scrolling=False)
         
-        with st.expander("Causal Pathway Tracing Tool (Element to Property)", expanded=False):
+        # Causal Pathway Tracing Tool
+        with st.expander("Causal Pathway Tracing Tool (Element to Property)", expanded=True):
             st.caption("Trace multi-scale metallurgical causality chains from alloying elements through precipitates to mechanical properties.")
             c_src, c_tgt = st.columns(2)
             with c_src:
-                src_node = st.selectbox("Source Alloying Element:", ["Ni", "Cu", "Mo", "Cr", "C", "V", "Mn"], key="kg_src_sel")
+                src_node = st.selectbox("Source Alloying Element:", ["Ni", "Cu", "Mo", "Cr", "C", "V", "Co", "Nb", "Mn"], key="kg_src_sel")
             with c_tgt:
                 tgt_node = st.selectbox("Target Mechanical Property:", ["toughness", "yield_strength", "weldability", "hardness"], key="kg_tgt_sel")
                 
@@ -1410,15 +1436,325 @@ with tab_graph:
             if paths:
                 st.markdown(f"**Found {len(paths)} causal pathway(s) from `{src_node}` to `{tgt_node}`:**")
                 for i, p in enumerate(paths, 1):
-                    chain = " $\\rightarrow$ ".join([f"`{n}`" for n in p])
-                    st.markdown(f"{i}. {chain}")
+                    chain = " $\\rightarrow$ ".join([f"`{n.replace('_', ' ').title()}`" for n in p])
+                    st.markdown(f"**Path {i}:** {chain}")
             else:
-                st.info(f"No direct causal chain found from `{src_node}` to `{tgt_node}` in the current subgraph.")
+                st.info(f"No direct causal chain found from `{src_node}` to `{tgt_node}` in the current subgraph scope.")
 
+        # Searchable Causal Relations Evidence Matrix
+        with st.expander("Causal Evidence & Relationship Matrix (Tabular View)", expanded=False):
+            st.caption("Searchable catalog of all metallurgical causality assertions, literature citations, and evidence claims.")
+            rel_records = get_causal_relations_table(G)
+            if rel_records:
+                df_rel = pd.DataFrame(rel_records)
+                st.dataframe(df_rel, use_container_width=True)
+                csv_bytes = df_rel.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    "Download Causal Relations Matrix (CSV)",
+                    data=csv_bytes,
+                    file_name="naval_steel_causal_knowledge_graph_matrix.csv",
+                    mime="text/csv",
+                    key="btn_down_kg_csv"
+                )
 
 
 # ==============================================================================
-# STUDIO 5: LITERATURE & AI ASSISTANT
+# STUDIO 5: UNIVERSAL DOCUMENT & FILE EXTRACTOR
+# ==============================================================================
+with tab_extractor:
+    st.markdown("### Universal Document & Materials Extractor")
+    st.caption("Upload or select any metallurgy document (.pdf, .csv, .tsv, .json, .txt, .md) to automatically extract chemical composition (wt%), thermal processing schedules, mechanical tensile & impact properties, physical indices (Pcm, Ms, Bs, cost), and military specification compliance.")
+
+    col_ext_mode, col_ext_source = st.columns([1, 2])
+    with col_ext_mode:
+        input_method = st.radio(
+            "Extraction source:",
+            ["Upload Your File", "Try Pre-Loaded Sample Document", "Paste Text / Specification"],
+            index=0,
+            key="ext_input_method_radio"
+        )
+    
+    file_bytes_to_extract = None
+    filename_to_extract = None
+
+    with col_ext_source:
+        if input_method == "Upload Your File":
+            uploaded_file = st.file_uploader(
+                "Upload any research PDF, experimental CSV, or specification file:",
+                type=["pdf", "csv", "tsv", "json", "txt", "md"],
+                key="universal_file_uploader_box",
+                help="Accepts .pdf (dissertations, papers), .csv/.tsv (heats data), .json (materials records), and .txt/.md (specs)."
+            )
+            if uploaded_file is not None:
+                file_bytes_to_extract = uploaded_file.getvalue()
+                filename_to_extract = uploaded_file.name
+                st.success(f"File loaded: `{uploaded_file.name}` ({len(file_bytes_to_extract)/1024:.1f} KB)")
+            else:
+                st.info("Select or drop a file above, or switch to 'Try Pre-Loaded Sample Document' to test immediately.")
+
+        elif input_method == "Try Pre-Loaded Sample Document":
+            sample_options = {
+                "Sample 1: MIL-S-24645A US Navy HSLA-100 Specification (.txt)": Path("data/sample_documents/mil_s_24645a_hsla100.txt"),
+                "Sample 2: Naval Plate Steel Heats Production Matrix (.csv)": Path("data/sample_documents/naval_steels_dataset.csv"),
+                "Sample 3: BlastAlloy160 Systems Design Report (.md)": Path("data/sample_documents/blastalloy160_summary.md"),
+                "Sample 4: AF1410 High-Toughness Submarine Armor Steel (.json)": Path("data/sample_documents/af1410_patent_extract.json"),
+                "Sample 5: Saha 2004 Northwestern University PhD Dissertation (.pdf)": Path("data/raw/blastalloy160_saha_2004.pdf"),
+            }
+            chosen_sample_name = st.selectbox("Select sample metallurgical record:", list(sample_options.keys()), key="sel_sample_doc")
+            sample_path = sample_options[chosen_sample_name]
+            if sample_path.exists():
+                file_bytes_to_extract = sample_path.read_bytes()
+                filename_to_extract = sample_path.name
+                st.caption(f"Loaded bundled benchmark: `{sample_path.name}` ({len(file_bytes_to_extract)/1024:.1f} KB)")
+            else:
+                st.warning(f"File not found: {sample_path}")
+
+        else:  # Paste Text
+            pasted_text = st.text_area(
+                "Paste specification, abstract, or alloy formulation notes:",
+                value="""MILITARY SPECIFICATION HSLA-100 (MIL-S-24645A)
+Chemical Composition (wt%):
+Carbon (C): 0.04 wt%
+Nickel (Ni): 3.50 wt%
+Copper (Cu): 1.60 wt%
+Chromium (Cr): 0.60 wt%
+Molybdenum (Mo): 0.55 wt%
+Manganese (Mn): 0.85 wt%
+Silicon (Si): 0.25 wt%
+Niobium (Nb): 0.03 wt%
+Iron (Fe): Balance
+
+Processing:
+Austenitized at 900 °C for 1.5 h, followed by water quench.
+Tempered at 650 °C for 2.0 h.
+
+Mechanical Properties:
+Yield Strength (0.2% offset): 690 MPa (100 ksi)
+Tensile Strength (UTS): 795 MPa (115 ksi)
+Charpy V-Notch Impact Toughness at -40°C: 80 J (60 ft-lb)
+Elongation: 18 %
+""",
+                height=180,
+                key="text_area_pasted_doc"
+            )
+            if pasted_text.strip():
+                file_bytes_to_extract = pasted_text.encode("utf-8")
+                filename_to_extract = "pasted_metallurgy_specification.txt"
+
+    btn_extract = st.button("Extract Materials Intelligence", type="primary", use_container_width=True, key="btn_run_universal_extract")
+
+    if btn_extract and file_bytes_to_extract and filename_to_extract:
+        with st.spinner(f"Analyzing {filename_to_extract} (composition, kinetics, properties, physics)..."):
+            extracted_res = extract_from_any_file(file_bytes_to_extract, filename_to_extract)
+            st.session_state["universal_extraction_result"] = extracted_res
+
+    if "universal_extraction_result" in st.session_state:
+        res = st.session_state["universal_extraction_result"]
+        st.markdown("---")
+        st.markdown(f"#### Extraction Scorecard: `{res['filename']}`")
+        
+        # Telemetry metrics
+        m1, m2, m3, m4, m5, m6 = st.columns(6)
+        m1.metric("File Format", res["file_type"])
+        m2.metric("Solutes Found", len([k for k in res["composition"] if k != "Fe"]))
+        m3.metric("Fe Balance", f"{res['composition'].get('Fe', 0.0):.2f}%")
+        m4.metric("Pcm Index", f"{res['physics']['pcm']:.3f}")
+        m5.metric("Ms Temp", f"{res['physics']['martensite_start_c']:.0f}°C")
+        m6.metric("Alloy Cost", f"${res['physics']['raw_cost_usd_kg_min']:.2f}/kg")
+
+        # Tabbed scorecard display
+        sub_comp, sub_proc, sub_mech, sub_tables = st.tabs([
+            "Chemical Composition", "Processing & Heat Treatment", "Mechanical Properties & Military Specs", "Document Tables & Text"
+        ])
+
+        with sub_comp:
+            col_c1, col_c2 = st.columns([1, 1])
+            with col_c1:
+                st.markdown("##### Extracted Chemical Composition (wt%)")
+                comp_rows = []
+                for el, val in sorted(res["composition"].items()):
+                    if el == "Fe":
+                        continue
+                    comp_rows.append({
+                        "Element": el,
+                        "Concentration (wt%)": val,
+                        "Standard Function in Naval Steel": {
+                            "C": "Interstitial hardening / Martensitic matrix",
+                            "Ni": "Austenite stabilization & TRIP toughening",
+                            "Cu": "BCC coherent precipitation strengthening",
+                            "Cr": "Carbide formation & Cu partition",
+                            "Mo": "Secondary hardening (M2C) & temper embrittlement resistance",
+                            "Mn": "Solid solution strengthening & deoxidation",
+                            "Si": "Ferrite solid solution & deoxidation",
+                            "V": "Grain boundary pinning & secondary carbides",
+                            "Nb": "Prior austenite grain refinement",
+                            "B": "Retards ferrite nucleation on grain boundaries",
+                            "Co": "Accelerates M2C nucleation in ultra-high strength steels"
+                        }.get(el, "Alloying addition")
+                    })
+                comp_rows.append({
+                    "Element": "Fe (Iron)",
+                    "Concentration (wt%)": res["composition"].get("Fe", 0.0),
+                    "Standard Function in Naval Steel": "Base Parent Matrix (Balance)"
+                })
+                st.dataframe(pd.DataFrame(comp_rows), use_container_width=True)
+
+            with col_c2:
+                st.markdown("##### Alloying Solute Additions")
+                solute_plot_data = {k: v for k, v in res["composition"].items() if k != "Fe" and v > 0}
+                if solute_plot_data:
+                    fig_comp = px.bar(
+                        x=list(solute_plot_data.keys()),
+                        y=list(solute_plot_data.values()),
+                        labels={"x": "Element", "y": "Concentration (wt%)"},
+                        color_discrete_sequence=["#38bdf8"]
+                    )
+                    fig_comp.update_layout(
+                        paper_bgcolor="#11141c",
+                        plot_bgcolor="#11141c",
+                        font=dict(color="#eef0f5", family="Inter"),
+                        margin=dict(l=30, r=20, t=30, b=30),
+                        height=280
+                    )
+                    st.plotly_chart(fig_comp, use_container_width=True)
+                else:
+                    st.info("No solute additions above 0 wt% detected.")
+
+        with sub_proc:
+            st.markdown("##### Thermal Kinetics & Processing Schedule")
+            p_info = res["processing"]
+            
+            c_p1, c_p2, c_p3 = st.columns(3)
+            c_p1.metric("Austenitizing Temp", f"{p_info['austenitizing_temp_c']:.0f}°C" if p_info['austenitizing_temp_c'] else "Not specified")
+            c_p2.metric("Quench Medium", p_info['quench_medium'].title() if p_info['quench_medium'] else "Standard quench")
+            c_p3.metric("Tempering Temp / Time", f"{p_info['tempering_temp_c']:.0f}°C ({p_info['tempering_time_h']}h)" if p_info['tempering_temp_c'] else "Not specified")
+
+            st.markdown(f"**Thermal Processing Cycle:** `{p_info['summary']}`")
+
+        with sub_mech:
+            st.markdown("##### Extracted Mechanical Performance Envelope")
+            props = res["properties"]
+            
+            c_m1, c_m2, c_m3, c_m4 = st.columns(4)
+            c_m1.metric("Yield Strength (YS)", f"{props['yield_strength_mpa']:.0f} MPa" if props['yield_strength_mpa'] else "Not extracted", f"{props['yield_strength_ksi']:.0f} ksi" if props['yield_strength_ksi'] else None)
+            c_m2.metric("Tensile Strength (UTS)", f"{props['tensile_strength_mpa']:.0f} MPa" if props['tensile_strength_mpa'] else "Not extracted", f"{props['tensile_strength_ksi']:.0f} ksi" if props['tensile_strength_ksi'] else None)
+            c_m3.metric("Charpy Toughness (-40°C)", f"{props['charpy_toughness_j']:.0f} J" if props['charpy_toughness_j'] else "Not extracted", f"{props['charpy_toughness_ft_lb']:.0f} ft-lb" if props['charpy_toughness_ft_lb'] else None)
+            c_m4.metric("Ductility / Hardness", f"{props['elongation_pct']:.1f}% EL" if props['elongation_pct'] else ("-", f"{props['hardness_hrc']:.0f} HRC" if props['hardness_hrc'] else None))
+
+            st.markdown("##### Physical Metallurgy & Military Standards Benchmark")
+            st.markdown(f"**Weldability Diagnostic:** {res['physics']['weldability_assessment']}")
+            st.markdown(f"**Bainite Transformation Start ($B_s$):** `{res['physics']['bainite_start_c']} °C`")
+
+            mil_checks = res["physics"]["mil_spec_compliance"]
+            if mil_checks:
+                st.markdown("**Military Specification Acceptance Verdict:**")
+                mil_rows = []
+                for spec_name, spec_info in mil_checks.items():
+                    mil_rows.append({
+                        "Specification": spec_name,
+                        "Application Domain": spec_info.get("name", spec_name),
+                        "Compliance Verdict": "COMPLIANT" if spec_info.get("compliant") else "NON-COMPLIANT",
+                        "Notes": ", ".join(spec_info.get("violations", [])) if not spec_info.get("compliant") else "Meets strength, toughness, and Pcm limits"
+                    })
+                st.dataframe(pd.DataFrame(mil_rows), use_container_width=True)
+
+        with sub_tables:
+            st.markdown("##### Ingested Document Tables")
+            if res.get("tables"):
+                for idx, t in enumerate(res["tables"], 1):
+                    with st.expander(f"Table {idx}: {t.get('source', 'Document Table')}", expanded=(idx == 1)):
+                        if "dataframe" in t and isinstance(t["dataframe"], pd.DataFrame):
+                            st.dataframe(t["dataframe"], use_container_width=True)
+                        else:
+                            st.dataframe(pd.DataFrame(t.get("data", [])), use_container_width=True)
+            else:
+                st.info("No explicit tabular grids detected in the document.")
+
+            with st.expander("Document Text Preview Snippet", expanded=False):
+                st.text(res.get("raw_text_preview", ""))
+
+        # 1-Click Load into Alloy Synthesizer Action
+        st.markdown("---")
+        col_act1, col_act2, col_act3, col_act4 = st.columns(4)
+        with col_act1:
+            if st.button("⚡ Load into Alloy Synthesizer", type="primary", use_container_width=True, key="btn_inject_into_studio"):
+                sp = res["session_payload"]
+                st.session_state["st_c"] = sp["st_c"]
+                st.session_state["st_ni"] = sp["st_ni"]
+                st.session_state["st_cu"] = sp["st_cu"]
+                st.session_state["st_cr"] = sp["st_cr"]
+                st.session_state["st_mo"] = sp["st_mo"]
+                st.session_state["st_mn"] = sp["st_mn"]
+                st.session_state["st_si"] = sp["st_si"]
+                st.session_state["st_v"] = sp["st_v"]
+                st.session_state["st_b"] = sp["st_b"]
+                st.session_state["st_temper_t"] = sp["st_temper_t"]
+                st.session_state["st_temper_time"] = sp["st_temper_time"]
+                st.session_state["current_preset_loaded"] = f"Extracted: {res['steel_name']}"
+                st.success(f"Loaded '{res['steel_name']}' into Studio 1! Switch to 'Alloy Synthesizer' to simulate property envelopes.")
+
+        with col_act2:
+            json_str = json.dumps(res, indent=2, default=str)
+            st.download_button(
+                "📥 Export Record (JSON)",
+                data=json_str.encode("utf-8"),
+                file_name=f"{Path(res['filename']).stem}_extracted_materials_record.json",
+                mime="application/json",
+                use_container_width=True,
+                key="btn_down_ext_json_v2"
+            )
+
+        with col_act3:
+            comp_csv = pd.DataFrame(list(res["composition"].items()), columns=["Element", "wt%"]).to_csv(index=False)
+            st.download_button(
+                "📥 Export Chemistry (CSV)",
+                data=comp_csv.encode("utf-8"),
+                file_name=f"{Path(res['filename']).stem}_composition.csv",
+                mime="text/csv",
+                use_container_width=True,
+                key="btn_down_ext_csv_v2"
+            )
+
+        with col_act4:
+            md_report = f"""# Materials Extraction Report: {res['steel_name']}
+**Source File:** `{res['filename']}` ({res['file_type']}, {res['file_size_kb']} KB)
+**Document Hash:** `{res['doc_hash']}`
+
+## Chemical Composition (wt%)
+| Element | Weight % |
+| :--- | :--- |
+""" + "\n".join([f"| **{el}** | {v} |" for el, v in res['composition'].items()]) + f"""
+
+## Thermal Kinetics
+- {res['processing']['summary']}
+
+## Mechanical Performance
+- **Yield Strength:** {res['properties']['yield_strength_mpa']} MPa ({res['properties']['yield_strength_ksi']} ksi)
+- **Tensile Strength (UTS):** {res['properties']['tensile_strength_mpa']} MPa ({res['properties']['tensile_strength_ksi']} ksi)
+- **Charpy Impact Toughness (-40°C):** {res['properties']['charpy_toughness_j']} J ({res['properties']['charpy_toughness_ft_lb']} ft-lb)
+- **Elongation:** {res['properties']['elongation_pct']} %
+- **Hardness:** {res['properties']['hardness_hrc']} HRC
+
+## Physical Metallurgy Indices
+- **Pcm (Ito-Bessyo):** {res['physics']['pcm']}
+- **CE_IIW:** {res['physics']['ce_iiw']}
+- **Martensite Start (Ms):** {res['physics']['martensite_start_c']} °C
+- **Bainite Start (Bs):** {res['physics']['bainite_start_c']} °C
+- **Commodity Alloy Cost:** ${res['physics']['raw_cost_usd_kg_min']} / kg
+- **Weldability Assessment:** {res['physics']['weldability_assessment']}
+"""
+            st.download_button(
+                "📄 Export Report (MD)",
+                data=md_report.encode("utf-8"),
+                file_name=f"{Path(res['filename']).stem}_extraction_summary.md",
+                mime="text/markdown",
+                use_container_width=True,
+                key="btn_down_ext_md_v2"
+            )
+
+
+# ==============================================================================
+# STUDIO 6: LITERATURE & AI ASSISTANT
 # ==============================================================================
 with tab_literature:
     st.markdown("### Literature Intelligence & AI Metallurgist Agent")

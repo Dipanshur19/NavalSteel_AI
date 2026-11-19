@@ -1,28 +1,38 @@
 """
-Extraction Agent.
+Extraction Agent and Universal Materials Extractor.
 
-Calls an LLM (Claude, via the Anthropic API) with the extraction prompt from
-prompts/extract.md plus a page-numbered document, and parses the response
-into a validated MaterialRecord. Every record is checked against both the
-Pydantic model (schema.py) and the portable JSON Schema (schema/materials.schema.json)
-before being written to disk - if validation fails, the raw response is
-saved for debugging instead of silently accepting bad data.
+Calls an LLM (Gemini or Claude) or deterministic physical metallurgy heuristics
+to extract structured material records (composition wt% with balance Fe, heat
+treatment schedules, tensile & Charpy properties, physical indices Pcm, Ms, Bs,
+and military specification benchmarks) from any ingested file (.pdf, .csv, .tsv,
+.txt, .md, .json).
 
-Dry-run mode (--dry-run, or no ANTHROPIC_API_KEY set) skips the network
-call and validates a locally-provided or example JSON payload instead, so
-the rest of the pipeline can be developed and tested without an API key.
+Validated against both the Pydantic model (schema.py) and the portable JSON
+Schema (schema/materials.schema.json).
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
+import io
 import json
+import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
+import pandas as pd
 from jsonschema import Draft7Validator
 
 from . import config
+from .optimize import calculate_raw_material_cost
+from .physics import (
+    calculate_bainite_start,
+    calculate_carbon_equivalent_iiw,
+    calculate_martensite_start,
+    calculate_pcm,
+    check_military_specifications,
+)
 from .schema import MaterialRecord
 
 EXTRACT_PROMPT_PATH = config.PROMPTS_DIR / "extract.md"
@@ -157,9 +167,6 @@ def extract_record(
     return {"record": validated.model_dump(mode="json"), "valid": True, "errors": [], "raw_response": raw}
 
 
-import re
-
-
 def extract_metallurgy_info_from_doc(doc: Dict[str, Any]) -> Dict[str, Any]:
     """
     Extracts structured metallurgical data (composition, properties, tables)
@@ -227,6 +234,552 @@ def extract_metallurgy_info_from_doc(doc: Dict[str, Any]) -> Dict[str, Any]:
         "compositions": compositions,
         "properties": unique_props,
         "sample_tables": all_tables[:4]
+    }
+
+
+# ==============================================================================
+# UNIVERSAL MATERIALS FILE EXTRACTOR (.PDF, .CSV, .TSV, .TXT, .MD, .JSON)
+# ==============================================================================
+
+STANDARD_ELEMENTS = ["C", "Mn", "Si", "Ni", "Cr", "Mo", "Cu", "V", "Nb", "Ti", "B", "Co", "Al", "Fe"]
+
+ELEMENT_ALIASES: Dict[str, str] = {
+    "carbon": "C", "c": "C",
+    "manganese": "Mn", "mn": "Mn",
+    "silicon": "Si", "si": "Si",
+    "nickel": "Ni", "ni": "Ni",
+    "chromium": "Cr", "cr": "Cr",
+    "molybdenum": "Mo", "mo": "Mo",
+    "copper": "Cu", "cu": "Cu",
+    "vanadium": "V", "v": "V",
+    "niobium": "Nb", "columbium": "Nb", "nb": "Nb", "cb": "Nb",
+    "titanium": "Ti", "ti": "Ti",
+    "boron": "B", "b": "B",
+    "cobalt": "Co", "co": "Co",
+    "aluminum": "Al", "aluminium": "Al", "al": "Al",
+    "iron": "Fe", "fe": "Fe",
+    "phosphorus": "P", "p": "P",
+    "sulfur": "S", "s": "S"
+}
+
+
+def extract_from_any_file(file_bytes: bytes, filename: str) -> Dict[str, Any]:
+    """
+    Universal materials data extractor for any file format:
+    - .pdf : Parses text & tables across pages via pdfplumber
+    - .csv / .tsv : Reads tabular chemistry & mechanical properties via pandas
+    - .json : Parses structured metallurgical records or raw key-value dictionaries
+    - .txt / .md : Extracts regex patterns, dashed chemistries, and markdown tables
+
+    Computes:
+    - Chemical composition (wt%) with automatic Fe balance
+    - Heat treatment parameters (Austenitizing, Quenching, Tempering)
+    - Mechanical properties (YS, UTS, CVN, Elongation, Hardness) in SI & Imperial
+    - Physical metallurgy indices: Pcm, CE_IIW, Ms, Bs, commodity alloy cost
+    - US Navy military specification compliance checks (MIL-S-24645A, MIL-S-16216K)
+    - Session state payload for 1-click loading into Alloy Synthesizer
+    """
+    suffix = Path(filename).suffix.lower()
+    doc_hash = hashlib.sha256(file_bytes).hexdigest()
+    
+    extracted_text = ""
+    extracted_tables: List[Dict[str, Any]] = []
+    num_pages = 1
+
+    # 1. Parse File Content by Format
+    if suffix == ".pdf":
+        try:
+            import pdfplumber
+            with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
+                num_pages = len(pdf.pages)
+                text_chunks = []
+                for idx, page in enumerate(pdf.pages[:80], start=1):
+                    p_txt = page.extract_text() or ""
+                    if p_txt:
+                        text_chunks.append(f"[[Page {idx}]]\n" + p_txt)
+                    p_tables = page.extract_tables() or []
+                    for t_idx, tbl in enumerate(p_tables):
+                        cleaned = [r for r in tbl if any(c for c in r)]
+                        if len(cleaned) >= 2:
+                            extracted_tables.append({
+                                "source": f"PDF Page {idx} (Table {t_idx+1})",
+                                "page": idx,
+                                "data": cleaned
+                            })
+                extracted_text = "\n\n".join(text_chunks)
+        except Exception as e:
+            extracted_text = f"[PDF extraction warning: {str(e)}]"
+
+    elif suffix in [".csv", ".tsv"]:
+        sep = "\t" if suffix == ".tsv" else None
+        text_str = file_bytes.decode("utf-8", errors="replace")
+        extracted_text = text_str
+        try:
+            df = pd.read_csv(io.StringIO(text_str), sep=sep, engine="python")
+            cleaned_rows = [df.columns.tolist()] + df.values.tolist()
+            extracted_tables.append({
+                "source": f"CSV Dataset: {Path(filename).stem}",
+                "page": 1,
+                "data": cleaned_rows,
+                "dataframe": df
+            })
+        except Exception:
+            pass
+
+    elif suffix == ".json":
+        text_str = file_bytes.decode("utf-8", errors="replace")
+        extracted_text = text_str
+        try:
+            json_obj = json.loads(text_str)
+            # Flatten or inspect
+            if isinstance(json_obj, dict):
+                extracted_tables.append({
+                    "source": "JSON Document Object",
+                    "page": 1,
+                    "data": [["Key", "Value"]] + [[str(k), str(v)[:100]] for k, v in json_obj.items()]
+                })
+        except Exception:
+            pass
+
+    else:  # .txt, .md, and plain text
+        text_str = file_bytes.decode("utf-8", errors="replace")
+        extracted_text = text_str
+        # Check for Markdown tables
+        current_md_table = []
+        for line in text_str.splitlines():
+            sline = line.strip()
+            if sline.startswith("|") and sline.endswith("|"):
+                cells = [c.strip() for c in sline.split("|")[1:-1]]
+                if not all(c.startswith("---") or c.startswith(":") for c in cells):
+                    current_md_table.append(cells)
+            else:
+                if len(current_md_table) >= 2:
+                    extracted_tables.append({
+                        "source": f"Markdown Table ({len(current_md_table)} rows)",
+                        "page": 1,
+                        "data": current_md_table
+                    })
+                current_md_table = []
+        if len(current_md_table) >= 2:
+            extracted_tables.append({
+                "source": f"Markdown Table ({len(current_md_table)} rows)",
+                "page": 1,
+                "data": current_md_table
+            })
+
+    # 2. Extract Chemical Composition
+    comp: Dict[str, float] = {}
+    
+    # 2a. Check if parsed from JSON object
+    if suffix == ".json":
+        try:
+            jobj = json.loads(extracted_text)
+            # Schema 1: MaterialRecord steel.composition
+            if "steel" in jobj and "composition" in jobj["steel"]:
+                for c_item in jobj["steel"]["composition"]:
+                    el = c_item.get("element", "")
+                    val = c_item.get("value")
+                    if el and val is not None:
+                        comp[el] = float(val)
+            # Schema 2: top-level composition / composition_wt_pct
+            for k in ["composition_wt_pct", "composition", "chemistry", "elements"]:
+                if k in jobj and isinstance(jobj[k], dict):
+                    for el_raw, val in jobj[k].items():
+                        el_clean = ELEMENT_ALIASES.get(el_raw.lower(), el_raw.capitalize())
+                        if val is not None:
+                            try:
+                                comp[el_clean] = float(val)
+                            except (ValueError, TypeError):
+                                pass
+            # Schema 3: direct keys
+            for el_raw in STANDARD_ELEMENTS:
+                if el_raw in jobj and jobj[el_raw] is not None:
+                    try:
+                        comp[el_raw] = float(jobj[el_raw])
+                    except (ValueError, TypeError):
+                        pass
+        except Exception:
+            pass
+
+    # 2b. Check tables (CSV or extracted document tables)
+    if not comp and extracted_tables:
+        for tbl in extracted_tables:
+            rows = tbl.get("data", [])
+            if not rows or len(rows) < 2:
+                continue
+            header = [str(c).strip() for c in rows[0]]
+            # Wide format: columns are elements
+            matched_cols: Dict[str, int] = {}
+            for idx, col_name in enumerate(header):
+                cleaned_name = col_name.strip().replace("(wt%)", "").replace("wt%", "").replace("%", "").strip()
+                el = ELEMENT_ALIASES.get(cleaned_name.lower())
+                if el and el in STANDARD_ELEMENTS:
+                    matched_cols[el] = idx
+            
+            if len(matched_cols) >= 3:
+                # Extract first data row
+                first_row = rows[1]
+                for el, col_idx in matched_cols.items():
+                    if col_idx < len(first_row):
+                        raw_v = str(first_row[col_idx]).strip().replace("%", "")
+                        try:
+                            comp[el] = float(raw_v)
+                        except (ValueError, TypeError):
+                            pass
+                if comp:
+                    break
+            
+            # Long format: column 0 has element name, column 1 has value
+            if len(header) >= 2:
+                for row in rows[1:]:
+                    if len(row) >= 2:
+                        name_cell = str(row[0]).strip().replace("*", "").replace(":", "")
+                        el = ELEMENT_ALIASES.get(name_cell.lower())
+                        if el and el in STANDARD_ELEMENTS:
+                            val_str = str(row[1]).strip().replace("%", "").replace("wt", "").strip()
+                            try:
+                                comp[el] = float(val_str)
+                            except (ValueError, TypeError):
+                                pass
+
+    # Clean formatting markers for regex robustness across Markdown, logs, and tables
+    clean_text_for_regex = re.sub(r'[*_#`]', '', extracted_text)
+
+    # 2c. Check Regex in Text
+    if not comp or len(comp) < 3:
+        # Check hyphenated formula strings like: Fe-0.05C-6.5Ni-3.65Cu-1.84Cr-0.6Mo-0.1V
+        formula_matches = re.findall(
+            r'(?:Fe-)?((?:[0-9.]+[A-Za-z]+[- ]*)+)',
+            clean_text_for_regex
+        )
+        for f_match in formula_matches:
+            pairs = re.findall(r'([0-9.]+)\s*([A-Za-z]+)', f_match)
+            if len(pairs) >= 3:
+                for val, el_raw in pairs:
+                    el = ELEMENT_ALIASES.get(el_raw.lower())
+                    if el and el in STANDARD_ELEMENTS:
+                        comp[el] = float(val)
+                if len(comp) >= 3:
+                    break
+
+        # Explicit regex for standard elements
+        for el in STANDARD_ELEMENTS:
+            if el == "Fe":
+                continue
+            full_names = [k for k, v in ELEMENT_ALIASES.items() if v == el and len(k) > 2]
+            name_pats = [rf"\b{el}\b"] + [rf"\b{fn.capitalize()}\b" for fn in full_names]
+            el_group = "|".join(name_pats)
+            pat = rf'(?:{el_group})(?:\s*\([A-Za-z]+\))?[\s:=]+([0-9.]+)\s*(?:wt%|%|\b)'
+            m = re.search(pat, clean_text_for_regex, re.IGNORECASE)
+            if m:
+                try:
+                    val = float(m.group(1))
+                    if val < 30.0:  # Sanity check for alloying solutes
+                        comp[el] = val
+                except ValueError:
+                    pass
+
+    # Balance Fe calculation
+    solutes_sum = sum(v for k, v in comp.items() if k != "Fe")
+    if "Fe" not in comp or comp["Fe"] <= 50.0:
+        comp["Fe"] = round(max(0.0, 100.0 - solutes_sum), 3)
+        is_fe_balance = True
+    else:
+        is_fe_balance = False
+
+    # 3. Extract Heat Treatment Parameters
+    processing: Dict[str, Any] = {
+        "austenitizing_temp_c": None,
+        "austenitizing_time_h": None,
+        "quench_medium": None,
+        "tempering_temp_c": None,
+        "tempering_time_h": None,
+        "summary": "Standard thermal cycle"
+    }
+
+    # JSON processing check
+    if suffix == ".json":
+        try:
+            jobj = json.loads(extracted_text)
+            if "heat_treatment" in jobj and isinstance(jobj["heat_treatment"], dict):
+                ht = jobj["heat_treatment"]
+                processing["austenitizing_temp_c"] = ht.get("austenitizing_temp_c")
+                processing["tempering_temp_c"] = ht.get("tempering_temp_c")
+                processing["tempering_time_h"] = ht.get("tempering_time_h")
+                processing["quench_medium"] = ht.get("quench")
+            elif "processing" in jobj and isinstance(jobj["processing"], list):
+                for step in jobj["processing"]:
+                    s_name = str(step.get("step", "")).lower()
+                    if "solution" in s_name or "austenit" in s_name:
+                        processing["austenitizing_temp_c"] = step.get("temperature_C")
+                    elif "temper" in s_name or "aging" in s_name:
+                        if not processing["tempering_temp_c"]:
+                            processing["tempering_temp_c"] = step.get("temperature_C")
+                            t_str = str(step.get("time", ""))
+                            tm = re.search(r'([0-9.]+)\s*(?:h|hr|hours?)', t_str)
+                            if tm:
+                                processing["tempering_time_h"] = float(tm.group(1))
+        except Exception:
+            pass
+
+    # Regex for Austenitizing / Solution
+    if processing["austenitizing_temp_c"] is None:
+        m_aust = re.search(r'(?:austenitiz(?:ed|ing)?|solution\s+treatment)[\s\w]*?(?:at\s+)?([0-9]{3,4})\s*(?:°?C|deg\s*C)', extracted_text, re.IGNORECASE)
+        if m_aust:
+            processing["austenitizing_temp_c"] = float(m_aust.group(1))
+
+    # Regex for Quenching
+    if processing["quench_medium"] is None:
+        m_quench = re.search(r'(water[\s-]?quench|oil[\s-]?quench|air[\s-]?cool|gas[\s-]?quench|liquid[\s-]?nitrogen)', extracted_text, re.IGNORECASE)
+        if m_quench:
+            processing["quench_medium"] = m_quench.group(1).lower().replace("-", " ")
+
+    # Regex for Tempering / Aging
+    if processing["tempering_temp_c"] is None:
+        m_temp = re.search(r'(?:temper(?:ed|ing)?|ag(?:ed|ing)?)[\s\w]*?(?:at\s+)?([0-9]{3,4})\s*(?:°?C|deg\s*C)', extracted_text, re.IGNORECASE)
+        if m_temp:
+            processing["tempering_temp_c"] = float(m_temp.group(1))
+
+    if processing["tempering_time_h"] is None:
+        m_ttime = re.search(r'(?:temper(?:ed|ing)?|ag(?:ed|ing)?)[^.\n]*?([0-9.]+)\s*(?:h|hr|hours?)', extracted_text, re.IGNORECASE)
+        if m_ttime:
+            processing["tempering_time_h"] = float(m_ttime.group(1))
+
+    # Build processing summary string
+    proc_desc = []
+    if processing["austenitizing_temp_c"]:
+        proc_desc.append(f"Austenitized at {processing['austenitizing_temp_c']:.0f}°C")
+    if processing["quench_medium"]:
+        proc_desc.append(f"{processing['quench_medium'].title()}")
+    if processing["tempering_temp_c"]:
+        t_dur = f" for {processing['tempering_time_h']}h" if processing['tempering_time_h'] else ""
+        proc_desc.append(f"Tempered at {processing['tempering_temp_c']:.0f}°C{t_dur}")
+    processing["summary"] = " -> ".join(proc_desc) if proc_desc else "Thermal cycle: Austenitize 900°C -> Quench -> Temper"
+
+    # 4. Extract Mechanical Properties
+    props: Dict[str, Any] = {
+        "yield_strength_mpa": None,
+        "yield_strength_ksi": None,
+        "tensile_strength_mpa": None,
+        "tensile_strength_ksi": None,
+        "charpy_toughness_j": None,
+        "charpy_toughness_ft_lb": None,
+        "charpy_temp_c": -40.0,
+        "elongation_pct": None,
+        "hardness_hrc": None,
+        "raw_matches": []
+    }
+
+    # JSON mechanical properties
+    if suffix == ".json":
+        try:
+            jobj = json.loads(extracted_text)
+            if "mechanical_properties" in jobj and isinstance(jobj["mechanical_properties"], dict):
+                mp = jobj["mechanical_properties"]
+                if "yield_strength_mpa" in mp:
+                    props["yield_strength_mpa"] = float(mp["yield_strength_mpa"])
+                    props["yield_strength_ksi"] = round(props["yield_strength_mpa"] * 0.145038, 1)
+                if "tensile_strength_mpa" in mp:
+                    props["tensile_strength_mpa"] = float(mp["tensile_strength_mpa"])
+                    props["tensile_strength_ksi"] = round(props["tensile_strength_mpa"] * 0.145038, 1)
+                if "charpy_toughness_j" in mp:
+                    props["charpy_toughness_j"] = float(mp["charpy_toughness_j"])
+                    props["charpy_toughness_ft_lb"] = round(props["charpy_toughness_j"] * 0.737562, 1)
+                if "elongation_pct" in mp:
+                    props["elongation_pct"] = float(mp["elongation_pct"])
+                if "hardness_hrc" in mp:
+                    props["hardness_hrc"] = float(mp["hardness_hrc"])
+            elif "properties" in jobj and isinstance(jobj["properties"], list):
+                for p_item in jobj["properties"]:
+                    p_name = p_item.get("property", "").lower()
+                    val = p_item.get("value")
+                    unit = p_item.get("unit", "").lower()
+                    if val is not None:
+                        if "yield" in p_name:
+                            if "ksi" in unit:
+                                props["yield_strength_ksi"] = float(val)
+                                props["yield_strength_mpa"] = round(float(val) * 6.89476, 1)
+                            else:
+                                props["yield_strength_mpa"] = float(val)
+                                props["yield_strength_ksi"] = round(float(val) * 0.145038, 1)
+                        elif "charpy" in p_name or "toughness" in p_name:
+                            if "ft-lb" in unit or "ft_lb" in unit:
+                                props["charpy_toughness_ft_lb"] = float(val)
+                                props["charpy_toughness_j"] = round(float(val) * 1.35582, 1)
+                            else:
+                                props["charpy_toughness_j"] = float(val)
+                                props["charpy_toughness_ft_lb"] = round(float(val) * 0.737562, 1)
+        except Exception:
+            pass
+
+    # CSV / DataFrame column detection for mechanical properties & thermal cycles
+    if extracted_tables and "dataframe" in extracted_tables[0]:
+        df_src = extracted_tables[0]["dataframe"]
+        if len(df_src) > 0:
+            row0 = df_src.iloc[0]
+            for c in df_src.columns:
+                cl = str(c).lower()
+                val_c = row0[c]
+                try:
+                    vf = float(val_c)
+                    if ("ys" in cl or "yield" in cl) and props["yield_strength_mpa"] is None:
+                        if "ksi" in cl:
+                            props["yield_strength_ksi"] = vf
+                            props["yield_strength_mpa"] = round(vf * 6.89476, 1)
+                        else:
+                            props["yield_strength_mpa"] = vf
+                            props["yield_strength_ksi"] = round(vf * 0.145038, 1)
+                        props["raw_matches"].append({"property": "Yield Strength (CSV)", "val": vf, "unit": "MPa"})
+                    elif ("uts" in cl or "tensile" in cl) and props["tensile_strength_mpa"] is None:
+                        if "ksi" in cl:
+                            props["tensile_strength_ksi"] = vf
+                            props["tensile_strength_mpa"] = round(vf * 6.89476, 1)
+                        else:
+                            props["tensile_strength_mpa"] = vf
+                            props["tensile_strength_ksi"] = round(vf * 0.145038, 1)
+                        props["raw_matches"].append({"property": "UTS (CSV)", "val": vf, "unit": "MPa"})
+                    elif ("cvn" in cl or "charpy" in cl or "impact" in cl) and props["charpy_toughness_j"] is None:
+                        if "ft" in cl:
+                            props["charpy_toughness_ft_lb"] = vf
+                            props["charpy_toughness_j"] = round(vf * 1.35582, 1)
+                        else:
+                            props["charpy_toughness_j"] = vf
+                            props["charpy_toughness_ft_lb"] = round(vf * 0.737562, 1)
+                        props["raw_matches"].append({"property": "Charpy Toughness (CSV)", "val": vf, "unit": "J"})
+                    elif ("elong" in cl or "ductil" in cl) and props["elongation_pct"] is None:
+                        props["elongation_pct"] = vf
+                    elif ("hard" in cl or "hrc" in cl) and props["hardness_hrc"] is None:
+                        props["hardness_hrc"] = vf
+                    elif "austeniti" in cl and processing["austenitizing_temp_c"] is None:
+                        processing["austenitizing_temp_c"] = vf
+                    elif "temper" in cl and "temp" in cl and processing["tempering_temp_c"] is None:
+                        processing["tempering_temp_c"] = vf
+                    elif "temper" in cl and "time" in cl and processing["tempering_time_h"] is None:
+                        processing["tempering_time_h"] = vf
+                except (ValueError, TypeError):
+                    pass
+
+    # Regex for Yield Strength
+    if props["yield_strength_mpa"] is None:
+        m_ys = re.findall(r'(?:yield\s+strength|0\.2%\s*offset\s*yield|ys|proof\s+stress)(?:\s*\([^)]*\))?[\s:=]+(\d+(?:\.\d+)?)\s*(mpa|ksi)', clean_text_for_regex, re.IGNORECASE)
+        if m_ys:
+            val, unit = m_ys[0]
+            val_f = float(val)
+            if unit.lower() == "ksi":
+                props["yield_strength_ksi"] = val_f
+                props["yield_strength_mpa"] = round(val_f * 6.89476, 1)
+            else:
+                props["yield_strength_mpa"] = val_f
+                props["yield_strength_ksi"] = round(val_f * 0.145038, 1)
+            props["raw_matches"].append({"property": "Yield Strength", "val": val_f, "unit": unit.upper()})
+
+    # Regex for Tensile Strength (UTS)
+    if props["tensile_strength_mpa"] is None:
+        m_uts = re.findall(r'(?:ultimate\s+tensile\s+strength|tensile\s+strength|uts)(?:\s*\([^)]*\))?[\s:=]+(\d+(?:\.\d+)?)\s*(mpa|ksi)', clean_text_for_regex, re.IGNORECASE)
+        if m_uts:
+            val, unit = m_uts[0]
+            val_f = float(val)
+            if unit.lower() == "ksi":
+                props["tensile_strength_ksi"] = val_f
+                props["tensile_strength_mpa"] = round(val_f * 6.89476, 1)
+            else:
+                props["tensile_strength_mpa"] = val_f
+                props["tensile_strength_ksi"] = round(val_f * 0.145038, 1)
+            props["raw_matches"].append({"property": "UTS", "val": val_f, "unit": unit.upper()})
+
+    # Regex for Charpy Toughness
+    if props["charpy_toughness_j"] is None:
+        m_cvn = re.findall(r'(?:charpy(?:\s+v-notch)?|impact\s+energy|cvn)(?:[^\n:=]*?)[\s:=]+(\d+(?:\.\d+)?)\s*(j|joules|ft[- ]*lbs?|ft[- ]*lbf)', clean_text_for_regex, re.IGNORECASE)
+        if m_cvn:
+            val, unit = m_cvn[0]
+            val_f = float(val)
+            if "ft" in unit.lower():
+                props["charpy_toughness_ft_lb"] = val_f
+                props["charpy_toughness_j"] = round(val_f * 1.35582, 1)
+            else:
+                props["charpy_toughness_j"] = val_f
+                props["charpy_toughness_ft_lb"] = round(val_f * 0.737562, 1)
+            props["raw_matches"].append({"property": "Charpy Toughness", "val": val_f, "unit": unit.upper()})
+
+    # Regex for Elongation
+    if props["elongation_pct"] is None:
+        m_el = re.search(r'(?:elongation|ductility)[\s\w]*?[\s:=]+(\d+(?:\.\d+)?)\s*(?:%|pct)', clean_text_for_regex, re.IGNORECASE)
+        if m_el:
+            props["elongation_pct"] = float(m_el.group(1))
+
+    # Regex for Hardness
+    if props["hardness_hrc"] is None:
+        m_hrc = re.search(r'(?:hardness|rockwell)[\s:=]+(\d+(?:\.\d+)?)\s*(?:hrc)?', clean_text_for_regex, re.IGNORECASE)
+        if m_hrc:
+            props["hardness_hrc"] = float(m_hrc.group(1))
+
+    # 5. Compute Physical Metallurgy Indices
+    pcm_val = calculate_pcm(comp)
+    ce_iiw_val = calculate_carbon_equivalent_iiw(comp)
+    ms_val = calculate_martensite_start(comp)
+    bs_val = calculate_bainite_start(comp)
+    cost_min, cost_max = calculate_raw_material_cost(comp)
+
+    # Weldability Assessment
+    if pcm_val <= 0.22:
+        weld_status = "Optimal Field Weldability (Crack-free without preheat up to 50 mm plate)"
+    elif pcm_val <= 0.28:
+        weld_status = "Good Military Weldability (Preheat optional for thin plate < 25 mm, recommended for heavy armor)"
+    else:
+        weld_status = "High Cracking Susceptibility (Mandatory preheat > 100°C required to prevent hydrogen cold cracking)"
+
+    # Military Specification Check
+    prop_eval_dict = {}
+    if props["yield_strength_mpa"]:
+        prop_eval_dict["yield_strength"] = props["yield_strength_mpa"]
+    if props["charpy_toughness_j"]:
+        prop_eval_dict["charpy_toughness"] = props["charpy_toughness_j"]
+    
+    mil_results = check_military_specifications(comp, prop_eval_dict)
+
+    # 6. Session Payload for 1-Click Injection into Studio 1 (Alloy Synthesizer)
+    session_payload = {
+        "st_c": float(comp.get("C", 0.05)),
+        "st_ni": float(comp.get("Ni", 5.0)),
+        "st_cu": float(comp.get("Cu", 1.5)),
+        "st_cr": float(comp.get("Cr", 1.0)),
+        "st_mo": float(comp.get("Mo", 0.5)),
+        "st_mn": float(comp.get("Mn", 0.6)),
+        "st_si": float(comp.get("Si", 0.25)),
+        "st_v": float(comp.get("V", 0.08)),
+        "st_b": float(comp.get("B", 0.001)),
+        "st_temper_t": float(processing["tempering_temp_c"] or 480.0),
+        "st_temper_time": float(processing["tempering_time_h"] or 4.0),
+    }
+
+    # Format sample preview text
+    preview_snippet = extracted_text[:1200] if extracted_text else "No textual content available."
+
+    return {
+        "filename": filename,
+        "file_type": suffix.replace(".", "").upper(),
+        "file_size_kb": round(len(file_bytes) / 1024, 2),
+        "doc_hash": doc_hash,
+        "num_pages": num_pages,
+        "steel_name": Path(filename).stem.replace("_", " ").title(),
+        "composition": comp,
+        "solutes_sum": round(solutes_sum, 3),
+        "is_fe_balance": is_fe_balance,
+        "processing": processing,
+        "properties": props,
+        "physics": {
+            "pcm": round(pcm_val, 4),
+            "ce_iiw": round(ce_iiw_val, 4),
+            "martensite_start_c": round(ms_val, 1),
+            "bainite_start_c": round(bs_val, 1),
+            "raw_cost_usd_kg_min": round(cost_min, 2),
+            "raw_cost_usd_kg_max": round(cost_max, 2),
+            "weldability_assessment": weld_status,
+            "mil_spec_compliance": mil_results
+        },
+        "tables": extracted_tables,
+        "raw_text_preview": preview_snippet,
+        "session_payload": session_payload
     }
 
 
