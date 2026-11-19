@@ -182,7 +182,7 @@ def generate_graph_html(
     show_edge_labels: bool = False
 ) -> str:
     """Generates an interactive HTML string using PyVis with clean hierarchical or force layout."""
-    net = Network(height=height, width="100%", directed=True, notebook=False, bgcolor="#11141c", font_color="#eef0f5")
+    net = Network(height=height, width="100%", directed=True, notebook=False, bgcolor="#0e1424", font_color="#eef0f5")
     
     is_hierarchical = (layout_mode == "hierarchical")
 
@@ -300,16 +300,16 @@ def generate_graph_html(
             width=data.get("width", 2.0),
             dashes=data.get("dashes", False),
             title=data.get("title", ""),
-            font={"size": 9, "color": "#cbd5e1", "face": "Inter, sans-serif", "background": "#11141c", "strokeWidth": 0} if show_edge_labels else None,
+            font={"size": 9, "color": "#cbd5e1", "face": "Inter, sans-serif", "background": "#0e1424", "strokeWidth": 0} if show_edge_labels else None,
         )
 
     raw_html = net.generate_html()
     styled_html = raw_html.replace(
         "border: 1px solid lightgray;",
-        "border: 1px solid rgba(238, 240, 245, 0.08); border-radius: 8px;"
+        "border: 1px solid rgba(56, 189, 248, 0.14); border-radius: 8px;"
     ).replace(
         "<body>",
-        '<body style="margin:0; padding:0; background-color: #11141c; overflow: hidden;">'
+        '<body style="margin:0; padding:0; background-color: #0e1424; overflow: hidden;">'
     )
     return styled_html
 

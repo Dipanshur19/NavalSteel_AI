@@ -62,205 +62,344 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Technical Dark Ink Design System (Unslopped & Redlined under unslop-ui tokens)
+# ==============================================================================
+# TECHNICAL DEFENSE & TACTICAL TERMINAL DESIGN SYSTEM
+# Inspired by Polymarket & Binance Pro (High density, crisp contrast, zero AI slop)
+# ==============================================================================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    /* Solid Dark Ink Canvas - Zero blobs, zero radial color washes */
+    /* =========================================================================
+       1. GLOBAL THEME & VIEWPORT (Tactical Obsidian Canvas)
+       ========================================================================= */
     .stApp {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background-color: #0b0d14;
-        color: #eef0f5;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: #080b12 !important;
+        color: #f1f5f9 !important;
     }
-    
-    /* Typography - Inter only, weights 400 to 600, no sci-fi fonts */
+
+    /* Headings */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
         font-weight: 600 !important;
-        color: #eef0f5 !important;
-        letter-spacing: -0.015em;
+        color: #f8fafc !important;
+        letter-spacing: -0.02em !important;
     }
-    
-    /* Solid, Authoritative Branding without Gradient Text */
+
+    /* Global scrollbars */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #080b12;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #1e293b;
+        border-radius: 4px;
+        border: 1px solid rgba(56, 189, 248, 0.15);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #0284c7;
+    }
+
+    /* Solid, Authoritative Branding */
     .brand-title {
         font-family: 'Inter', -apple-system, sans-serif !important;
-        font-size: 1.5rem !important;
-        font-weight: 600 !important;
-        color: #eef0f5 !important;
+        font-size: 1.65rem !important;
+        font-weight: 700 !important;
+        color: #f8fafc !important;
         letter-spacing: -0.02em;
     }
     .brand-badge {
         font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.72rem !important;
-        font-weight: 500 !important;
-        padding: 2px 7px;
-        border-radius: 4px;
-        background: #1a1e28;
-        border: 1px solid rgba(238, 240, 245, 0.10);
+        font-size: 0.74rem !important;
+        font-weight: 600 !important;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: rgba(2, 132, 199, 0.16);
+        border: 1px solid rgba(56, 189, 248, 0.35);
         color: #38bdf8;
         margin-left: 8px;
         vertical-align: middle;
     }
 
-    /* Structured Surface Panels - Ink ramp, hairline border, no colored glows */
-    .surface-card {
-        background: #11141c !important;
-        border: 1px solid rgba(238, 240, 245, 0.08) !important;
+    /* =========================================================================
+       2. TIER 1: PRIMARY STUDIO DOCK (Top Capsule Navigation - Binance / macOS)
+       ========================================================================= */
+    .stTabs > div > [data-baseweb="tab-list"] {
+        background: #0e1424 !important;
+        border: 1px solid rgba(56, 189, 248, 0.18) !important;
         border-radius: 12px !important;
-        padding: 20px 24px !important;
-        margin-bottom: 16px !important;
+        padding: 6px 8px !important;
+        gap: 6px !important;
+        margin-bottom: 24px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45) !important;
+        overflow-x: auto !important;
     }
-
-    /* Metric Tiles - Clean tabular figures, sentence-case labels */
-    [data-testid="stMetric"] {
-        background: #11141c !important;
-        border: 1px solid rgba(238, 240, 245, 0.08) !important;
-        border-radius: 10px !important;
-        padding: 14px 18px !important;
-        transition: border-color 0.15s ease !important;
-    }
-    [data-testid="stMetric"]:hover {
-        border-color: rgba(238, 240, 245, 0.16) !important;
-    }
-    [data-testid="stMetricValue"] {
-        font-family: 'JetBrains Mono', monospace !important;
-        font-weight: 600 !important;
-        color: #eef0f5 !important;
-        font-size: 1.35rem !important;
-        font-feature-settings: "tnum" 1;
-    }
-    [data-testid="stMetricLabel"] {
+    .stTabs > div > [data-baseweb="tab-list"] [data-baseweb="tab"] {
+        padding: 10px 20px !important;
         font-family: 'Inter', sans-serif !important;
-        font-size: 0.8rem !important;
-        color: #a3a9b8 !important;
-        text-transform: none !important;
-        letter-spacing: 0 !important;
+        font-size: 0.90rem !important;
         font-weight: 500 !important;
-    }
-    [data-testid="stMetricDelta"] {
-        font-family: 'JetBrains Mono', monospace !important;
-        font-weight: 500 !important;
-        font-size: 0.78rem !important;
-    }
-
-    /* Restrained Segmented Studio Dock - Nested radius math: outer 8px, inner 6px (no 9999px pill) */
-    .stTabs [data-baseweb="tab-list"] {
-        background: #11141c !important;
-        border: 1px solid rgba(238, 240, 245, 0.08) !important;
+        color: #94a3b8 !important;
         border-radius: 8px !important;
-        padding: 4px !important;
-        gap: 4px !important;
-        margin-bottom: 1.5rem !important;
-    }
-    .stTabs [data-baseweb="tab"] {
-        padding: 8px 18px !important;
-        font-family: 'Inter', sans-serif !important;
-        font-size: 0.88rem !important;
-        font-weight: 500 !important;
-        color: #a3a9b8 !important;
-        border-radius: 6px !important;
-        border: none !important;
+        border: 1px solid transparent !important;
         background: transparent !important;
-        transition: background-color 0.15s ease, color 0.15s ease !important;
+        transition: all 0.16s ease !important;
+        white-space: nowrap !important;
     }
-    .stTabs [data-baseweb="tab"]:hover {
-        color: #eef0f5 !important;
-        background: #1a1e28 !important;
+    .stTabs > div > [data-baseweb="tab-list"] [data-baseweb="tab"]:hover {
+        color: #f8fafc !important;
+        background: rgba(56, 189, 248, 0.08) !important;
     }
-    .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #eef0f5 !important;
-        background: #1a1e28 !important;
-        border: 1px solid rgba(238, 240, 245, 0.12) !important;
-        border-bottom: 2px solid #0284c7 !important;
+    .stTabs > div > [data-baseweb="tab-list"] [data-baseweb="tab"][aria-selected="true"] {
+        color: #ffffff !important;
+        background: #17233c !important;
+        font-weight: 600 !important;
+        border: 1px solid rgba(56, 189, 248, 0.35) !important;
+        border-bottom: 3px solid #38bdf8 !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
     }
     .stTabs [data-baseweb="tab-highlight"] {
         display: none !important;
     }
 
-    /* Telemetry Metadata Chips - Restrained status labels */
+    /* =========================================================================
+       3. TIER 2: POLYMARKET-STYLE PILL SUBTABS (Nested within any tab or panel)
+       ========================================================================= */
+    [data-baseweb="tab-panel"] [data-baseweb="tab-list"],
+    .stTabs [data-baseweb="tab-panel"] .stTabs [data-baseweb="tab-list"] {
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 4px 0 !important;
+        margin-top: 4px !important;
+        margin-bottom: 20px !important;
+        gap: 8px !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+    [data-baseweb="tab-panel"] [data-baseweb="tab-list"] [data-baseweb="tab"],
+    .stTabs [data-baseweb="tab-panel"] .stTabs [data-baseweb="tab-list"] [data-baseweb="tab"] {
+        padding: 6px 18px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 500 !important;
+        color: #94a3b8 !important;
+        border-radius: 9999px !important; /* Authentic Polymarket Rounded Pill */
+        border: 1px solid rgba(255, 255, 255, 0.10) !important;
+        background: #101726 !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
+        transition: all 0.14s ease !important;
+        white-space: nowrap !important;
+    }
+    [data-baseweb="tab-panel"] [data-baseweb="tab-list"] [data-baseweb="tab"]:hover,
+    .stTabs [data-baseweb="tab-panel"] .stTabs [data-baseweb="tab-list"] [data-baseweb="tab"]:hover {
+        color: #f8fafc !important;
+        background: #1a2438 !important;
+        border-color: rgba(56, 189, 248, 0.35) !important;
+        transform: translateY(-1px);
+    }
+    [data-baseweb="tab-panel"] [data-baseweb="tab-list"] [data-baseweb="tab"][aria-selected="true"],
+    .stTabs [data-baseweb="tab-panel"] .stTabs [data-baseweb="tab-list"] [data-baseweb="tab"][aria-selected="true"] {
+        color: #ffffff !important;
+        background: #0284c7 !important; /* Polymarket Active Pill Naval Blue */
+        border: 1px solid #38bdf8 !important;
+        font-weight: 600 !important;
+        box-shadow: 0 2px 12px rgba(2, 132, 199, 0.45) !important;
+        transform: translateY(-1px);
+    }
+
+    /* =========================================================================
+       4. ELEVATED CARD SURFACES & METRIC TILES
+       ========================================================================= */
+    .surface-card {
+        background: #0e1424 !important;
+        border: 1px solid rgba(56, 189, 248, 0.14) !important;
+        border-radius: 12px !important;
+        padding: 20px 24px !important;
+        margin-bottom: 18px !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+    }
+
+    [data-testid="stMetric"] {
+        background: #0e1424 !important;
+        border: 1px solid rgba(56, 189, 248, 0.14) !important;
+        border-radius: 10px !important;
+        padding: 14px 18px !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+        transition: border-color 0.18s ease, transform 0.18s ease !important;
+    }
+    [data-testid="stMetric"]:hover {
+        border-color: rgba(56, 189, 248, 0.35) !important;
+        transform: translateY(-1px) !important;
+    }
+    [data-testid="stMetricValue"] {
+        font-family: 'JetBrains Mono', monospace !important;
+        font-weight: 700 !important;
+        color: #38bdf8 !important;
+        font-size: 1.35rem !important;
+        font-feature-settings: "tnum" 1;
+    }
+    [data-testid="stMetricLabel"] {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.78rem !important;
+        color: #94a3b8 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.04em !important;
+        font-weight: 600 !important;
+    }
+    [data-testid="stMetricDelta"] {
+        font-family: 'JetBrains Mono', monospace !important;
+        font-weight: 500 !important;
+        font-size: 0.76rem !important;
+    }
+
+    /* Structured Steel Benchmark Cards */
+    .steel-showcase-card {
+        background: #0e1424;
+        border: 1px solid rgba(56, 189, 248, 0.14);
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        transition: border-color 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+    }
+    .steel-showcase-card:hover {
+        border-color: rgba(56, 189, 248, 0.38);
+        background: #131c30;
+        transform: translateY(-2px);
+    }
+
+    /* =========================================================================
+       5. TELEMETRY STATUS CHIPS & BADGES
+       ========================================================================= */
     .telemetry-chip {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 3px 9px;
-        border-radius: 4px;
-        font-size: 0.74rem;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.76rem;
         font-weight: 500;
         font-family: 'JetBrains Mono', monospace;
-        background: #1a1e28;
-        border: 1px solid rgba(238, 240, 245, 0.08);
-        color: #a3a9b8;
+        background: #12192c;
+        border: 1px solid rgba(56, 189, 248, 0.16);
+        color: #cbd5e1;
     }
     .chip-dot {
-        width: 6px;
-        height: 6px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
         display: inline-block;
     }
-    .dot-green { background-color: #4cc38a; }
-    .dot-blue  { background-color: #38bdf8; }
-    .dot-purple { background-color: #a3a9b8; }
+    .dot-green {
+        background-color: #10b981;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.65);
+    }
+    .dot-blue {
+        background-color: #38bdf8;
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.65);
+    }
+    .dot-gold {
+        background-color: #f59e0b;
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.65);
+    }
+    .dot-purple {
+        background-color: #94a3b8;
+        box-shadow: 0 0 6px rgba(148, 163, 184, 0.45);
+    }
 
-    /* Buttons - Standard tactile response, single accent fill, no purple gradients */
+    /* =========================================================================
+       6. BUTTONS & INTERACTIVE CONTROLS
+       ========================================================================= */
     .stButton > button {
         font-family: 'Inter', sans-serif !important;
         font-weight: 500 !important;
         font-size: 0.88rem !important;
-        border-radius: 6px !important;
-        background: #1a1e28 !important;
-        border: 1px solid rgba(238, 240, 245, 0.10) !important;
-        color: #eef0f5 !important;
-        transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.08s ease !important;
+        border-radius: 8px !important;
+        background: #12192c !important;
+        border: 1px solid rgba(56, 189, 248, 0.18) !important;
+        color: #f1f5f9 !important;
+        transition: all 0.14s ease !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
     }
     .stButton > button:hover {
-        background: #222735 !important;
-        border-color: rgba(238, 240, 245, 0.18) !important;
+        background: #1b2640 !important;
+        border-color: rgba(56, 189, 248, 0.35) !important;
+        color: #ffffff !important;
+        transform: translateY(-1px) !important;
     }
     .stButton > button:active {
         transform: scale(0.98) !important;
     }
     .stButton > button[kind="primary"] {
         background: #0284c7 !important;
-        border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        border: 1px solid #38bdf8 !important;
         color: #ffffff !important;
+        font-weight: 600 !important;
+        box-shadow: 0 2px 12px rgba(2, 132, 199, 0.4) !important;
     }
     .stButton > button[kind="primary"]:hover {
         background: #0369a1 !important;
-        border-color: rgba(255, 255, 255, 0.25) !important;
+        border-color: #7dd3fc !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.55) !important;
     }
 
-    /* Inputs & Selectboxes - Sunken dark surface, calm hairline focus */
+    .stDownloadButton > button {
+        background: #101726 !important;
+        border: 1px solid rgba(56, 189, 248, 0.25) !important;
+        color: #38bdf8 !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        transition: all 0.14s ease !important;
+    }
+    .stDownloadButton > button:hover {
+        background: #1a253c !important;
+        border-color: #38bdf8 !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 10px rgba(56, 189, 248, 0.3) !important;
+    }
+
+    /* =========================================================================
+       7. FORM CONTROLS: INPUTS, SELECTBOXES, SLIDERS, NUMBER INPUTS
+       ========================================================================= */
     [data-baseweb="input"], [data-baseweb="select"] > div {
-        background: #07080d !important;
-        border: 1px solid rgba(238, 240, 245, 0.10) !important;
-        border-radius: 6px !important;
-        color: #eef0f5 !important;
-        transition: border-color 0.15s ease !important;
+        background: #070a12 !important;
+        border: 1px solid rgba(56, 189, 248, 0.16) !important;
+        border-radius: 8px !important;
+        color: #f8fafc !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
     }
     [data-baseweb="input"]:focus-within, [data-baseweb="select"] > div:focus-within {
-        border-color: #0284c7 !important;
-        box-shadow: none !important;
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 0 1px #38bdf8 !important;
+    }
+
+    /* Expanders */
+    [data-testid="stExpander"] {
+        background: #0e1424 !important;
+        border: 1px solid rgba(56, 189, 248, 0.14) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* Dataframe Tables */
+    [data-testid="stDataFrame"] {
+        border: 1px solid rgba(56, 189, 248, 0.14) !important;
+        border-radius: 8px !important;
+        background: #090d16 !important;
+        overflow: hidden !important;
     }
 
     /* Deepest Neutral Sidebar */
     [data-testid="stSidebar"] {
-        background: #07080d !important;
-        border-right: 1px solid rgba(238, 240, 245, 0.08) !important;
-    }
-
-    /* Structured Steel Benchmark Cards */
-    .steel-showcase-card {
-        background: #11141c;
-        border: 1px solid rgba(238, 240, 245, 0.08);
-        border-radius: 10px;
-        padding: 16px 18px;
-        margin-bottom: 12px;
-        transition: border-color 0.15s ease, background-color 0.15s ease;
-    }
-    .steel-showcase-card:hover {
-        border-color: rgba(238, 240, 245, 0.18);
-        background: #151924;
+        background: #060910 !important;
+        border-right: 1px solid rgba(56, 189, 248, 0.10) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -434,7 +573,7 @@ def normalize_alloy_metrics(ys: float, uts: float, cvn: float, pcm: float, cost:
 
 
 def build_polar_radar_figure(categories: List[str], series_list: List[Dict[str, Any]], title: str = "") -> go.Figure:
-    """Builds a technical Plotly polar radar chart on dark ink background."""
+    """Builds a technical Plotly polar radar chart on dark tactical background."""
     fig = go.Figure()
     closed_cats = list(categories) + [categories[0]]
     for s in series_list:
@@ -454,19 +593,19 @@ def build_polar_radar_figure(categories: List[str], series_list: List[Dict[str, 
                 range=[0, 100],
                 showticklabels=True,
                 ticksuffix="%",
-                gridcolor="rgba(238, 240, 245, 0.08)",
-                linecolor="rgba(238, 240, 245, 0.12)",
-                tickfont=dict(color="#7a8296", size=9, family="JetBrains Mono"),
+                gridcolor="rgba(56, 189, 248, 0.10)",
+                linecolor="rgba(56, 189, 248, 0.16)",
+                tickfont=dict(color="#64748b", size=9, family="JetBrains Mono"),
             ),
             angularaxis=dict(
-                gridcolor="rgba(238, 240, 245, 0.08)",
-                linecolor="rgba(238, 240, 245, 0.12)",
-                tickfont=dict(color="#eef0f5", size=11, family="Inter"),
+                gridcolor="rgba(56, 189, 248, 0.10)",
+                linecolor="rgba(56, 189, 248, 0.16)",
+                tickfont=dict(color="#f8fafc", size=11, family="Inter"),
             ),
-            bgcolor="#11141c",
+            bgcolor="#0e1424",
         ),
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#11141c",
+        plot_bgcolor="#0e1424",
         height=400,
         margin=dict(l=35, r=35, t=35, b=25),
         showlegend=True,
@@ -476,37 +615,37 @@ def build_polar_radar_figure(categories: List[str], series_list: List[Dict[str, 
             y=-0.16,
             xanchor="center",
             x=0.5,
-            font=dict(color="#a3a9b8", family="Inter", size=10)
+            font=dict(color="#94a3b8", family="Inter", size=10)
         ),
-        title=dict(text=title, font=dict(color="#eef0f5", family="Inter", size=13)) if title else None
+        title=dict(text=title, font=dict(color="#f8fafc", family="Inter", size=13)) if title else None
     )
     return fig
 
 
 def apply_unslop_chart_theme(fig: go.Figure, height: int = 400) -> go.Figure:
-    """Applies clean, high-contrast dark theme to any Plotly chart."""
+    """Applies clean, high-contrast tactical dark theme to any Plotly chart."""
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#11141c",
+        plot_bgcolor="#0e1424",
         height=height,
-        font=dict(family="Inter, sans-serif", color="#a3a9b8", size=12),
+        font=dict(family="Inter, sans-serif", color="#94a3b8", size=12),
         margin=dict(l=30, r=20, t=35, b=30),
         xaxis=dict(
-            gridcolor="rgba(238, 240, 245, 0.08)",
-            linecolor="rgba(238, 240, 245, 0.12)",
-            tickfont=dict(family="JetBrains Mono, monospace", size=10, color="#7a8296"),
-            title=dict(font=dict(family="Inter, sans-serif", size=12, color="#a3a9b8"))
+            gridcolor="rgba(56, 189, 248, 0.08)",
+            linecolor="rgba(56, 189, 248, 0.16)",
+            tickfont=dict(family="JetBrains Mono, monospace", size=10, color="#64748b"),
+            title=dict(font=dict(family="Inter, sans-serif", size=12, color="#94a3b8"))
         ),
         yaxis=dict(
-            gridcolor="rgba(238, 240, 245, 0.08)",
-            linecolor="rgba(238, 240, 245, 0.12)",
-            tickfont=dict(family="JetBrains Mono, monospace", size=10, color="#7a8296"),
-            title=dict(font=dict(family="Inter, sans-serif", size=12, color="#a3a9b8"))
+            gridcolor="rgba(56, 189, 248, 0.08)",
+            linecolor="rgba(56, 189, 248, 0.16)",
+            tickfont=dict(family="JetBrains Mono, monospace", size=10, color="#64748b"),
+            title=dict(font=dict(family="Inter, sans-serif", size=12, color="#94a3b8"))
         ),
         legend=dict(
-            font=dict(family="Inter, sans-serif", size=11, color="#a3a9b8"),
-            bgcolor="rgba(17, 20, 28, 0.8)",
-            bordercolor="rgba(238, 240, 245, 0.08)",
+            font=dict(family="Inter, sans-serif", size=11, color="#94a3b8"),
+            bgcolor="rgba(14, 20, 36, 0.85)",
+            bordercolor="rgba(56, 189, 248, 0.14)",
             borderwidth=1
         ),
     )
@@ -514,37 +653,51 @@ def apply_unslop_chart_theme(fig: go.Figure, height: int = 400) -> go.Figure:
 
 
 # ==============================================================================
-# 4. MAIN HERO MASTHEAD
+# 4. MAIN HERO MASTHEAD (Tactical Defense & Financial Terminal Aesthetic)
 # ==============================================================================
 st.markdown("""
-<div class="surface-card" style="margin-bottom: 20px; padding: 18px 24px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+<div class="surface-card" style="margin-bottom: 22px; padding: 20px 24px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
         <div>
-            <div class="brand-title">
-                NavalSteel AI <span class="brand-badge">Materials Informatics</span>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <span class="brand-title">
+                    NavalSteel AI
+                </span>
+                <span class="brand-badge">
+                    MATERIALS INFORMATICS & INVERSE DESIGN
+                </span>
             </div>
-            <p style="margin: 4px 0 0 0; font-size: 0.86rem; color: #a3a9b8; font-family: 'Inter', sans-serif;">
-                Physics-informed machine learning, autonomous multi-objective inverse alloy design, and naval defense specifications
+            <p style="margin: 6px 0 6px 0; font-size: 0.88rem; color: #94a3b8; font-family: 'Inter', sans-serif;">
+                Physics-informed surrogate ensembles, multi-objective NSGA-II inverse alloy design, and naval defense qualification standards
             </p>
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: #64748b; font-family: 'Inter', sans-serif; flex-wrap: wrap;">
+                <span><strong style="color: #cbd5e1;">IIT Kanpur</strong> · Department of Materials Science & Engineering</span>
+                <span>·</span>
+                <span>Author: <strong style="color: #cbd5e1;">Dipanshu Raj</strong> (Roll No: 230375)</span>
+                <span>·</span>
+                <span>Mentor: <strong style="color: #cbd5e1;">Prof. Amarendra Kumar Singh</strong></span>
+                <span>·</span>
+                <span>Course: <strong style="color: #38bdf8;">UGP 497</strong></span>
+            </div>
         </div>
         <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Surrogate: RF+GB Ensemble</span>
+            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Surrogate: RF+GB Ensemble (R² 0.91)</span>
             <span class="telemetry-chip"><span class="chip-dot dot-blue"></span>MIL Compliance: Active</span>
-            <span class="telemetry-chip"><span class="chip-dot dot-purple"></span>Intelligence: Gemini Flash</span>
+            <span class="telemetry-chip"><span class="chip-dot dot-gold"></span>NSGA-II Pareto: Enabled</span>
             <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Dataset: 40 Heats</span>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Primary Segmented Studio Dock (Unslopped)
+# Primary Segmented Studio Dock (Tactical Terminal Architecture)
 tab_studio, tab_pareto, tab_benchmarks, tab_graph, tab_extractor, tab_literature = st.tabs([
-    "Alloy Synthesizer",
-    "Pareto Optimization",
-    "Benchmark Library",
-    "Causal Knowledge Graph",
-    "Document & File Extractor",
-    "Literature Intelligence",
+    "⚡ Alloy Synthesizer",
+    "🎯 Pareto Optimization",
+    "🛡️ Benchmark Library",
+    "🕸️ Causal Knowledge Graph",
+    "📑 Document & File Extractor",
+    "🤖 Literature Intelligence",
 ])
 
 
@@ -570,7 +723,7 @@ with tab_studio:
     with col_pre2:
         preset_info = BENCHMARK_PRESETS[chosen_preset]
         st.markdown(f"""
-        <div style="background: #11141c; border-left: 3px solid #0284c7; border: 1px solid rgba(238, 240, 245, 0.08); border-radius: 6px; padding: 10px 14px; font-size: 0.85rem; color: #a3a9b8; margin-top: 5px;">
+        <div style="background: #0e1424; border-left: 3px solid #0284c7; border: 1px solid rgba(56, 189, 248, 0.16); border-radius: 8px; padding: 12px 16px; font-size: 0.85rem; color: #94a3b8; margin-top: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
             {preset_info["desc"]}
         </div>
         """, unsafe_allow_html=True)
@@ -600,9 +753,9 @@ with tab_studio:
         st.markdown("##### Aim Chemical Formulation (wt%)")
         
         tab_base, tab_tough, tab_carbide = st.tabs([
-            "Iron Matrix (C, Mn, Si)",
-            "Toughening Solutes (Ni, Cu)",
-            "Carbide Formers (Cr, Mo, V, B)"
+            "⚡ Base Matrix (Fe, C, Mn, Si)",
+            "💎 Toughening Solutes (Ni, Cu)",
+            "🛡️ Carbide Formers (Cr, Mo, V, B)"
         ])
         
         with tab_base:
@@ -734,8 +887,8 @@ with tab_studio:
     # Dynamic Isochronal Tempering Response & Multi-Dimensional Radar
     st.markdown("#### Performance Envelope & Kinetics Analysis")
     st_tab_iso, st_tab_radar = st.tabs([
-        "Isochronal Tempering Trajectory (400°C – 650°C)",
-        "Multi-Dimensional Radar Fingerprint (vs. HSLA-100 & BlastAlloy 160)"
+        "📈 Isochronal Tempering Kinetics (400°C–650°C)",
+        "🎯 Multi-Dimensional Radar Fingerprint"
     ])
 
     with st_tab_iso:
@@ -777,31 +930,31 @@ with tab_studio:
             y=[current_ys],
             mode="markers",
             name="Current Condition",
-            marker=dict(color="#e5484d", size=9, symbol="circle"),
+            marker=dict(color="#f59e0b", size=9, symbol="circle"),
         ))
 
         fig_iso.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="#11141c",
+            plot_bgcolor="#0e1424",
             height=400,
             margin=dict(l=30, r=30, t=35, b=25),
             xaxis=dict(
-                title=dict(text="Tempering Temperature (°C)", font=dict(family="Inter", size=12, color="#a3a9b8")),
-                gridcolor="rgba(238, 240, 245, 0.08)",
-                linecolor="rgba(238, 240, 245, 0.12)",
-                tickfont=dict(family="JetBrains Mono", size=10, color="#7a8296"),
+                title=dict(text="Tempering Temperature (°C)", font=dict(family="Inter", size=12, color="#94a3b8")),
+                gridcolor="rgba(56, 189, 248, 0.08)",
+                linecolor="rgba(56, 189, 248, 0.16)",
+                tickfont=dict(family="JetBrains Mono", size=10, color="#64748b"),
             ),
             yaxis=dict(
                 title=dict(text=f"Yield Strength ({'ksi' if is_imperial else 'MPa'})", font=dict(family="Inter", size=12, color="#38BDF8")),
-                gridcolor="rgba(238, 240, 245, 0.08)",
-                linecolor="rgba(238, 240, 245, 0.12)",
+                gridcolor="rgba(56, 189, 248, 0.08)",
+                linecolor="rgba(56, 189, 248, 0.16)",
                 tickfont=dict(family="JetBrains Mono", size=10, color="#38BDF8"),
             ),
             yaxis2=dict(
-                title=dict(text=f"Charpy Toughness ({'ft-lb' if is_imperial else 'J'})", font=dict(family="Inter", size=12, color="#4cc38a")),
-                gridcolor="rgba(238, 240, 245, 0.08)",
-                linecolor="rgba(238, 240, 245, 0.12)",
-                tickfont=dict(family="JetBrains Mono", size=10, color="#4cc38a"),
+                title=dict(text=f"Charpy Toughness ({'ft-lb' if is_imperial else 'J'})", font=dict(family="Inter", size=12, color="#10B981")),
+                gridcolor="rgba(56, 189, 248, 0.08)",
+                linecolor="rgba(56, 189, 248, 0.16)",
+                tickfont=dict(family="JetBrains Mono", size=10, color="#10B981"),
                 overlaying="y",
                 side="right"
             ),
@@ -922,7 +1075,7 @@ with tab_pareto:
     st.markdown("### Multi-Objective Pareto Optimizer (NSGA-II)")
     st.caption("Evolutionary search isolating non-dominated trade-offs across Yield Strength, Charpy Toughness, Weldability (Pcm), and Alloying Cost.")
 
-    opt_tab_nsga, opt_tab_heuristic = st.tabs(["Evolutionary Optimizer (NSGA-II)", "Heuristic Inverse Designer"])
+    opt_tab_nsga, opt_tab_heuristic = st.tabs(["⚡ Evolutionary Optimizer (NSGA-II)", "🎯 Heuristic Inverse Designer"])
 
     with opt_tab_nsga:
         st.markdown("##### Mission Profile Presets")
@@ -997,7 +1150,7 @@ with tab_pareto:
             df_plot = pd.DataFrame(plot_rows)
 
             # 2D and 3D Visualization
-            v_tab2d, v_tab3d = st.tabs(["2D Pareto Frontier", "3D Objective Space"])
+            v_tab2d, v_tab3d = st.tabs(["📈 2D Pareto Frontier", "🌐 3D Objective Space"])
             with v_tab2d:
                 fig_2d = px.scatter(
                     df_plot,
@@ -1036,9 +1189,9 @@ with tab_pareto:
                 fig_3d.update_layout(
                     paper_bgcolor="rgba(0,0,0,0)",
                     scene=dict(
-                        xaxis=dict(gridcolor="rgba(238, 240, 245, 0.08)", backgroundcolor="#11141c", color="#a3a9b8"),
-                        yaxis=dict(gridcolor="rgba(238, 240, 245, 0.08)", backgroundcolor="#11141c", color="#a3a9b8"),
-                        zaxis=dict(gridcolor="rgba(238, 240, 245, 0.08)", backgroundcolor="#11141c", color="#a3a9b8"),
+                        xaxis=dict(gridcolor="rgba(56, 189, 248, 0.08)", backgroundcolor="#0e1424", color="#94a3b8"),
+                        yaxis=dict(gridcolor="rgba(56, 189, 248, 0.08)", backgroundcolor="#0e1424", color="#94a3b8"),
+                        zaxis=dict(gridcolor="rgba(56, 189, 248, 0.08)", backgroundcolor="#0e1424", color="#94a3b8"),
                     ),
                     height=480,
                     margin=dict(l=10, r=10, t=35, b=10)
@@ -1132,144 +1285,146 @@ with tab_benchmarks:
     st.markdown("### Naval Benchmark Steels & Training Heats")
     st.caption("Experimentally validated military plate steels extracted from scientific literature and technical reports.")
 
-    # Structured Steel Showcase Cards Grid
-    st.markdown("""
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 20px;">
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">BlastAlloy 160</span>
-                <span class="telemetry-chip" style="margin: 0;">ONR Prototype</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Dual Cu & M2C nanoscale precipitation with transformation toughening.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
-                <span>YS: <b style="color: #eef0f5;">1103 MPa</b></span>
-                <span>CVN: <b style="color: #4cc38a;">176 J</b></span>
-                <span>Pcm: <b style="color: #f59e0b;">0.447</b></span>
-            </div>
-        </div>
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HSLA-115</span>
-                <span class="telemetry-chip" style="margin: 0;">CVN-78 Carrier</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Zero-preheat aircraft carrier flight deck structural plate steel.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
-                <span>YS: <b style="color: #eef0f5;">793 MPa</b></span>
-                <span>CVN: <b style="color: #4cc38a;">115 J</b></span>
-                <span>Pcm: <b style="color: #4cc38a;">0.240</b></span>
-            </div>
-        </div>
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HSLA-100</span>
-                <span class="telemetry-chip" style="margin: 0;">Surface Fleet</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Low-carbon copper precipitation plate with high weldability (MIL-S-24645A).</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
-                <span>YS: <b style="color: #eef0f5;">690 MPa</b></span>
-                <span>CVN: <b style="color: #4cc38a;">140 J</b></span>
-                <span>Pcm: <b style="color: #4cc38a;">0.220</b></span>
-            </div>
-        </div>
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HY-100</span>
-                <span class="telemetry-chip" style="margin: 0;">Submarine Hull</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Quenched & tempered martensitic submarine pressure hull plate.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
-                <span>YS: <b style="color: #eef0f5;">690 MPa</b></span>
-                <span>CVN: <b style="color: #f59e0b;">90 J</b></span>
-                <span>Pcm: <b style="color: #f59e0b;">0.320</b></span>
-            </div>
-        </div>
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HY-80</span>
-                <span class="telemetry-chip" style="margin: 0;">Historic Sub</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Historic naval submarine hull standard plate (MIL-S-16216).</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
-                <span>YS: <b style="color: #eef0f5;">552 MPa</b></span>
-                <span>CVN: <b style="color: #4cc38a;">110 J</b></span>
-                <span>Pcm: <b style="color: #f59e0b;">0.290</b></span>
-            </div>
-        </div>
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">AF1410</span>
-                <span class="telemetry-chip" style="margin: 0;">Cobalt Armor</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Ultra-high strength 14 wt% Co plate with high raw material cost.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
-                <span>YS: <b style="color: #eef0f5;">1103 MPa</b></span>
-                <span>CVN: <b style="color: #f59e0b;">81 J</b></span>
-                <span>Pcm: <b style="color: #e5484d;">0.520</b></span>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    summary_rows = []
-    for k, rec in all_records.items():
-        c_val = None
-        for c in rec["steel"].get("composition", []):
-            if c["element"].lower() == "c":
-                c_val = c.get("value")
-                break
-
-        ys_val = None
-        for p in rec.get("properties", []):
-            if "yield" in p["property"].lower() and p.get("value") is not None:
-                val = p["value"]
-                if p.get("unit", "").lower() == "ksi":
-                    val *= 6.89476
-                ys_val = val
-                break
-
-        cvn_val = None
-        for p in rec.get("properties", []):
-            if "charpy" in p["property"].lower() and p.get("value") is not None:
-                val = p["value"]
-                if p.get("unit", "").lower() == "ft-lb":
-                    val *= 1.35582
-                cvn_val = val
-                break
-
-        phys = evaluate_steel_physics(rec["steel"].get("composition", []))
-
-        summary_rows.append({
-            "Steel Grade": rec["steel"]["name"],
-            "Family": rec["steel"].get("alloy_family", "Naval"),
-            "Carbon (wt%)": c_val,
-            "Yield Strength": fmt_strength(ys_val) if ys_val else "Unknown",
-            "Charpy Toughness": fmt_toughness(cvn_val) if cvn_val else "Unknown",
-            "Pcm (Cracking)": phys["pcm"],
-            "Weld Risk": phys["weldability_risk"],
-            "Preheat Req.": f"{phys['recommended_preheat_C']} °C",
-        })
-
-    df_bench = pd.DataFrame(summary_rows)
-    st.dataframe(df_bench, use_container_width=True, hide_index=True)
-
-    # Download Dataset Button
-    csv_bench_bytes = df_bench.to_csv(index=False).encode("utf-8")
-    st.download_button(
-        "Download Benchmark Steels (CSV)",
-        data=csv_bench_bytes,
-        file_name="naval_benchmark_steels.csv",
-        mime="text/csv",
-        key="btn_down_bench_tab3"
-    )
-
-    st.markdown("---")
-    st.markdown("#### Naval Benchmark Comparison & Multi-Property Trade-off Space")
-    tab_bench_2d, tab_bench_radar = st.tabs([
-        "2D Strength–Toughness Bubble Space",
-        "Benchmark Multi-Property Radar Matrix"
+    tab_bench_cards, tab_bench_visuals, tab_bench_raw = st.tabs([
+        "🛡️ Standard Benchmark Steels",
+        "📈 Multi-Property Radar & 2D Spaces",
+        "📊 40 Experimental Heats Dataset"
     ])
 
-    with tab_bench_2d:
+    with tab_bench_cards:
+        # Structured Steel Showcase Cards Grid
+        st.markdown("""
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 20px;">
+            <div class="steel-showcase-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 1.0rem; font-weight: 600; color: #f8fafc;">BlastAlloy 160</span>
+                    <span class="telemetry-chip" style="margin: 0;">ONR Prototype</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin: 6px 0 10px 0;">Dual Cu & M2C nanoscale precipitation with transformation toughening.</p>
+                <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                    <span>YS: <b style="color: #38bdf8;">1103 MPa</b></span>
+                    <span>CVN: <b style="color: #10b981;">176 J</b></span>
+                    <span>Pcm: <b style="color: #f59e0b;">0.447</b></span>
+                </div>
+            </div>
+            <div class="steel-showcase-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 1.0rem; font-weight: 600; color: #f8fafc;">HSLA-115</span>
+                    <span class="telemetry-chip" style="margin: 0;">CVN-78 Carrier</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin: 6px 0 10px 0;">Zero-preheat aircraft carrier flight deck structural plate steel.</p>
+                <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                    <span>YS: <b style="color: #38bdf8;">793 MPa</b></span>
+                    <span>CVN: <b style="color: #10b981;">115 J</b></span>
+                    <span>Pcm: <b style="color: #10b981;">0.240</b></span>
+                </div>
+            </div>
+            <div class="steel-showcase-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 1.0rem; font-weight: 600; color: #f8fafc;">HSLA-100</span>
+                    <span class="telemetry-chip" style="margin: 0;">Surface Fleet</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin: 6px 0 10px 0;">Low-carbon copper precipitation plate with high weldability (MIL-S-24645A).</p>
+                <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                    <span>YS: <b style="color: #38bdf8;">690 MPa</b></span>
+                    <span>CVN: <b style="color: #10b981;">140 J</b></span>
+                    <span>Pcm: <b style="color: #10b981;">0.220</b></span>
+                </div>
+            </div>
+            <div class="steel-showcase-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 1.0rem; font-weight: 600; color: #f8fafc;">HY-100</span>
+                    <span class="telemetry-chip" style="margin: 0;">Submarine Hull</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin: 6px 0 10px 0;">Quenched & tempered martensitic submarine pressure hull plate.</p>
+                <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                    <span>YS: <b style="color: #38bdf8;">690 MPa</b></span>
+                    <span>CVN: <b style="color: #f59e0b;">90 J</b></span>
+                    <span>Pcm: <b style="color: #f59e0b;">0.320</b></span>
+                </div>
+            </div>
+            <div class="steel-showcase-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 1.0rem; font-weight: 600; color: #f8fafc;">HY-80</span>
+                    <span class="telemetry-chip" style="margin: 0;">Historic Sub</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin: 6px 0 10px 0;">Historic naval submarine hull standard plate (MIL-S-16216).</p>
+                <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                    <span>YS: <b style="color: #38bdf8;">552 MPa</b></span>
+                    <span>CVN: <b style="color: #10b981;">110 J</b></span>
+                    <span>Pcm: <b style="color: #f59e0b;">0.290</b></span>
+                </div>
+            </div>
+            <div class="steel-showcase-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 1.0rem; font-weight: 600; color: #f8fafc;">AF1410</span>
+                    <span class="telemetry-chip" style="margin: 0;">Cobalt Armor</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin: 6px 0 10px 0;">Ultra-high strength 14 wt% Co plate with high raw material cost.</p>
+                <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                    <span>YS: <b style="color: #38bdf8;">1103 MPa</b></span>
+                    <span>CVN: <b style="color: #f59e0b;">81 J</b></span>
+                    <span>Pcm: <b style="color: #ef4444;">0.520</b></span>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        summary_rows = []
+        for k, rec in all_records.items():
+            c_val = None
+            for c in rec["steel"].get("composition", []):
+                if c["element"].lower() == "c":
+                    c_val = c.get("value")
+                    break
+
+            ys_val = None
+            for p in rec.get("properties", []):
+                if "yield" in p["property"].lower() and p.get("value") is not None:
+                    val = p["value"]
+                    if p.get("unit", "").lower() == "ksi":
+                        val *= 6.89476
+                    ys_val = val
+                    break
+
+            cvn_val = None
+            for p in rec.get("properties", []):
+                if "charpy" in p["property"].lower() and p.get("value") is not None:
+                    val = p["value"]
+                    if p.get("unit", "").lower() == "ft-lb":
+                        val *= 1.35582
+                    cvn_val = val
+                    break
+
+            phys = evaluate_steel_physics(rec["steel"].get("composition", []))
+
+            summary_rows.append({
+                "Steel Grade": rec["steel"]["name"],
+                "Family": rec["steel"].get("alloy_family", "Naval"),
+                "Carbon (wt%)": c_val,
+                "Yield Strength": fmt_strength(ys_val) if ys_val else "Unknown",
+                "Charpy Toughness": fmt_toughness(cvn_val) if cvn_val else "Unknown",
+                "Pcm (Cracking)": phys["pcm"],
+                "Weld Risk": phys["weldability_risk"],
+                "Preheat Req.": f"{phys['recommended_preheat_C']} °C",
+            })
+
+        df_bench = pd.DataFrame(summary_rows)
+        st.dataframe(df_bench, use_container_width=True, hide_index=True)
+
+        # Download Dataset Button
+        csv_bench_bytes = df_bench.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            "Download Benchmark Steels (CSV)",
+            data=csv_bench_bytes,
+            file_name="naval_benchmark_steels.csv",
+            mime="text/csv",
+            key="btn_down_bench_tab3"
+        )
+
+    with tab_bench_visuals:
+        st.markdown("##### Naval Benchmark Comparison & Multi-Property Trade-off Space")
+        
         tradeoff_data = [
             {"Steel": "BlastAlloy160", "Yield Strength (MPa)": 1103, "Charpy Toughness (J)": 176, "Pcm": 0.447},
             {"Steel": "HY-80", "Yield Strength (MPa)": 552, "Charpy Toughness (J)": 110, "Pcm": 0.290},
@@ -1288,13 +1443,14 @@ with tab_benchmarks:
             size="Pcm",
             text="Steel",
             title="Naval Steels Trade-off Space: Strength vs. Toughness (Bubble Size: Pcm Cracking Risk)",
-            color_discrete_sequence=["#38BDF8", "#4cc38a", "#a3a9b8", "#f59e0b", "#64748b", "#cbd5e1"]
+            color_discrete_sequence=["#38BDF8", "#10B981", "#94a3b8", "#f59e0b", "#64748b", "#cbd5e1"]
         )
         fig_tradeoff.update_traces(textposition="top center")
         apply_unslop_chart_theme(fig_tradeoff, height=420)
         st.plotly_chart(fig_tradeoff, use_container_width=True)
 
-    with tab_bench_radar:
+        st.markdown("---")
+        st.markdown("##### Cross-Grade Benchmark Radar Matrix")
         bench_radar_series = [
             {
                 "name": "BlastAlloy 160 (Prototype)",
@@ -1306,15 +1462,15 @@ with tab_benchmarks:
             {
                 "name": "HSLA-100 (Surface)",
                 "values": normalize_alloy_metrics(690, 760, 140, 0.220, 2250, 420),
-                "color": "#4cc38a",
-                "fillcolor": "rgba(76, 195, 138, 0.08)",
+                "color": "#10B981",
+                "fillcolor": "rgba(16, 185, 129, 0.08)",
                 "width": 2
             },
             {
                 "name": "HSLA-115 (Carrier)",
                 "values": normalize_alloy_metrics(793, 860, 115, 0.240, 2600, 410),
-                "color": "#a3a9b8",
-                "fillcolor": "rgba(163, 169, 184, 0.08)",
+                "color": "#94a3b8",
+                "fillcolor": "rgba(148, 163, 184, 0.08)",
                 "width": 2
             },
             {
@@ -1336,8 +1492,8 @@ with tab_benchmarks:
             {
                 "name": "AF1410 (Co Armor)",
                 "values": normalize_alloy_metrics(1103, 1450, 81, 0.520, 14500, 340),
-                "color": "#e5484d",
-                "fillcolor": "rgba(229, 72, 77, 0.08)",
+                "color": "#ef4444",
+                "fillcolor": "rgba(239, 68, 68, 0.08)",
                 "width": 1.5,
                 "dash": "dot"
             },
@@ -1350,20 +1506,21 @@ with tab_benchmarks:
         st.plotly_chart(fig_bench_radar, use_container_width=True)
         st.caption("Cross-alloy radar fingerprint highlighting the structural performance boundary shift achieved by Dr. Arup Saha's BlastAlloy 160 vs. high-cobalt AF1410 and weld-friendly HSLA steels.")
 
-    st.markdown("---")
-    st.markdown("#### Experimental Training Heats (N = 40)")
-    dataset_csv_path = config.DATA_DIR / "dataset" / "naval_steels_dataset.csv"
-    if dataset_csv_path.exists():
-        df_raw_heats = pd.read_csv(dataset_csv_path)
-        st.dataframe(df_raw_heats, use_container_width=True)
-        raw_csv_bytes = df_raw_heats.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            "Download Experimental Heats Dataset (CSV)",
-            data=raw_csv_bytes,
-            file_name="naval_steels_dataset.csv",
-            mime="text/csv",
-            key="btn_down_raw_heats"
-        )
+    with tab_bench_raw:
+        st.markdown("##### Experimental Training Heats (N = 40)")
+        st.caption("Empirical heats dataset covering Fe-Ni-Cu-Cr-Mo-V-C systems from Northwestern University dissertation (Saha 2004).")
+        dataset_csv_path = config.DATA_DIR / "dataset" / "naval_steels_dataset.csv"
+        if dataset_csv_path.exists():
+            df_raw_heats = pd.read_csv(dataset_csv_path)
+            st.dataframe(df_raw_heats, use_container_width=True, height=520)
+            raw_csv_bytes = df_raw_heats.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                "Download Experimental Heats Dataset (CSV)",
+                data=raw_csv_bytes,
+                file_name="naval_steels_dataset.csv",
+                mime="text/csv",
+                key="btn_down_raw_heats"
+            )
 
 
 # ==============================================================================
@@ -1373,93 +1530,100 @@ with tab_graph:
     st.markdown("### Causal Materials Knowledge Graph")
     st.caption("Multi-scale directed network mapping: Alloying Solutes -> Microstructural Phases -> Physical Mechanisms -> Target Properties.")
 
-    col_kg_l, col_kg_r = st.columns([1, 3])
-    
-    with col_kg_l:
-        st.markdown("##### Subgraph Scope")
-        kg_scope = st.radio("Graph view:", ["Global Cross-Alloy Network", "Single Alloy Subgraph"], index=0, key="kg_scope_sel")
-        
-        target_recs = None
-        if kg_scope == "Single Alloy Subgraph":
-            alloy_key = st.selectbox("Target alloy:", list(all_records.keys()), format_func=lambda k: all_records[k]["steel"]["name"], key="kg_alloy_sel")
-            target_recs = [all_records[alloy_key]]
+    tab_kg_vis, tab_kg_matrix = st.tabs([
+        "🕸️ Hierarchical Causal DAG & Pathway Tracing",
+        "📋 Causal Evidence & Relations Matrix (Table)"
+    ])
 
-        st.markdown("##### Graph Architecture")
-        kg_layout = st.selectbox(
-            "Layout engine:",
-            ["Hierarchical Directed Flow (Left-to-Right DAG)", "Organic Force Network (Clustered Physics)"],
-            index=0,
-            help="Hierarchical Directed Flow arranges concepts into 4 crisp left-to-right columns (Solutes -> Phases -> Mechanisms -> Properties), eliminating overlapping text and node tangles.",
-            key="kg_layout_sel"
-        )
-        layout_mode = "hierarchical" if "Hierarchical" in kg_layout else "organic"
-
-        show_edge_labels = st.checkbox(
-            "Show text labels directly on lines",
-            value=False,
-            help="By default, relation details appear in clean hover tooltips. Enable this checkbox if you wish to render verbs directly on canvas lines.",
-            key="kg_edge_labels_toggle"
-        )
-
-        st.markdown("""
-        **Network Architecture Legend:**
-        * **Tier 1 (Left, Cobalt)**: Alloying Solutes (`Ni`, `Cu`, `Mo`, `Cr`, `C`, `V`, `Co`, `Nb`)
-        * **Tier 2 (Mid-Left, Indigo)**: Microstructures (`Lath Martensite`, `M2C`, `Retained Austenite`)
-        * **Tier 3 (Mid-Right, Emerald)**: Physical Mechanisms (`TRIP Toughening`, `Orowan Precipitation`, `Grain Refinement`)
-        * **Tier 4 (Right, Amber)**: Target Properties (`Toughness`, `Yield Strength`, `Weldability`)
+    with tab_kg_vis:
+        col_kg_l, col_kg_r = st.columns([1, 3])
         
-        **Causal Edge Types:**
-        * **Solid Cyan Line**: Explicit peer-reviewed literature evidence
-        * **Dashed Amber Line**: Inferred physical metallurgy relationship
-        """)
+        with col_kg_l:
+            st.markdown("##### Subgraph Scope")
+            kg_scope = st.radio("Graph view:", ["Global Cross-Alloy Network", "Single Alloy Subgraph"], index=0, key="kg_scope_sel")
+            
+            target_recs = None
+            if kg_scope == "Single Alloy Subgraph":
+                alloy_key = st.selectbox("Target alloy:", list(all_records.keys()), format_func=lambda k: all_records[k]["steel"]["name"], key="kg_alloy_sel")
+                target_recs = [all_records[alloy_key]]
 
-    with col_kg_r:
-        G = build_knowledge_graph(target_recs)
-        analytics = get_graph_analytics(G)
-        
-        m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Total Concepts", analytics["total_nodes"])
-        m2.metric("Causal Edges", analytics["total_edges"])
-        m3.metric("Explicit Evidence", analytics["evidence_counts"].get("EXPLICIT", 0))
-        m4.metric("Graph Density", f"{analytics['density']:.3f}")
-        
-        # Interactive Graph Canvas (Dark Ink styling)
-        html_code = generate_graph_html(G, height="540px", layout_mode=layout_mode, show_edge_labels=show_edge_labels)
-        components.html(html_code, height=550, scrolling=False)
-        
-        # Causal Pathway Tracing Tool
-        with st.expander("Causal Pathway Tracing Tool (Element to Property)", expanded=True):
-            st.caption("Trace multi-scale metallurgical causality chains from alloying elements through precipitates to mechanical properties.")
-            c_src, c_tgt = st.columns(2)
-            with c_src:
-                src_node = st.selectbox("Source Alloying Element:", ["Ni", "Cu", "Mo", "Cr", "C", "V", "Co", "Nb", "Mn"], key="kg_src_sel")
-            with c_tgt:
-                tgt_node = st.selectbox("Target Mechanical Property:", ["toughness", "yield_strength", "weldability", "hardness"], key="kg_tgt_sel")
-                
-            paths = find_causal_pathways(G, src_node, tgt_node)
-            if paths:
-                st.markdown(f"**Found {len(paths)} causal pathway(s) from `{src_node}` to `{tgt_node}`:**")
-                for i, p in enumerate(paths, 1):
-                    chain = " $\\rightarrow$ ".join([f"`{n.replace('_', ' ').title()}`" for n in p])
-                    st.markdown(f"**Path {i}:** {chain}")
-            else:
-                st.info(f"No direct causal chain found from `{src_node}` to `{tgt_node}` in the current subgraph scope.")
+            st.markdown("##### Graph Architecture")
+            kg_layout = st.selectbox(
+                "Layout engine:",
+                ["Hierarchical Directed Flow (Left-to-Right DAG)", "Organic Force Network (Clustered Physics)"],
+                index=0,
+                help="Hierarchical Directed Flow arranges concepts into 4 crisp left-to-right columns (Solutes -> Phases -> Mechanisms -> Properties), eliminating overlapping text and node tangles.",
+                key="kg_layout_sel"
+            )
+            layout_mode = "hierarchical" if "Hierarchical" in kg_layout else "organic"
 
-        # Searchable Causal Relations Evidence Matrix
-        with st.expander("Causal Evidence & Relationship Matrix (Tabular View)", expanded=False):
-            st.caption("Searchable catalog of all metallurgical causality assertions, literature citations, and evidence claims.")
-            rel_records = get_causal_relations_table(G)
-            if rel_records:
-                df_rel = pd.DataFrame(rel_records)
-                st.dataframe(df_rel, use_container_width=True)
-                csv_bytes = df_rel.to_csv(index=False).encode("utf-8")
-                st.download_button(
-                    "Download Causal Relations Matrix (CSV)",
-                    data=csv_bytes,
-                    file_name="naval_steel_causal_knowledge_graph_matrix.csv",
-                    mime="text/csv",
-                    key="btn_down_kg_csv"
-                )
+            show_edge_labels = st.checkbox(
+                "Show text labels directly on lines",
+                value=False,
+                help="By default, relation details appear in clean hover tooltips. Enable this checkbox if you wish to render verbs directly on canvas lines.",
+                key="kg_edge_labels_toggle"
+            )
+
+            st.markdown("""
+            **Network Architecture Legend:**
+            * **Tier 1 (Left, Cobalt)**: Alloying Solutes (`Ni`, `Cu`, `Mo`, `Cr`, `C`, `V`, `Co`, `Nb`)
+            * **Tier 2 (Mid-Left, Indigo)**: Microstructures (`Lath Martensite`, `M2C`, `Retained Austenite`)
+            * **Tier 3 (Mid-Right, Emerald)**: Physical Mechanisms (`TRIP Toughening`, `Orowan Precipitation`, `Grain Refinement`)
+            * **Tier 4 (Right, Amber)**: Target Properties (`Toughness`, `Yield Strength`, `Weldability`)
+            
+            **Causal Edge Types:**
+            * **Solid Cyan Line**: Explicit peer-reviewed literature evidence
+            * **Dashed Amber Line**: Inferred physical metallurgy relationship
+            """)
+
+        with col_kg_r:
+            G = build_knowledge_graph(target_recs)
+            analytics = get_graph_analytics(G)
+            
+            m1, m2, m3, m4 = st.columns(4)
+            m1.metric("Total Concepts", analytics["total_nodes"])
+            m2.metric("Causal Edges", analytics["total_edges"])
+            m3.metric("Explicit Evidence", analytics["evidence_counts"].get("EXPLICIT", 0))
+            m4.metric("Graph Density", f"{analytics['density']:.3f}")
+            
+            # Interactive Graph Canvas (Dark Tactical styling)
+            html_code = generate_graph_html(G, height="540px", layout_mode=layout_mode, show_edge_labels=show_edge_labels)
+            components.html(html_code, height=550, scrolling=False)
+            
+            # Causal Pathway Tracing Tool
+            with st.expander("Causal Pathway Tracing Tool (Element to Property)", expanded=True):
+                st.caption("Trace multi-scale metallurgical causality chains from alloying elements through precipitates to mechanical properties.")
+                c_src, c_tgt = st.columns(2)
+                with c_src:
+                    src_node = st.selectbox("Source Alloying Element:", ["Ni", "Cu", "Mo", "Cr", "C", "V", "Co", "Nb", "Mn"], key="kg_src_sel")
+                with c_tgt:
+                    tgt_node = st.selectbox("Target Mechanical Property:", ["toughness", "yield_strength", "weldability", "hardness"], key="kg_tgt_sel")
+                    
+                paths = find_causal_pathways(G, src_node, tgt_node)
+                if paths:
+                    st.markdown(f"**Found {len(paths)} causal pathway(s) from `{src_node}` to `{tgt_node}`:**")
+                    for i, p in enumerate(paths, 1):
+                        chain = " $\\rightarrow$ ".join([f"`{n.replace('_', ' ').title()}`" for n in p])
+                        st.markdown(f"**Path {i}:** {chain}")
+                else:
+                    st.info(f"No direct causal chain found from `{src_node}` to `{tgt_node}` in the current subgraph scope.")
+
+    with tab_kg_matrix:
+        st.markdown("##### Causal Evidence & Metallurgy Relations Matrix")
+        st.caption("Comprehensive peer-reviewed catalog of all multi-scale metallurgical causality assertions, literature citations, and evidence claims.")
+        G_matrix = build_knowledge_graph()
+        rel_records = get_causal_relations_table(G_matrix)
+        if rel_records:
+            df_rel = pd.DataFrame(rel_records)
+            st.dataframe(df_rel, use_container_width=True, height=520)
+            csv_bytes = df_rel.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                "Download Causal Relations Matrix (CSV)",
+                data=csv_bytes,
+                file_name="naval_steel_causal_knowledge_graph_matrix.csv",
+                mime="text/csv",
+                key="btn_down_kg_csv"
+            )
 
 
 # ==============================================================================
@@ -1568,7 +1732,7 @@ Elongation: 18 %
 
         # Tabbed scorecard display
         sub_comp, sub_proc, sub_mech, sub_tables = st.tabs([
-            "Chemical Composition", "Processing & Heat Treatment", "Mechanical Properties & Military Specs", "Document Tables & Text"
+            "🧪 Chemical Composition", "🔥 Processing & Heat Treatment", "🛡️ Mechanical Properties & MIL-SPECs", "📑 Document Tables & Text"
         ])
 
         with sub_comp:
@@ -1614,9 +1778,9 @@ Elongation: 18 %
                         color_discrete_sequence=["#38bdf8"]
                     )
                     fig_comp.update_layout(
-                        paper_bgcolor="#11141c",
-                        plot_bgcolor="#11141c",
-                        font=dict(color="#eef0f5", family="Inter"),
+                        paper_bgcolor="rgba(0,0,0,0)",
+                        plot_bgcolor="#0e1424",
+                        font=dict(color="#f8fafc", family="Inter"),
                         margin=dict(l=30, r=20, t=30, b=30),
                         height=280
                     )
@@ -1765,7 +1929,7 @@ with tab_literature:
     st.caption("Consult the autonomous AI Metallurgist Agent (powered by Google Gemini Flash), search public literature, or query indexed dissertations.")
 
     sub_agent, sub_scholarly, sub_ingest, sub_rag, sub_acceptance = st.tabs([
-        "AI Metallurgist Agent", "Literature Search", "PDF Ingestion", "Dissertation RAG", "Acceptance Benchmarks"
+        "🤖 AI Metallurgist Agent", "🔍 Scholarly Literature Search", "📥 PDF & Document Ingestion", "📖 Dissertation RAG Query", "✅ Acceptance Benchmarks"
     ])
 
     with sub_agent:
