@@ -21,7 +21,11 @@ import streamlit.components.v1 as components
 
 from src import config
 from src.chunk import chunk_document
-from src.extract import extract_metallurgy_info_from_doc, extract_from_any_file
+from src.extract import (
+    extract_metallurgy_info_from_doc,
+    extract_from_any_file,
+    extract_from_any,
+)
 from src.design import find_nearest_experimental_neighbors, generate_candidate_design
 from src.dossier import (
     format_markdown_dossier,

@@ -25,14 +25,6 @@ import pandas as pd
 from jsonschema import Draft7Validator
 
 from . import config
-from .optimize import calculate_raw_material_cost
-from .physics import (
-    calculate_bainite_start,
-    calculate_carbon_equivalent_iiw,
-    calculate_martensite_start,
-    calculate_pcm,
-    check_military_specifications,
-)
 from .schema import MaterialRecord
 
 EXTRACT_PROMPT_PATH = config.PROMPTS_DIR / "extract.md"
@@ -713,7 +705,16 @@ def extract_from_any_file(file_bytes: bytes, filename: str) -> Dict[str, Any]:
         if m_hrc:
             props["hardness_hrc"] = float(m_hrc.group(1))
 
-    # 5. Compute Physical Metallurgy Indices
+    # 5. Compute Physical Metallurgy Indices (Lazy local imports to isolate module loading)
+    from .physics import (
+        calculate_bainite_start,
+        calculate_carbon_equivalent_iiw,
+        calculate_martensite_start,
+        calculate_pcm,
+        check_military_specifications,
+    )
+    from .optimize import calculate_raw_material_cost
+
     pcm_val = calculate_pcm(comp)
     ce_iiw_val = calculate_carbon_equivalent_iiw(comp)
     ms_val = calculate_martensite_start(comp)
@@ -834,6 +835,10 @@ def main(argv=None) -> int:
     out_path = save_record(result["record"], Path(args.out_dir))
     print(f"Extracted and validated record: {out_path}")
     return 0
+
+
+# Backward compatibility alias
+extract_from_any = extract_from_any_file
 
 
 if __name__ == "__main__":
