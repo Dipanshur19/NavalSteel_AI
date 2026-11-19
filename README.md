@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![GSD Core](https://img.shields.io/badge/GSD--Core-v1.21.0%20Spec--Driven-8A2BE2?style=for-the-badge&logo=git&logoColor=white)](.planning/)
-[![PyTest](https://img.shields.io/badge/PyTest-52%20%2F%2052%20Passed%20(100%25)-success?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![PyTest](https://img.shields.io/badge/PyTest-55%20%2F%2055%20Passed%20(100%25)-success?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](streamlit_app.py)
 [![Plotly](https://img.shields.io/badge/Plotly-2D%20%2F%203D%20Interactive-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](streamlit_app.py)
 [![Google Gemini](https://img.shields.io/badge/LLM-Gemini%203.5%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](src/rag.py)

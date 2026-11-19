@@ -52,223 +52,205 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Glassmorphic Dark Space Design System (Dribbble & UI/UX Pro Max Archetype)
+# Technical Dark Ink Design System (Unslopped & Redlined under unslop-ui tokens)
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-    /* Atmospheric Dark Space Canvas with Dynamic Radial Light Blooms */
+    /* Solid Dark Ink Canvas - Zero blobs, zero radial color washes */
     .stApp {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background-color: #060913;
-        background-image: 
-            radial-gradient(circle at 5% 10%, rgba(56, 189, 248, 0.09) 0%, transparent 40%),
-            radial-gradient(circle at 92% 12%, rgba(129, 140, 248, 0.11) 0%, transparent 45%),
-            radial-gradient(circle at 50% 88%, rgba(16, 185, 129, 0.07) 0%, transparent 50%),
-            radial-gradient(circle at 85% 80%, rgba(244, 63, 94, 0.05) 0%, transparent 40%);
-        background-attachment: fixed;
-        color: #F8FAFC;
+        background-color: #0b0d14;
+        color: #eef0f5;
     }
     
-    /* Typography */
-    h1, h2, h3, h4, .dribbble-title {
-        font-family: 'Exo', -apple-system, sans-serif !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.025em;
-        color: #F8FAFC;
+    /* Typography - Inter only, weights 400 to 600, no sci-fi fonts */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        font-weight: 600 !important;
+        color: #eef0f5 !important;
+        letter-spacing: -0.015em;
     }
     
-    .gradient-text {
-        background: linear-gradient(135deg, #FFFFFF 0%, #38BDF8 55%, #818CF8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    /* Solid, Authoritative Branding without Gradient Text */
+    .brand-title {
+        font-family: 'Inter', -apple-system, sans-serif !important;
+        font-size: 1.5rem !important;
+        font-weight: 600 !important;
+        color: #eef0f5 !important;
+        letter-spacing: -0.02em;
+    }
+    .brand-badge {
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.72rem !important;
+        font-weight: 500 !important;
+        padding: 2px 7px;
+        border-radius: 4px;
+        background: #1a1e28;
+        border: 1px solid rgba(238, 240, 245, 0.10);
+        color: #38bdf8;
+        margin-left: 8px;
+        vertical-align: middle;
     }
 
-    /* Glassmorphism Surface Panels */
-    .glass-card {
-        background: rgba(15, 23, 42, 0.58) !important;
-        backdrop-filter: blur(20px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
-        border-radius: 16px !important;
+    /* Structured Surface Panels - Ink ramp, hairline border, no colored glows */
+    .surface-card {
+        background: #11141c !important;
+        border: 1px solid rgba(238, 240, 245, 0.08) !important;
+        border-radius: 12px !important;
         padding: 20px 24px !important;
         margin-bottom: 16px !important;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-    .glass-card:hover {
-        border-color: rgba(56, 189, 248, 0.35) !important;
-        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45), 0 0 20px rgba(56, 189, 248, 0.12) !important;
-        transform: translateY(-2px);
     }
 
-    /* Glass Metric Tiles */
+    /* Metric Tiles - Clean tabular figures, sentence-case labels */
     [data-testid="stMetric"] {
-        background: rgba(18, 28, 45, 0.50) !important;
-        backdrop-filter: blur(16px) !important;
-        -webkit-backdrop-filter: blur(16px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.16) !important;
-        border-radius: 14px !important;
+        background: #11141c !important;
+        border: 1px solid rgba(238, 240, 245, 0.08) !important;
+        border-radius: 10px !important;
         padding: 14px 18px !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28) !important;
-        transition: all 0.25s ease !important;
+        transition: border-color 0.15s ease !important;
     }
     [data-testid="stMetric"]:hover {
-        border-color: rgba(56, 189, 248, 0.30) !important;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38), 0 0 18px rgba(56, 189, 248, 0.14) !important;
-        transform: translateY(-1px);
+        border-color: rgba(238, 240, 245, 0.16) !important;
     }
     [data-testid="stMetricValue"] {
         font-family: 'JetBrains Mono', monospace !important;
-        font-weight: 700 !important;
-        color: #38BDF8 !important;
-        font-size: 1.45rem !important;
-        text-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+        font-weight: 600 !important;
+        color: #eef0f5 !important;
+        font-size: 1.35rem !important;
+        font-feature-settings: "tnum" 1;
     }
     [data-testid="stMetricLabel"] {
         font-family: 'Inter', sans-serif !important;
-        font-size: 0.78rem !important;
-        color: #94A3B8 !important;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        font-weight: 600;
+        font-size: 0.8rem !important;
+        color: #a3a9b8 !important;
+        text-transform: none !important;
+        letter-spacing: 0 !important;
+        font-weight: 500 !important;
     }
     [data-testid="stMetricDelta"] {
         font-family: 'JetBrains Mono', monospace !important;
-        font-weight: 600;
+        font-weight: 500 !important;
+        font-size: 0.78rem !important;
     }
 
-    /* Floating Frosted Segmented Studio Dock */
+    /* Restrained Segmented Studio Dock - Nested radius math: outer 8px, inner 6px (no 9999px pill) */
     .stTabs [data-baseweb="tab-list"] {
-        background: rgba(15, 23, 42, 0.65) !important;
-        backdrop-filter: blur(24px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.10) !important;
-        border-radius: 9999px !important;
-        padding: 6px !important;
-        gap: 6px !important;
-        margin-bottom: 2rem !important;
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+        background: #11141c !important;
+        border: 1px solid rgba(238, 240, 245, 0.08) !important;
+        border-radius: 8px !important;
+        padding: 4px !important;
+        gap: 4px !important;
+        margin-bottom: 1.5rem !important;
     }
     .stTabs [data-baseweb="tab"] {
-        padding: 10px 22px !important;
-        font-family: 'Exo', sans-serif !important;
-        font-size: 0.92rem !important;
-        font-weight: 600 !important;
-        color: #94A3B8 !important;
-        border-radius: 9999px !important;
+        padding: 8px 18px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.88rem !important;
+        font-weight: 500 !important;
+        color: #a3a9b8 !important;
+        border-radius: 6px !important;
         border: none !important;
         background: transparent !important;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
     }
     .stTabs [data-baseweb="tab"]:hover {
-        color: #F8FAFC !important;
-        background: rgba(255, 255, 255, 0.06) !important;
+        color: #eef0f5 !important;
+        background: #1a1e28 !important;
     }
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #FFFFFF !important;
-        background: linear-gradient(135deg, rgba(56, 189, 248, 0.28) 0%, rgba(129, 140, 248, 0.24) 100%) !important;
-        border: 1px solid rgba(56, 189, 248, 0.45) !important;
-        box-shadow: 0 4px 18px rgba(56, 189, 248, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+        color: #eef0f5 !important;
+        background: #1a1e28 !important;
+        border: 1px solid rgba(238, 240, 245, 0.12) !important;
+        border-bottom: 2px solid #0284c7 !important;
     }
     .stTabs [data-baseweb="tab-highlight"] {
         display: none !important;
     }
 
-    /* Frosted Telemetry Chips */
+    /* Telemetry Metadata Chips - Restrained status labels */
     .telemetry-chip {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 4px 12px;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 4px;
+        font-size: 0.74rem;
+        font-weight: 500;
         font-family: 'JetBrains Mono', monospace;
-        background: rgba(22, 32, 50, 0.65);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        color: #CBD5E1;
-        margin-right: 6px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        background: #1a1e28;
+        border: 1px solid rgba(238, 240, 245, 0.08);
+        color: #a3a9b8;
     }
     .chip-dot {
-        width: 7px;
-        height: 7px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
+        display: inline-block;
     }
-    .dot-green { background-color: #10B981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.8); }
-    .dot-blue  { background-color: #38BDF8; box-shadow: 0 0 8px rgba(56, 189, 248, 0.8); }
-    .dot-purple { background-color: #818CF8; box-shadow: 0 0 8px rgba(129, 140, 248, 0.8); }
+    .dot-green { background-color: #4cc38a; }
+    .dot-blue  { background-color: #38bdf8; }
+    .dot-purple { background-color: #a3a9b8; }
 
-    /* Neo-Gradient Buttons */
+    /* Buttons - Standard tactile response, single accent fill, no purple gradients */
     .stButton > button {
         font-family: 'Inter', sans-serif !important;
-        font-weight: 600 !important;
-        border-radius: 12px !important;
-        background: rgba(30, 41, 59, 0.6) !important;
-        backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
-        color: #F8FAFC !important;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        font-weight: 500 !important;
+        font-size: 0.88rem !important;
+        border-radius: 6px !important;
+        background: #1a1e28 !important;
+        border: 1px solid rgba(238, 240, 245, 0.10) !important;
+        color: #eef0f5 !important;
+        transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.08s ease !important;
     }
     .stButton > button:hover {
-        transform: translateY(-2px) !important;
-        border-color: rgba(56, 189, 248, 0.4) !important;
-        box-shadow: 0 8px 24px rgba(56, 189, 248, 0.25), 0 0 14px rgba(56, 189, 248, 0.15) !important;
+        background: #222735 !important;
+        border-color: rgba(238, 240, 245, 0.18) !important;
+    }
+    .stButton > button:active {
+        transform: scale(0.98) !important;
     }
     .stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #0284C7 0%, #6366F1 100%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.24) !important;
-        color: #FFFFFF !important;
-        box-shadow: 0 6px 24px rgba(2, 132, 199, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        background: #0284c7 !important;
+        border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        color: #ffffff !important;
     }
     .stButton > button[kind="primary"]:hover {
-        background: linear-gradient(135deg, #0EA5E9 0%, #818CF8 100%) !important;
-        box-shadow: 0 8px 32px rgba(14, 165, 233, 0.55), 0 0 20px rgba(99, 102, 241, 0.45) !important;
+        background: #0369a1 !important;
+        border-color: rgba(255, 255, 255, 0.25) !important;
     }
 
-    /* Glass Inputs & Selectboxes */
+    /* Inputs & Selectboxes - Sunken dark surface, calm hairline focus */
     [data-baseweb="input"], [data-baseweb="select"] > div {
-        background: rgba(15, 23, 42, 0.6) !important;
-        backdrop-filter: blur(14px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.10) !important;
-        border-radius: 10px !important;
-        color: #F8FAFC !important;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+        background: #07080d !important;
+        border: 1px solid rgba(238, 240, 245, 0.10) !important;
+        border-radius: 6px !important;
+        color: #eef0f5 !important;
+        transition: border-color 0.15s ease !important;
     }
     [data-baseweb="input"]:focus-within, [data-baseweb="select"] > div:focus-within {
-        border-color: #38BDF8 !important;
-        box-shadow: 0 0 16px rgba(56, 189, 248, 0.25) !important;
+        border-color: #0284c7 !important;
+        box-shadow: none !important;
     }
 
-    /* Frosted Sidebar */
+    /* Deepest Neutral Sidebar */
     [data-testid="stSidebar"] {
-        background: rgba(10, 15, 26, 0.82) !important;
-        backdrop-filter: blur(24px) !important;
-        -webkit-backdrop-filter: blur(24px) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: #07080d !important;
+        border-right: 1px solid rgba(238, 240, 245, 0.08) !important;
     }
 
-    /* Frosted Steel Card Grid */
+    /* Structured Steel Benchmark Cards */
     .steel-showcase-card {
-        background: rgba(18, 28, 45, 0.55);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-top: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 14px;
+        background: #11141c;
+        border: 1px solid rgba(238, 240, 245, 0.08);
+        border-radius: 10px;
         padding: 16px 18px;
         margin-bottom: 12px;
-        transition: all 0.25s ease;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
     }
     .steel-showcase-card:hover {
-        border-color: rgba(56, 189, 248, 0.35);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 16px rgba(56, 189, 248, 0.15);
-        transform: translateY(-2px);
+        border-color: rgba(238, 240, 245, 0.18);
+        background: #151924;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -376,7 +358,7 @@ with st.sidebar:
             with open(ugp_report_path, "rb") as rf:
                 ugp_pdf_bytes = rf.read()
             st.download_button(
-                "📄 Download Final Report (11-Page PDF)",
+                "Download Final Report (11-Page PDF)",
                 data=ugp_pdf_bytes,
                 file_name="UGP497_Final_Report_Dipanshu_Raj_230375.pdf",
                 mime="application/pdf",
@@ -388,7 +370,7 @@ with st.sidebar:
             with open(walkthrough_path, "rb") as wf:
                 walkthrough_bytes = wf.read()
             st.download_button(
-                "🎯 Download Mentor Walkthrough (7-Page PDF)",
+                "Download Mentor Walkthrough (7-Page PDF)",
                 data=walkthrough_bytes,
                 file_name="UGP497_Mentor_Walkthrough_Guide_Dipanshu_Raj_230375.pdf",
                 mime="application/pdf",
@@ -420,7 +402,7 @@ def fmt_temp(deg_c: float) -> str:
     return f"{deg_c:.1f} °C"
 
 
-# Multi-Dimensional Radar Helper Functions (UI/UX Pro Max)
+# Multi-Dimensional Radar Helper Functions
 RADAR_CATEGORIES = [
     "Yield Strength",
     "Tensile Strength",
@@ -442,7 +424,7 @@ def normalize_alloy_metrics(ys: float, uts: float, cvn: float, pcm: float, cost:
 
 
 def build_polar_radar_figure(categories: List[str], series_list: List[Dict[str, Any]], title: str = "") -> go.Figure:
-    """Builds a refined Plotly polar radar chart matching the Data-Dense Dashboard aesthetic."""
+    """Builds a technical Plotly polar radar chart on dark ink background."""
     fig = go.Figure()
     closed_cats = list(categories) + [categories[0]]
     for s in series_list:
@@ -452,7 +434,7 @@ def build_polar_radar_figure(categories: List[str], series_list: List[Dict[str, 
             theta=closed_cats,
             name=s["name"],
             fill=s.get("fill", "toself"),
-            fillcolor=s.get("fillcolor", "rgba(56, 189, 248, 0.15)"),
+            fillcolor=s.get("fillcolor", "rgba(56, 189, 248, 0.12)"),
             line=dict(color=s.get("color", "#38BDF8"), width=s.get("width", 2), dash=s.get("dash", "solid")),
         ))
     fig.update_layout(
@@ -462,71 +444,96 @@ def build_polar_radar_figure(categories: List[str], series_list: List[Dict[str, 
                 range=[0, 100],
                 showticklabels=True,
                 ticksuffix="%",
-                gridcolor="rgba(255, 255, 255, 0.12)",
-                linecolor="rgba(255, 255, 255, 0.15)",
-                tickfont=dict(color="#94A3B8", size=9, family="JetBrains Mono"),
+                gridcolor="rgba(238, 240, 245, 0.08)",
+                linecolor="rgba(238, 240, 245, 0.12)",
+                tickfont=dict(color="#7a8296", size=9, family="JetBrains Mono"),
             ),
             angularaxis=dict(
-                gridcolor="rgba(255, 255, 255, 0.12)",
-                linecolor="rgba(255, 255, 255, 0.15)",
-                tickfont=dict(color="#F8FAFC", size=11, family="Inter"),
+                gridcolor="rgba(238, 240, 245, 0.08)",
+                linecolor="rgba(238, 240, 245, 0.12)",
+                tickfont=dict(color="#eef0f5", size=11, family="Inter"),
             ),
-            bgcolor="rgba(15, 23, 42, 0.6)",
+            bgcolor="#11141c",
         ),
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        height=420,
+        plot_bgcolor="#11141c",
+        height=400,
         margin=dict(l=35, r=35, t=35, b=25),
         showlegend=True,
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=-0.18,
+            y=-0.16,
             xanchor="center",
             x=0.5,
-            font=dict(color="#94A3B8", family="Inter", size=10)
+            font=dict(color="#a3a9b8", family="Inter", size=10)
         ),
-        title=dict(text=title, font=dict(color="#F8FAFC", family="Exo", size=14)) if title else None
+        title=dict(text=title, font=dict(color="#eef0f5", family="Inter", size=13)) if title else None
+    )
+    return fig
+
+
+def apply_unslop_chart_theme(fig: go.Figure, height: int = 400) -> go.Figure:
+    """Applies clean, high-contrast dark theme to any Plotly chart."""
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#11141c",
+        height=height,
+        font=dict(family="Inter, sans-serif", color="#a3a9b8", size=12),
+        margin=dict(l=30, r=20, t=35, b=30),
+        xaxis=dict(
+            gridcolor="rgba(238, 240, 245, 0.08)",
+            linecolor="rgba(238, 240, 245, 0.12)",
+            tickfont=dict(family="JetBrains Mono, monospace", size=10, color="#7a8296"),
+            title=dict(font=dict(family="Inter, sans-serif", size=12, color="#a3a9b8"))
+        ),
+        yaxis=dict(
+            gridcolor="rgba(238, 240, 245, 0.08)",
+            linecolor="rgba(238, 240, 245, 0.12)",
+            tickfont=dict(family="JetBrains Mono, monospace", size=10, color="#7a8296"),
+            title=dict(font=dict(family="Inter, sans-serif", size=12, color="#a3a9b8"))
+        ),
+        legend=dict(
+            font=dict(family="Inter, sans-serif", size=11, color="#a3a9b8"),
+            bgcolor="rgba(17, 20, 28, 0.8)",
+            bordercolor="rgba(238, 240, 245, 0.08)",
+            borderwidth=1
+        ),
     )
     return fig
 
 
 # ==============================================================================
-# 4. MAIN HERO MASTHEAD (DRIBBLE FROSTED GLASS DOCK)
+# 4. MAIN HERO MASTHEAD
 # ==============================================================================
 st.markdown("""
-<div class="glass-card" style="margin-bottom: 22px; padding: 22px 28px;">
+<div class="surface-card" style="margin-bottom: 20px; padding: 18px 24px;">
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(129, 140, 248, 0.25) 100%); border: 1px solid rgba(56, 189, 248, 0.45); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 24px rgba(56, 189, 248, 0.35);">
-                ⚓
+        <div>
+            <div class="brand-title">
+                NavalSteel AI <span class="brand-badge">Materials Informatics</span>
             </div>
-            <div>
-                <h1 style="margin: 0; font-size: 1.85rem; letter-spacing: -0.03em; line-height: 1.15;">
-                    NavalSteel <span class="gradient-text">AI</span>
-                </h1>
-                <p style="margin: 4px 0 0 0; font-size: 0.86rem; color: #94A3B8; font-family: 'Inter', sans-serif;">
-                    Materials Informatics, Physics-Informed ML & Autonomous Inverse Alloy Design
-                </p>
-            </div>
+            <p style="margin: 4px 0 0 0; font-size: 0.86rem; color: #a3a9b8; font-family: 'Inter', sans-serif;">
+                Physics-informed machine learning, autonomous multi-objective inverse alloy design, and naval defense specifications
+            </p>
         </div>
         <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Surrogate: Sub-35ms RF</span>
+            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Surrogate: RF+GB Ensemble</span>
             <span class="telemetry-chip"><span class="chip-dot dot-blue"></span>MIL Compliance: Active</span>
-            <span class="telemetry-chip"><span class="chip-dot dot-purple"></span>AI: Gemini 3.5 Flash</span>
-            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>GSD Core: v1.21.0</span>
+            <span class="telemetry-chip"><span class="chip-dot dot-purple"></span>Intelligence: Gemini Flash</span>
+            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Dataset: 40 Heats</span>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Primary Segmented Studio Dock
+# Primary Segmented Studio Dock (Unslopped)
 tab_studio, tab_pareto, tab_benchmarks, tab_graph, tab_literature = st.tabs([
-    "🔬 1. Alloy Synthesizer",
-    "⚡ 2. Pareto Cockpit",
-    "🛡️ 3. Naval Fleet Library",
-    "🕸️ 4. Causal Nexus",
-    "🤖 5. Copilot & Literature",
+    "Alloy Synthesizer",
+    "Pareto Optimization",
+    "Benchmark Library",
+    "Causal Knowledge Graph",
+    "Literature Intelligence",
 ])
 
 
@@ -552,7 +559,7 @@ with tab_studio:
     with col_pre2:
         preset_info = BENCHMARK_PRESETS[chosen_preset]
         st.markdown(f"""
-        <div style="background: rgba(18, 28, 45, 0.45); border-left: 3px solid #38BDF8; border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; color: #CBD5E1; margin-top: 5px;">
+        <div style="background: #11141c; border-left: 3px solid #0284c7; border: 1px solid rgba(238, 240, 245, 0.08); border-radius: 6px; padding: 10px 14px; font-size: 0.85rem; color: #a3a9b8; margin-top: 5px;">
             {preset_info["desc"]}
         </div>
         """, unsafe_allow_html=True)
@@ -609,8 +616,8 @@ with tab_studio:
         solute_total = c_val + ni_val + cu_val + cr_val + mo_val + mn_val + si_val + v_val + b_val
         fe_balance = max(0.0, 100.0 - solute_total)
         st.markdown(f"""
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #94A3B8; margin-top: 8px;">
-            Matrix Balance: <span style="color:#38BDF8;">{fe_balance:.2f} wt% Fe</span> · Total Solutes: <span style="color:#818CF8;">{solute_total:.2f} wt%</span>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #7a8296; margin-top: 8px;">
+            Matrix Balance: <span style="color:#eef0f5; font-weight: 500;">{fe_balance:.2f} wt% Fe</span> · Total Solutes: <span style="color:#38bdf8; font-weight: 500;">{solute_total:.2f} wt%</span>
         </div>
         """, unsafe_allow_html=True)
         if solute_total > 20.0:
@@ -759,26 +766,45 @@ with tab_studio:
             y=[current_ys],
             mode="markers",
             name="Current Condition",
-            marker=dict(color="#F43F5E", size=9, symbol="circle"),
+            marker=dict(color="#e5484d", size=9, symbol="circle"),
         ))
 
         fig_iso.update_layout(
-            xaxis=dict(title=dict(text="Tempering Temperature (°C)", font=dict(color="#94A3B8"))),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="#11141c",
+            height=400,
+            margin=dict(l=30, r=30, t=35, b=25),
+            xaxis=dict(
+                title=dict(text="Tempering Temperature (°C)", font=dict(family="Inter", size=12, color="#a3a9b8")),
+                gridcolor="rgba(238, 240, 245, 0.08)",
+                linecolor="rgba(238, 240, 245, 0.12)",
+                tickfont=dict(family="JetBrains Mono", size=10, color="#7a8296"),
+            ),
             yaxis=dict(
-                title=dict(text=f"Yield Strength ({'ksi' if is_imperial else 'MPa'})", font=dict(color="#38BDF8")),
-                tickfont=dict(color="#38BDF8")
+                title=dict(text=f"Yield Strength ({'ksi' if is_imperial else 'MPa'})", font=dict(family="Inter", size=12, color="#38BDF8")),
+                gridcolor="rgba(238, 240, 245, 0.08)",
+                linecolor="rgba(238, 240, 245, 0.12)",
+                tickfont=dict(family="JetBrains Mono", size=10, color="#38BDF8"),
             ),
             yaxis2=dict(
-                title=dict(text=f"Charpy Toughness ({'ft-lb' if is_imperial else 'J'})", font=dict(color="#10B981")),
-                tickfont=dict(color="#10B981"),
+                title=dict(text=f"Charpy Toughness ({'ft-lb' if is_imperial else 'J'})", font=dict(family="Inter", size=12, color="#4cc38a")),
+                gridcolor="rgba(238, 240, 245, 0.08)",
+                linecolor="rgba(238, 240, 245, 0.12)",
+                tickfont=dict(family="JetBrains Mono", size=10, color="#4cc38a"),
                 overlaying="y",
                 side="right"
             ),
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(15, 23, 42, 0.4)",
-            height=400,
-            margin=dict(l=20, r=20, t=30, b=20),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#94A3B8"))
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1,
+                font=dict(family="Inter", size=11, color="#a3a9b8"),
+                bgcolor="rgba(17, 20, 28, 0.8)",
+                bordercolor="rgba(238, 240, 245, 0.08)",
+                borderwidth=1
+            )
         )
         st.plotly_chart(fig_iso, use_container_width=True)
 
@@ -803,22 +829,22 @@ with tab_studio:
                 "name": f"Active Formulation ({chosen_preset.split('(')[0].strip()})",
                 "values": active_radar_scores,
                 "color": "#38BDF8",
-                "fillcolor": "rgba(56, 189, 248, 0.20)",
+                "fillcolor": "rgba(56, 189, 248, 0.14)",
                 "width": 2.5
             },
             {
                 "name": "HSLA-100 Baseline (MIL-S-24645A)",
                 "values": hsla100_radar_scores,
-                "color": "#10B981",
-                "fillcolor": "rgba(16, 185, 129, 0.08)",
+                "color": "#4cc38a",
+                "fillcolor": "rgba(76, 195, 138, 0.08)",
                 "width": 1.5,
                 "dash": "dash"
             },
             {
                 "name": "BlastAlloy 160 Benchmark (Saha 2004)",
                 "values": blastalloy_radar_scores,
-                "color": "#818CF8",
-                "fillcolor": "rgba(129, 140, 248, 0.08)",
+                "color": "#a3a9b8",
+                "fillcolor": "rgba(163, 169, 184, 0.08)",
                 "width": 1.5,
                 "dash": "dot"
             }
@@ -890,17 +916,17 @@ with tab_pareto:
     with opt_tab_nsga:
         st.markdown("##### Mission Profile Presets")
         mp1, mp2, mp3 = st.columns(3)
-        if mp1.button("✈️ CVN-78 Flight Deck (HSLA-115 Goal)", use_container_width=True, key="m_preset_cvn"):
+        if mp1.button("Carrier Flight Deck (HSLA-115 Target)", use_container_width=True, key="m_preset_cvn"):
             st.session_state["nsga_min_ys"] = 800
             st.session_state["nsga_min_cvn"] = 115
             st.session_state["nsga_max_pcm"] = 0.25
             st.rerun()
-        if mp2.button("🚢 Submarine Pressure Hull (HY-100 Goal)", use_container_width=True, key="m_preset_sub"):
+        if mp2.button("Submarine Pressure Hull (HY-100 Target)", use_container_width=True, key="m_preset_sub"):
             st.session_state["nsga_min_ys"] = 950
             st.session_state["nsga_min_cvn"] = 100
             st.session_state["nsga_max_pcm"] = 0.35
             st.rerun()
-        if mp3.button("💥 Blast Resistant Armor (BlastAlloy Goal)", use_container_width=True, key="m_preset_armor"):
+        if mp3.button("Blast-Resistant Armor (BlastAlloy Target)", use_container_width=True, key="m_preset_armor"):
             st.session_state["nsga_min_ys"] = 1100
             st.session_state["nsga_min_cvn"] = 150
             st.session_state["nsga_max_pcm"] = 0.45
@@ -919,9 +945,9 @@ with tab_pareto:
             sub_col1, sub_col2 = st.columns(2)
             opt_pop = sub_col1.select_slider("Population Size", [20, 30, 40, 50], value=30, key="nsga_pop")
             opt_gen = sub_col2.select_slider("Generations", [10, 15, 20, 25], value=15, key="nsga_gen")
-            st.caption("Hard constraints: 0.02% <= C <= 0.12%, Ms >= 320°C, Solutes <= 20 wt%. Infeasible candidates are rejected.")
+            st.caption("Physical constraints: 0.02% <= C <= 0.12%, Ms >= 320°C, Solutes <= 20 wt%. Infeasible candidates are rejected.")
 
-        if st.button("Run Multi-Objective Optimization", type="primary", key="btn_exec_nsga"):
+        if st.button("Compute Pareto Frontier", type="primary", key="btn_exec_nsga"):
             with st.spinner("Executing NSGA-II solver across 4D objective space..."):
                 discovered = run_pareto_optimization(
                     pop_size=opt_pop,
@@ -936,7 +962,7 @@ with tab_pareto:
 
         candidates = st.session_state.get("discovered_pareto")
         if not candidates:
-            st.info("Set parameters and click 'Run Multi-Objective Optimization' to compute the non-dominated Pareto frontier.")
+            st.info("Set parameters and click 'Compute Pareto Frontier' to isolate non-dominated candidates.")
         else:
             st.success(f"Discovered {len(candidates)} non-dominated Pareto-optimal candidates on the Rank-1 frontier.")
 
@@ -960,7 +986,7 @@ with tab_pareto:
             df_plot = pd.DataFrame(plot_rows)
 
             # 2D and 3D Visualization
-            v_tab2d, v_tab3d = st.tabs(["2D Pareto Projection", "3D Hyper-surface"])
+            v_tab2d, v_tab3d = st.tabs(["2D Pareto Frontier", "3D Objective Space"])
             with v_tab2d:
                 fig_2d = px.scatter(
                     df_plot,
@@ -970,14 +996,14 @@ with tab_pareto:
                     size="Cost ($/ton)",
                     hover_name="ID",
                     hover_data=["MIL Spec Match", "Novelty", "Nearest Benchmark", "Tempering", "Cost ($/ton)"],
-                    color_continuous_scale="Viridis_r",
+                    color_continuous_scale="Tealgrn",
                     labels={
                         "Yield Strength": f"Yield Strength ({'ksi' if is_imperial else 'MPa'})",
                         "Charpy Toughness": f"Charpy Toughness ({'ft-lb' if is_imperial else 'J'})"
                     },
                     title="Strength vs. Toughness Trade-off (Color: Pcm Weldability, Size: Cost $/ton)"
                 )
-                fig_2d.update_layout(height=420, margin=dict(l=20, r=20, t=35, b=20))
+                apply_unslop_chart_theme(fig_2d, height=420)
                 st.plotly_chart(fig_2d, use_container_width=True)
 
             with v_tab3d:
@@ -989,14 +1015,23 @@ with tab_pareto:
                     color="Cost ($/ton)",
                     hover_name="ID",
                     hover_data=["Novelty", "Nearest Benchmark"],
-                    color_continuous_scale="Turbo",
+                    color_continuous_scale="Viridis",
                     labels={
                         "Yield Strength": f"YS ({'ksi' if is_imperial else 'MPa'})",
                         "Charpy Toughness": f"CVN ({'ft-lb' if is_imperial else 'J'})"
                     },
-                    title="3D Pareto Surface: Strength vs. Toughness vs. Pcm (Color: Cost $/ton)"
+                    title="3D Objective Space: Strength vs. Toughness vs. Pcm (Color: Cost $/ton)"
                 )
-                fig_3d.update_layout(height=480, margin=dict(l=10, r=10, t=35, b=10))
+                fig_3d.update_layout(
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    scene=dict(
+                        xaxis=dict(gridcolor="rgba(238, 240, 245, 0.08)", backgroundcolor="#11141c", color="#a3a9b8"),
+                        yaxis=dict(gridcolor="rgba(238, 240, 245, 0.08)", backgroundcolor="#11141c", color="#a3a9b8"),
+                        zaxis=dict(gridcolor="rgba(238, 240, 245, 0.08)", backgroundcolor="#11141c", color="#a3a9b8"),
+                    ),
+                    height=480,
+                    margin=dict(l=10, r=10, t=35, b=10)
+                )
                 st.plotly_chart(fig_3d, use_container_width=True)
 
             st.markdown("---")
@@ -1086,79 +1121,79 @@ with tab_benchmarks:
     st.markdown("### Naval Benchmark Steels & Training Heats")
     st.caption("Experimentally validated military plate steels extracted from scientific literature and technical reports.")
 
-    # Frosted Steel Showcase Cards Grid
+    # Structured Steel Showcase Cards Grid
     st.markdown("""
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 20px;">
         <div class="steel-showcase-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #38BDF8; font-size: 1.02rem;">BlastAlloy 160</strong>
-                <span class="telemetry-chip" style="margin: 0;"><span class="chip-dot dot-purple"></span>ONR Prototype</span>
+                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">BlastAlloy 160</span>
+                <span class="telemetry-chip" style="margin: 0;">ONR Prototype</span>
             </div>
-            <p style="font-size: 0.8rem; color: #94A3B8; margin: 6px 0 10px 0;">Dual Cu & M2C nanoscale precipitation with transformation toughening.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #CBD5E1;">
-                <span>YS: <b style="color: #F8FAFC;">1103 MPa</b></span>
-                <span>CVN: <b style="color: #10B981;">176 J</b></span>
-                <span>Pcm: <b style="color: #F59E0B;">0.447</b></span>
-            </div>
-        </div>
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #10B981; font-size: 1.02rem;">HSLA-115</strong>
-                <span class="telemetry-chip" style="margin: 0;"><span class="chip-dot dot-green"></span>CVN-78 Carrier</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #94A3B8; margin: 6px 0 10px 0;">Zero-preheat aircraft carrier flight deck structural plate steel.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #CBD5E1;">
-                <span>YS: <b style="color: #F8FAFC;">793 MPa</b></span>
-                <span>CVN: <b style="color: #10B981;">115 J</b></span>
-                <span>Pcm: <b style="color: #10B981;">0.240</b></span>
+            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Dual Cu & M2C nanoscale precipitation with transformation toughening.</p>
+            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                <span>YS: <b style="color: #eef0f5;">1103 MPa</b></span>
+                <span>CVN: <b style="color: #4cc38a;">176 J</b></span>
+                <span>Pcm: <b style="color: #f59e0b;">0.447</b></span>
             </div>
         </div>
         <div class="steel-showcase-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #818CF8; font-size: 1.02rem;">HSLA-100</strong>
-                <span class="telemetry-chip" style="margin: 0;"><span class="chip-dot dot-green"></span>Surface Fleet</span>
+                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HSLA-115</span>
+                <span class="telemetry-chip" style="margin: 0;">CVN-78 Carrier</span>
             </div>
-            <p style="font-size: 0.8rem; color: #94A3B8; margin: 6px 0 10px 0;">Low-carbon copper precipitation plate with high weldability (MIL-S-24645A).</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #CBD5E1;">
-                <span>YS: <b style="color: #F8FAFC;">690 MPa</b></span>
-                <span>CVN: <b style="color: #10B981;">140 J</b></span>
-                <span>Pcm: <b style="color: #10B981;">0.220</b></span>
-            </div>
-        </div>
-        <div class="steel-showcase-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #F59E0B; font-size: 1.02rem;">HY-100</strong>
-                <span class="telemetry-chip" style="margin: 0;"><span class="chip-dot dot-blue"></span>Submarine Hull</span>
-            </div>
-            <p style="font-size: 0.8rem; color: #94A3B8; margin: 6px 0 10px 0;">Quenched & tempered martensitic submarine pressure hull plate.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #CBD5E1;">
-                <span>YS: <b style="color: #F8FAFC;">690 MPa</b></span>
-                <span>CVN: <b style="color: #F59E0B;">90 J</b></span>
-                <span>Pcm: <b style="color: #F59E0B;">0.320</b></span>
+            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Zero-preheat aircraft carrier flight deck structural plate steel.</p>
+            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                <span>YS: <b style="color: #eef0f5;">793 MPa</b></span>
+                <span>CVN: <b style="color: #4cc38a;">115 J</b></span>
+                <span>Pcm: <b style="color: #4cc38a;">0.240</b></span>
             </div>
         </div>
         <div class="steel-showcase-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #EC4899; font-size: 1.02rem;">HY-80</strong>
-                <span class="telemetry-chip" style="margin: 0;"><span class="chip-dot dot-blue"></span>Historic Sub</span>
+                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HSLA-100</span>
+                <span class="telemetry-chip" style="margin: 0;">Surface Fleet</span>
             </div>
-            <p style="font-size: 0.8rem; color: #94A3B8; margin: 6px 0 10px 0;">Historic naval submarine hull standard plate (MIL-S-16216).</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #CBD5E1;">
-                <span>YS: <b style="color: #F8FAFC;">552 MPa</b></span>
-                <span>CVN: <b style="color: #10B981;">110 J</b></span>
-                <span>Pcm: <b style="color: #F59E0B;">0.290</b></span>
+            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Low-carbon copper precipitation plate with high weldability (MIL-S-24645A).</p>
+            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                <span>YS: <b style="color: #eef0f5;">690 MPa</b></span>
+                <span>CVN: <b style="color: #4cc38a;">140 J</b></span>
+                <span>Pcm: <b style="color: #4cc38a;">0.220</b></span>
             </div>
         </div>
         <div class="steel-showcase-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #A855F7; font-size: 1.02rem;">AF1410</strong>
-                <span class="telemetry-chip" style="margin: 0;"><span class="chip-dot dot-purple"></span>Cobalt Armor</span>
+                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HY-100</span>
+                <span class="telemetry-chip" style="margin: 0;">Submarine Hull</span>
             </div>
-            <p style="font-size: 0.8rem; color: #94A3B8; margin: 6px 0 10px 0;">Ultra-high strength 14 wt% Co plate with high raw material cost.</p>
-            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #CBD5E1;">
-                <span>YS: <b style="color: #F8FAFC;">1103 MPa</b></span>
-                <span>CVN: <b style="color: #F59E0B;">81 J</b></span>
-                <span>Pcm: <b style="color: #EF4444;">0.520</b></span>
+            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Quenched & tempered martensitic submarine pressure hull plate.</p>
+            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                <span>YS: <b style="color: #eef0f5;">690 MPa</b></span>
+                <span>CVN: <b style="color: #f59e0b;">90 J</b></span>
+                <span>Pcm: <b style="color: #f59e0b;">0.320</b></span>
+            </div>
+        </div>
+        <div class="steel-showcase-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">HY-80</span>
+                <span class="telemetry-chip" style="margin: 0;">Historic Sub</span>
+            </div>
+            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Historic naval submarine hull standard plate (MIL-S-16216).</p>
+            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                <span>YS: <b style="color: #eef0f5;">552 MPa</b></span>
+                <span>CVN: <b style="color: #4cc38a;">110 J</b></span>
+                <span>Pcm: <b style="color: #f59e0b;">0.290</b></span>
+            </div>
+        </div>
+        <div class="steel-showcase-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.0rem; font-weight: 600; color: #eef0f5;">AF1410</span>
+                <span class="telemetry-chip" style="margin: 0;">Cobalt Armor</span>
+            </div>
+            <p style="font-size: 0.8rem; color: #a3a9b8; margin: 6px 0 10px 0;">Ultra-high strength 14 wt% Co plate with high raw material cost.</p>
+            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #7a8296;">
+                <span>YS: <b style="color: #eef0f5;">1103 MPa</b></span>
+                <span>CVN: <b style="color: #f59e0b;">81 J</b></span>
+                <span>Pcm: <b style="color: #e5484d;">0.520</b></span>
             </div>
         </div>
     </div>
@@ -1242,18 +1277,10 @@ with tab_benchmarks:
             size="Pcm",
             text="Steel",
             title="Naval Steels Trade-off Space: Strength vs. Toughness (Bubble Size: Pcm Cracking Risk)",
-            color_discrete_sequence=["#38BDF8", "#10B981", "#818CF8", "#F59E0B", "#EC4899", "#A855F7"]
+            color_discrete_sequence=["#38BDF8", "#4cc38a", "#a3a9b8", "#f59e0b", "#64748b", "#cbd5e1"]
         )
         fig_tradeoff.update_traces(textposition="top center")
-        fig_tradeoff.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(15, 23, 42, 0.4)",
-            height=420,
-            margin=dict(l=20, r=20, t=35, b=20),
-            xaxis=dict(gridcolor="rgba(255, 255, 255, 0.08)", title=dict(font=dict(color="#94A3B8"))),
-            yaxis=dict(gridcolor="rgba(255, 255, 255, 0.08)", title=dict(font=dict(color="#94A3B8"))),
-            legend=dict(font=dict(color="#94A3B8"))
-        )
+        apply_unslop_chart_theme(fig_tradeoff, height=420)
         st.plotly_chart(fig_tradeoff, use_container_width=True)
 
     with tab_bench_radar:
@@ -1262,27 +1289,27 @@ with tab_benchmarks:
                 "name": "BlastAlloy 160 (Prototype)",
                 "values": normalize_alloy_metrics(1103, 1350, 176, 0.447, 6850, 365),
                 "color": "#38BDF8",
-                "fillcolor": "rgba(56, 189, 248, 0.15)",
+                "fillcolor": "rgba(56, 189, 248, 0.12)",
                 "width": 2.5
             },
             {
                 "name": "HSLA-100 (Surface)",
                 "values": normalize_alloy_metrics(690, 760, 140, 0.220, 2250, 420),
-                "color": "#10B981",
-                "fillcolor": "rgba(16, 185, 129, 0.10)",
+                "color": "#4cc38a",
+                "fillcolor": "rgba(76, 195, 138, 0.08)",
                 "width": 2
             },
             {
                 "name": "HSLA-115 (Carrier)",
                 "values": normalize_alloy_metrics(793, 860, 115, 0.240, 2600, 410),
-                "color": "#818CF8",
-                "fillcolor": "rgba(129, 140, 248, 0.10)",
+                "color": "#a3a9b8",
+                "fillcolor": "rgba(163, 169, 184, 0.08)",
                 "width": 2
             },
             {
                 "name": "HY-80 (Submarine)",
                 "values": normalize_alloy_metrics(552, 680, 110, 0.290, 2100, 390),
-                "color": "#F59E0B",
+                "color": "#f59e0b",
                 "fillcolor": "rgba(245, 158, 11, 0.08)",
                 "width": 1.5,
                 "dash": "dash"
@@ -1290,16 +1317,16 @@ with tab_benchmarks:
             {
                 "name": "HY-100 (Submarine)",
                 "values": normalize_alloy_metrics(690, 810, 90, 0.320, 2300, 380),
-                "color": "#EC4899",
-                "fillcolor": "rgba(236, 72, 153, 0.08)",
+                "color": "#64748b",
+                "fillcolor": "rgba(100, 116, 139, 0.08)",
                 "width": 1.5,
                 "dash": "dash"
             },
             {
                 "name": "AF1410 (Co Armor)",
                 "values": normalize_alloy_metrics(1103, 1450, 81, 0.520, 14500, 340),
-                "color": "#A855F7",
-                "fillcolor": "rgba(168, 85, 247, 0.08)",
+                "color": "#e5484d",
+                "fillcolor": "rgba(229, 72, 77, 0.08)",
                 "width": 1.5,
                 "dash": "dot"
             },
@@ -1471,7 +1498,7 @@ with tab_literature:
             uploaded_save_path = config.RAW_DIR / uploaded_pdf.name
             if not uploaded_save_path.exists() or st.button(f"Save '{uploaded_pdf.name}' to data/raw/", key="btn_save_uploaded"):
                 uploaded_save_path.write_bytes(uploaded_pdf.getbuffer())
-                st.success(f"✓ Successfully uploaded and stored: `{uploaded_pdf.name}` ({len(uploaded_pdf.getbuffer()) / 1024:.1f} KB)")
+                st.success(f"Uploaded and stored: `{uploaded_pdf.name}` ({len(uploaded_pdf.getbuffer()) / 1024:.1f} KB)")
 
         st.markdown("---")
         raw_pdf_files = sorted(config.RAW_DIR.glob("*.pdf"))
@@ -1492,8 +1519,8 @@ with tab_literature:
                 picked_backend = st.selectbox("Embedding backend:", ["tfidf", "sbert"], index=0, key="backend_pick_ingest")
 
             col_btn_ingest, col_btn_extract = st.columns(2)
-            run_ingest = col_btn_ingest.button("⚡ 1. Ingest & Build Vector Index", type="primary", use_container_width=True, key="btn_run_ingest")
-            run_extract = col_btn_extract.button("🔬 2. Extract Materials Information", type="secondary", use_container_width=True, key="btn_run_extract")
+            run_ingest = col_btn_ingest.button("Ingest Document & Index", type="primary", use_container_width=True, key="btn_run_ingest")
+            run_extract = col_btn_extract.button("Extract Materials Data", type="secondary", use_container_width=True, key="btn_run_extract")
 
             if run_ingest:
                 with st.spinner(f"Parsing pages and building vector index for {picked_pdf.name}..."):
@@ -1505,8 +1532,8 @@ with tab_literature:
                     idx_obj = build_index(chunk_out_path, backend_name=picked_backend)
                     idx_save_path = config.INDEX_DIR / (chunk_out_path.stem.replace(".chunks", "") + ".index.pkl")
                     save_index(idx_obj, idx_save_path)
-                st.success(f"✓ Indexed {ingested_doc['num_pages']} pages into {chunked_doc['num_chunks']} semantic chunks ({idx_save_path.name})!")
-                st.info("You can now ask questions about this document in the 'Dissertation RAG' tab!")
+                st.success(f"Indexed {ingested_doc['num_pages']} pages into {chunked_doc['num_chunks']} semantic chunks ({idx_save_path.name})")
+                st.info("Document successfully indexed. You can now query it in the 'Dissertation RAG' tab.")
 
             if run_extract:
                 with st.spinner("Extracting chemical composition, properties, and microstructural mechanisms..."):
