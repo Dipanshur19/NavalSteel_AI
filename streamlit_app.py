@@ -656,48 +656,40 @@ def apply_unslop_chart_theme(fig: go.Figure, height: int = 400) -> go.Figure:
 # 4. MAIN HERO MASTHEAD (Tactical Defense & Financial Terminal Aesthetic)
 # ==============================================================================
 st.markdown("""
-<div class="surface-card" style="margin-bottom: 22px; padding: 20px 24px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+<div class="surface-card" style="margin-bottom: 20px; padding: 18px 24px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
         <div>
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                <span class="brand-title">
-                    NavalSteel AI
-                </span>
-                <span class="brand-badge">
-                    MATERIALS INFORMATICS & INVERSE DESIGN
-                </span>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="brand-title">NavalSteel AI</span>
+                <span class="brand-badge">MATERIALS INFORMATICS</span>
             </div>
-            <p style="margin: 6px 0 6px 0; font-size: 0.88rem; color: #94a3b8; font-family: 'Inter', sans-serif;">
-                Physics-informed surrogate ensembles, multi-objective NSGA-II inverse alloy design, and naval defense qualification standards
-            </p>
-            <div style="display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: #64748b; font-family: 'Inter', sans-serif; flex-wrap: wrap;">
-                <span><strong style="color: #cbd5e1;">IIT Kanpur</strong> · Department of Materials Science & Engineering</span>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.80rem; color: #94a3b8; font-family: 'Inter', sans-serif; margin-top: 6px; flex-wrap: wrap;">
+                <span>IIT Kanpur · MSE</span>
                 <span>·</span>
-                <span>Author: <strong style="color: #cbd5e1;">Dipanshu Raj</strong> (Roll No: 230375)</span>
+                <span>UGP 497</span>
                 <span>·</span>
-                <span>Mentor: <strong style="color: #cbd5e1;">Prof. Amarendra Kumar Singh</strong></span>
+                <span>Dipanshu Raj (230375)</span>
                 <span>·</span>
-                <span>Course: <strong style="color: #38bdf8;">UGP 497</strong></span>
+                <span>Mentor: Prof. Amarendra Kumar Singh</span>
             </div>
         </div>
         <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Surrogate: RF+GB Ensemble (R² 0.91)</span>
+            <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Surrogate: RF+GB Ensemble</span>
             <span class="telemetry-chip"><span class="chip-dot dot-blue"></span>MIL Compliance: Active</span>
-            <span class="telemetry-chip"><span class="chip-dot dot-gold"></span>NSGA-II Pareto: Enabled</span>
             <span class="telemetry-chip"><span class="chip-dot dot-green"></span>Dataset: 40 Heats</span>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Primary Segmented Studio Dock (Tactical Terminal Architecture)
+# Primary Segmented Studio Dock
 tab_studio, tab_pareto, tab_benchmarks, tab_graph, tab_extractor, tab_literature = st.tabs([
-    "⚡ Alloy Synthesizer",
-    "🎯 Pareto Optimization",
-    "🛡️ Benchmark Library",
-    "🕸️ Causal Knowledge Graph",
-    "📑 Document & File Extractor",
-    "🤖 Literature Intelligence",
+    "Alloy Synthesizer",
+    "Pareto Optimization",
+    "Benchmark Steels",
+    "Causal Network",
+    "Document Extractor",
+    "Literature Intelligence",
 ])
 
 
@@ -705,8 +697,8 @@ tab_studio, tab_pareto, tab_benchmarks, tab_graph, tab_extractor, tab_literature
 # STUDIO 1: ALLOY STUDIO (FORMULATION & MULTI-PHYSICS FORECASTING)
 # ==============================================================================
 with tab_studio:
-    st.markdown("### Alloy Formulation & Real-Time Property Forecast")
-    st.caption("Adjust chemical composition and thermal kinetics in real-time to forecast weldability parameters, phase transformation kinetics, and mechanical performance envelopes.")
+    st.markdown("### Alloy Formulation & Property Prediction")
+    st.caption("Adjust chemical composition and tempering parameters to evaluate weldability and mechanical performance.")
 
     # Preset Synchronization & Quick Selection Dock
     if "current_preset_loaded" not in st.session_state:
@@ -753,9 +745,9 @@ with tab_studio:
         st.markdown("##### Aim Chemical Formulation (wt%)")
         
         tab_base, tab_tough, tab_carbide = st.tabs([
-            "⚡ Base Matrix (Fe, C, Mn, Si)",
-            "💎 Toughening Solutes (Ni, Cu)",
-            "🛡️ Carbide Formers (Cr, Mo, V, B)"
+            "Base Matrix (Fe-C-Mn-Si)",
+            "Toughening Solutes (Ni-Cu)",
+            "Microalloying & Carbides (Cr-Mo-V-B)"
         ])
         
         with tab_base:
@@ -885,10 +877,10 @@ with tab_studio:
     st.markdown("---")
     
     # Dynamic Isochronal Tempering Response & Multi-Dimensional Radar
-    st.markdown("#### Performance Envelope & Kinetics Analysis")
+    st.markdown("#### Performance Envelope & Kinetics")
     st_tab_iso, st_tab_radar = st.tabs([
-        "📈 Isochronal Tempering Kinetics (400°C–650°C)",
-        "🎯 Multi-Dimensional Radar Fingerprint"
+        "Isochronal Tempering (400–650°C)",
+        "Property Radar Profile"
     ])
 
     with st_tab_iso:
@@ -1072,10 +1064,10 @@ with tab_studio:
 # STUDIO 2: PARETO OPTIMIZER & INVERSE DESIGN
 # ==============================================================================
 with tab_pareto:
-    st.markdown("### Multi-Objective Pareto Optimizer (NSGA-II)")
-    st.caption("Evolutionary search isolating non-dominated trade-offs across Yield Strength, Charpy Toughness, Weldability (Pcm), and Alloying Cost.")
+    st.markdown("### Multi-Objective Pareto Optimization")
+    st.caption("Evolutionary search exploring non-dominated trade-offs across strength, toughness, weldability, and cost.")
 
-    opt_tab_nsga, opt_tab_heuristic = st.tabs(["⚡ Evolutionary Optimizer (NSGA-II)", "🎯 Heuristic Inverse Designer"])
+    opt_tab_nsga, opt_tab_heuristic = st.tabs(["NSGA-II Optimizer", "Heuristic Designer"])
 
     with opt_tab_nsga:
         st.markdown("##### Mission Profile Presets")
@@ -1150,7 +1142,7 @@ with tab_pareto:
             df_plot = pd.DataFrame(plot_rows)
 
             # 2D and 3D Visualization
-            v_tab2d, v_tab3d = st.tabs(["📈 2D Pareto Frontier", "🌐 3D Objective Space"])
+            v_tab2d, v_tab3d = st.tabs(["2D Pareto Frontier", "3D Objective Space"])
             with v_tab2d:
                 fig_2d = px.scatter(
                     df_plot,
@@ -1282,13 +1274,13 @@ with tab_pareto:
 # STUDIO 3: BENCHMARK DATABASE & EXPERIMENTAL DATASET
 # ==============================================================================
 with tab_benchmarks:
-    st.markdown("### Naval Benchmark Steels & Training Heats")
-    st.caption("Experimentally validated military plate steels extracted from scientific literature and technical reports.")
+    st.markdown("### Naval Benchmark Steels")
+    st.caption("Experimentally validated military plate steels and research heats.")
 
     tab_bench_cards, tab_bench_visuals, tab_bench_raw = st.tabs([
-        "🛡️ Standard Benchmark Steels",
-        "📈 Multi-Property Radar & 2D Spaces",
-        "📊 40 Experimental Heats Dataset"
+        "Standard Grades",
+        "Property Trade-offs",
+        "Experimental Heats (N=40)"
     ])
 
     with tab_bench_cards:
@@ -1528,11 +1520,11 @@ with tab_benchmarks:
 # ==============================================================================
 with tab_graph:
     st.markdown("### Causal Materials Knowledge Graph")
-    st.caption("Multi-scale directed network mapping: Alloying Solutes -> Microstructural Phases -> Physical Mechanisms -> Target Properties.")
+    st.caption("Directed network connecting alloying elements, microstructures, physical mechanisms, and properties.")
 
     tab_kg_vis, tab_kg_matrix = st.tabs([
-        "🕸️ Hierarchical Causal DAG & Pathway Tracing",
-        "📋 Causal Evidence & Relations Matrix (Table)"
+        "Graph Visualizer & Pathways",
+        "Causal Evidence Matrix"
     ])
 
     with tab_kg_vis:
@@ -1564,17 +1556,15 @@ with tab_graph:
                 key="kg_edge_labels_toggle"
             )
 
-            st.markdown("""
-            **Network Architecture Legend:**
-            * **Tier 1 (Left, Cobalt)**: Alloying Solutes (`Ni`, `Cu`, `Mo`, `Cr`, `C`, `V`, `Co`, `Nb`)
-            * **Tier 2 (Mid-Left, Indigo)**: Microstructures (`Lath Martensite`, `M2C`, `Retained Austenite`)
-            * **Tier 3 (Mid-Right, Emerald)**: Physical Mechanisms (`TRIP Toughening`, `Orowan Precipitation`, `Grain Refinement`)
-            * **Tier 4 (Right, Amber)**: Target Properties (`Toughness`, `Yield Strength`, `Weldability`)
-            
-            **Causal Edge Types:**
-            * **Solid Cyan Line**: Explicit peer-reviewed literature evidence
-            * **Dashed Amber Line**: Inferred physical metallurgy relationship
-            """)
+            with st.expander("Network Legend & Architecture", expanded=False):
+                st.markdown("""
+                * **Tier 1 (Cobalt)**: Solutes (`Ni`, `Cu`, `Mo`, `Cr`, `C`, `V`, `Co`, `Nb`)
+                * **Tier 2 (Indigo)**: Microstructures (`Martensite`, `M2C`, `Austenite`)
+                * **Tier 3 (Emerald)**: Mechanisms (`TRIP`, `Precipitation`, `Refinement`)
+                * **Tier 4 (Amber)**: Properties (`Toughness`, `Yield Strength`, `Weldability`)
+                * **Solid Line**: Explicit literature evidence
+                * **Dashed Line**: Inferred relationship
+                """)
 
         with col_kg_r:
             G = build_knowledge_graph(target_recs)
@@ -1630,8 +1620,8 @@ with tab_graph:
 # STUDIO 5: UNIVERSAL DOCUMENT & FILE EXTRACTOR
 # ==============================================================================
 with tab_extractor:
-    st.markdown("### Universal Document & Materials Extractor")
-    st.caption("Upload or select any metallurgy document (.pdf, .csv, .tsv, .json, .txt, .md) to automatically extract chemical composition (wt%), thermal processing schedules, mechanical tensile & impact properties, physical indices (Pcm, Ms, Bs, cost), and military specification compliance.")
+    st.markdown("### Materials Document Extractor")
+    st.caption("Extract composition, processing schedules, and mechanical properties from documents (.pdf, .csv, .json, .txt).")
 
     col_ext_mode, col_ext_source = st.columns([1, 2])
     with col_ext_mode:
@@ -1648,38 +1638,38 @@ with tab_extractor:
     with col_ext_source:
         if input_method == "Upload Your File":
             uploaded_file = st.file_uploader(
-                "Upload any research PDF, experimental CSV, or specification file:",
+                "Upload research PDF, experimental CSV, or specification file:",
                 type=["pdf", "csv", "tsv", "json", "txt", "md"],
                 key="universal_file_uploader_box",
-                help="Accepts .pdf (dissertations, papers), .csv/.tsv (heats data), .json (materials records), and .txt/.md (specs)."
+                help="Accepts .pdf, .csv/.tsv, .json, and .txt/.md."
             )
             if uploaded_file is not None:
                 file_bytes_to_extract = uploaded_file.getvalue()
                 filename_to_extract = uploaded_file.name
                 st.success(f"File loaded: `{uploaded_file.name}` ({len(file_bytes_to_extract)/1024:.1f} KB)")
             else:
-                st.info("Select or drop a file above, or switch to 'Try Pre-Loaded Sample Document' to test immediately.")
+                st.info("Select or drop a file above, or switch to 'Try Pre-Loaded Sample Document'.")
 
         elif input_method == "Try Pre-Loaded Sample Document":
             sample_options = {
-                "Sample 1: MIL-S-24645A US Navy HSLA-100 Specification (.txt)": Path("data/sample_documents/mil_s_24645a_hsla100.txt"),
-                "Sample 2: Naval Plate Steel Heats Production Matrix (.csv)": Path("data/sample_documents/naval_steels_dataset.csv"),
-                "Sample 3: BlastAlloy160 Systems Design Report (.md)": Path("data/sample_documents/blastalloy160_summary.md"),
-                "Sample 4: AF1410 High-Toughness Submarine Armor Steel (.json)": Path("data/sample_documents/af1410_patent_extract.json"),
-                "Sample 5: Saha 2004 Northwestern University PhD Dissertation (.pdf)": Path("data/raw/blastalloy160_saha_2004.pdf"),
+                "MIL-S-24645A HSLA-100 Specification (.txt)": Path("data/sample_documents/mil_s_24645a_hsla100.txt"),
+                "Naval Plate Steel Heats Matrix (.csv)": Path("data/sample_documents/naval_steels_dataset.csv"),
+                "BlastAlloy160 Systems Design Report (.md)": Path("data/sample_documents/blastalloy160_summary.md"),
+                "AF1410 Submarine Armor Steel (.json)": Path("data/sample_documents/af1410_patent_extract.json"),
+                "Saha 2004 Northwestern University PhD Dissertation (.pdf)": Path("data/raw/blastalloy160_saha_2004.pdf"),
             }
-            chosen_sample_name = st.selectbox("Select sample metallurgical record:", list(sample_options.keys()), key="sel_sample_doc")
+            chosen_sample_name = st.selectbox("Select sample record:", list(sample_options.keys()), key="sel_sample_doc")
             sample_path = sample_options[chosen_sample_name]
             if sample_path.exists():
                 file_bytes_to_extract = sample_path.read_bytes()
                 filename_to_extract = sample_path.name
-                st.caption(f"Loaded bundled benchmark: `{sample_path.name}` ({len(file_bytes_to_extract)/1024:.1f} KB)")
+                st.caption(f"Loaded benchmark: `{sample_path.name}` ({len(file_bytes_to_extract)/1024:.1f} KB)")
             else:
                 st.warning(f"File not found: {sample_path}")
 
         else:  # Paste Text
             pasted_text = st.text_area(
-                "Paste specification, abstract, or alloy formulation notes:",
+                "Paste specification or alloy formulation notes:",
                 value="""MILITARY SPECIFICATION HSLA-100 (MIL-S-24645A)
 Chemical Composition (wt%):
 Carbon (C): 0.04 wt%
@@ -1709,7 +1699,7 @@ Elongation: 18 %
                 file_bytes_to_extract = pasted_text.encode("utf-8")
                 filename_to_extract = "pasted_metallurgy_specification.txt"
 
-    btn_extract = st.button("Extract Materials Intelligence", type="primary", use_container_width=True, key="btn_run_universal_extract")
+    btn_extract = st.button("Extract Data", type="primary", use_container_width=True, key="btn_run_universal_extract")
 
     if btn_extract and file_bytes_to_extract and filename_to_extract:
         with st.spinner(f"Analyzing {filename_to_extract} (composition, kinetics, properties, physics)..."):
@@ -1732,7 +1722,7 @@ Elongation: 18 %
 
         # Tabbed scorecard display
         sub_comp, sub_proc, sub_mech, sub_tables = st.tabs([
-            "🧪 Chemical Composition", "🔥 Processing & Heat Treatment", "🛡️ Mechanical Properties & MIL-SPECs", "📑 Document Tables & Text"
+            "Chemical Composition", "Processing Schedule", "Mechanical Properties & Standards", "Raw Tables & Text"
         ])
 
         with sub_comp:
@@ -1845,7 +1835,7 @@ Elongation: 18 %
         st.markdown("---")
         col_act1, col_act2, col_act3, col_act4 = st.columns(4)
         with col_act1:
-            if st.button("⚡ Load into Alloy Synthesizer", type="primary", use_container_width=True, key="btn_inject_into_studio"):
+            if st.button("Load into Alloy Synthesizer", type="primary", use_container_width=True, key="btn_inject_into_studio"):
                 sp = res["session_payload"]
                 st.session_state["st_c"] = sp["st_c"]
                 st.session_state["st_ni"] = sp["st_ni"]
@@ -1864,7 +1854,7 @@ Elongation: 18 %
         with col_act2:
             json_str = json.dumps(res, indent=2, default=str)
             st.download_button(
-                "📥 Export Record (JSON)",
+                "Export Record (JSON)",
                 data=json_str.encode("utf-8"),
                 file_name=f"{Path(res['filename']).stem}_extracted_materials_record.json",
                 mime="application/json",
@@ -1875,7 +1865,7 @@ Elongation: 18 %
         with col_act3:
             comp_csv = pd.DataFrame(list(res["composition"].items()), columns=["Element", "wt%"]).to_csv(index=False)
             st.download_button(
-                "📥 Export Chemistry (CSV)",
+                "Export Chemistry (CSV)",
                 data=comp_csv.encode("utf-8"),
                 file_name=f"{Path(res['filename']).stem}_composition.csv",
                 mime="text/csv",
@@ -1912,7 +1902,7 @@ Elongation: 18 %
 - **Weldability Assessment:** {res['physics']['weldability_assessment']}
 """
             st.download_button(
-                "📄 Export Report (MD)",
+                "Export Report (Markdown)",
                 data=md_report.encode("utf-8"),
                 file_name=f"{Path(res['filename']).stem}_extraction_summary.md",
                 mime="text/markdown",
@@ -1925,16 +1915,16 @@ Elongation: 18 %
 # STUDIO 6: LITERATURE & AI ASSISTANT
 # ==============================================================================
 with tab_literature:
-    st.markdown("### Literature Intelligence & AI Metallurgist Agent")
-    st.caption("Consult the autonomous AI Metallurgist Agent (powered by Google Gemini Flash), search public literature, or query indexed dissertations.")
+    st.markdown("### Literature Intelligence & AI Metallurgist")
+    st.caption("Consult the AI metallurgist agent, query scholarly databases, or ask questions grounded in indexed dissertations.")
 
-    sub_agent, sub_scholarly, sub_ingest, sub_rag, sub_acceptance = st.tabs([
-        "🤖 AI Metallurgist Agent", "🔍 Scholarly Literature Search", "📥 PDF & Document Ingestion", "📖 Dissertation RAG Query", "✅ Acceptance Benchmarks"
+    sub_agent, sub_scholarly, sub_rag, sub_acceptance = st.tabs([
+        "AI Metallurgist", "Literature Search", "Dissertation Q&A (RAG)", "Acceptance Benchmarks"
     ])
 
     with sub_agent:
-        st.markdown("##### Autonomous AI Metallurgist Agent (Google Gemini Flash)")
-        st.caption("Ask questions on naval steel inverse design, precipitation kinetics, transformation toughening, or field weldability. No API key required.")
+        st.markdown("##### AI Metallurgist Consultation")
+        st.caption("Ask questions on alloy inverse design, transformation kinetics, or field weldability (Gemini Flash).")
 
         sample_agent_queries = [
             "How does copper precipitation strengthening synergize with nickel in BlastAlloy160?",
@@ -1944,7 +1934,7 @@ with tab_literature:
             "What are the heat treatment and preheat guidelines for welding heavy HY-100 submarine plate?"
         ]
         chosen_sample_q = st.selectbox("Sample scientific queries:", sample_agent_queries, key="agent_sample_pick")
-        user_agent_prompt = st.text_area("Or formulate your inquiry:", value=chosen_sample_q, height=85, key="agent_user_prompt")
+        user_agent_prompt = st.text_area("Formulate inquiry:", value=chosen_sample_q, height=85, key="agent_user_prompt")
 
         if st.button("Consult AI Metallurgist", type="primary", key="btn_ask_agent"):
             with st.spinner("Analyzing physical metallurgy mechanisms via Gemini Flash..."):
@@ -1985,119 +1975,46 @@ with tab_literature:
                         if r.get("doi"):
                             c_lnk2.caption(f"DOI: `{r['doi']}`")
 
-    with sub_ingest:
-        st.markdown("##### Upload Metallurgy PDF & Automated Information Extraction")
-        st.caption("Upload research dissertations, defense technical reports, or journal PDFs to extract composition, heat treatment, and mechanical properties.")
-
-        # Drag-and-drop file uploader
-        uploaded_pdf = st.file_uploader(
-            "Drop or select a PDF file to upload into NavalSteel AI:",
-            type=["pdf"],
-            key="pdf_file_uploader",
-            help="Upload research papers, technical reports, or dissertation PDFs."
-        )
-
-        uploaded_save_path = None
-        if uploaded_pdf is not None:
-            uploaded_save_path = config.RAW_DIR / uploaded_pdf.name
-            if not uploaded_save_path.exists() or st.button(f"Save '{uploaded_pdf.name}' to data/raw/", key="btn_save_uploaded"):
-                uploaded_save_path.write_bytes(uploaded_pdf.getbuffer())
-                st.success(f"Uploaded and stored: `{uploaded_pdf.name}` ({len(uploaded_pdf.getbuffer()) / 1024:.1f} KB)")
-
-        st.markdown("---")
-        raw_pdf_files = sorted(config.RAW_DIR.glob("*.pdf"))
-        if not raw_pdf_files:
-            st.info(f"Upload a PDF above or place one in `{config.RAW_DIR}` to begin.")
-        else:
-            c_p1, c_p2 = st.columns([2, 1])
-            with c_p1:
-                default_idx = raw_pdf_files.index(uploaded_save_path) if (uploaded_save_path and uploaded_save_path in raw_pdf_files) else 0
-                picked_pdf = st.selectbox(
-                    "Select Target PDF to Ingest & Extract:",
-                    raw_pdf_files,
-                    index=default_idx,
-                    format_func=lambda p: p.name,
-                    key="pdf_pick_ingest"
-                )
-            with c_p2:
-                picked_backend = st.selectbox("Embedding backend:", ["tfidf", "sbert"], index=0, key="backend_pick_ingest")
-
-            col_btn_ingest, col_btn_extract = st.columns(2)
-            run_ingest = col_btn_ingest.button("Ingest Document & Index", type="primary", use_container_width=True, key="btn_run_ingest")
-            run_extract = col_btn_extract.button("Extract Materials Data", type="secondary", use_container_width=True, key="btn_run_extract")
-
-            if run_ingest:
-                with st.spinner(f"Parsing pages and building vector index for {picked_pdf.name}..."):
-                    ingested_doc = ingest_pdf(picked_pdf)
-                    saved_proc_path = save_ingested(ingested_doc, config.PROCESSED_DIR)
-                    chunked_doc = chunk_document(saved_proc_path)
-                    chunk_out_path = config.PROCESSED_DIR / (saved_proc_path.stem + ".chunks.json")
-                    chunk_out_path.write_text(json.dumps(chunked_doc, indent=2), encoding="utf-8")
-                    idx_obj = build_index(chunk_out_path, backend_name=picked_backend)
-                    idx_save_path = config.INDEX_DIR / (chunk_out_path.stem.replace(".chunks", "") + ".index.pkl")
-                    save_index(idx_obj, idx_save_path)
-                st.success(f"Indexed {ingested_doc['num_pages']} pages into {chunked_doc['num_chunks']} semantic chunks ({idx_save_path.name})")
-                st.info("Document successfully indexed. You can now query it in the 'Dissertation RAG' tab.")
-
-            if run_extract:
-                with st.spinner("Extracting chemical composition, properties, and microstructural mechanisms..."):
-                    proc_json_path = config.PROCESSED_DIR / f"{picked_pdf.stem}.json"
-                    if not proc_json_path.exists():
-                        ingested_doc = ingest_pdf(picked_pdf)
-                        save_ingested(ingested_doc, config.PROCESSED_DIR)
-                    else:
-                        with open(proc_json_path, "r", encoding="utf-8") as f:
-                            ingested_doc = json.load(f)
-
-                    extracted_summary = extract_metallurgy_info_from_doc(ingested_doc)
-                    st.session_state["last_extracted_info"] = extracted_summary
-
-            if "last_extracted_info" in st.session_state:
-                ext = st.session_state["last_extracted_info"]
-                st.markdown("---")
-                st.markdown(f"#### Extracted Materials Information: `{ext['filename']}`")
-                
-                m1, m2, m3 = st.columns(3)
-                m1.metric("Pages Analyzed", ext["num_pages"])
-                m2.metric("Extracted Tables", ext["num_tables"])
-                m3.metric("Document Hash", ext["doc_hash"][:10] + "...")
-
-                if ext.get("compositions"):
-                    st.markdown("##### Detected Chemical Compositions (wt%)")
-                    st.dataframe(pd.DataFrame(ext["compositions"]), use_container_width=True)
-
-                if ext.get("properties"):
-                    st.markdown("##### Detected Mechanical Properties")
-                    st.dataframe(pd.DataFrame(ext["properties"]), use_container_width=True)
-                else:
-                    st.info("No explicit tensile/Charpy regex pattern identified in the text overview. You can query specific details in the 'Dissertation RAG' tab.")
-
-                if ext.get("sample_tables"):
-                    with st.expander("Extracted Document Tables", expanded=False):
-                        for idx, tbl in enumerate(ext["sample_tables"], 1):
-                            st.caption(f"Table {idx} (from page {tbl['page']})")
-                            st.dataframe(pd.DataFrame(tbl["data"]), use_container_width=True)
-
-                json_bytes = json.dumps(ext, indent=2).encode("utf-8")
-                st.download_button(
-                    "Download Extracted Material Record (JSON)",
-                    data=json_bytes,
-                    file_name=f"{picked_pdf.stem}_extracted_record.json",
-                    mime="application/json",
-                    key="btn_down_ext_json"
-                )
-
     with sub_rag:
-        st.markdown("##### Evidence-Grounded Research Assistant")
+        st.markdown("##### Dissertation Q&A (RAG)")
+        st.caption("Query indexed metallurgy literature with citation-backed semantic retrieval.")
+
+        with st.expander("Upload & Index New PDF for RAG", expanded=False):
+            uploaded_pdf = st.file_uploader(
+                "Drop or select a PDF file:",
+                type=["pdf"],
+                key="pdf_file_uploader_rag",
+                help="Upload technical documents to build a new semantic index."
+            )
+            if uploaded_pdf is not None:
+                uploaded_save_path = config.RAW_DIR / uploaded_pdf.name
+                uploaded_save_path.write_bytes(uploaded_pdf.getbuffer())
+                st.success(f"Stored: `{uploaded_pdf.name}` ({len(uploaded_pdf.getbuffer()) / 1024:.1f} KB)")
+                c_idx1, c_idx2 = st.columns([2, 1])
+                picked_backend = c_idx2.selectbox("Backend:", ["tfidf", "sbert"], index=0, key="rag_backend_pick")
+                if c_idx1.button("Build Vector Index", type="primary", key="btn_build_rag_idx"):
+                    with st.spinner(f"Indexing {uploaded_pdf.name}..."):
+                        ingested_doc = ingest_pdf(uploaded_save_path)
+                        saved_proc_path = save_ingested(ingested_doc, config.PROCESSED_DIR)
+                        chunked_doc = chunk_document(saved_proc_path)
+                        chunk_out_path = config.PROCESSED_DIR / (saved_proc_path.stem + ".chunks.json")
+                        chunk_out_path.write_text(json.dumps(chunked_doc, indent=2), encoding="utf-8")
+                        idx_obj = build_index(chunk_out_path, backend_name=picked_backend)
+                        idx_save_path = config.INDEX_DIR / (chunk_out_path.stem.replace(".chunks", "") + ".index.pkl")
+                        save_index(idx_obj, idx_save_path)
+                    st.success(f"Indexed {ingested_doc['num_pages']} pages into {chunked_doc['num_chunks']} semantic chunks.")
+                    st.rerun()
+
         index_pkl_files = sorted(config.INDEX_DIR.glob("*.index.pkl"))
         if not index_pkl_files:
-            st.info("No vector indexes found. Build one in the 'PDF Ingestion' tab above.")
+            st.info("No vector indexes found. Index a PDF above to begin.")
         else:
-            chosen_index = st.selectbox("Active indexed document:", index_pkl_files, format_func=lambda p: p.name, key="rag_index_pick")
-            force_offline = st.checkbox(
-                "Force extractive offline mode (No API call)",
+            col_idx_sel, col_dry = st.columns([3, 1])
+            chosen_index = col_idx_sel.selectbox("Active index:", index_pkl_files, format_func=lambda p: p.name, key="rag_index_pick")
+            force_offline = col_dry.checkbox(
+                "Force offline mode",
                 value=not config.has_api_key(),
-                help="Automatically checked when no external API key is configured.",
+                help="Extractive retrieval without external API calls.",
                 key="rag_force_offline"
             )
             sample_prompts = [
@@ -2107,12 +2024,12 @@ with tab_literature:
                 "What role does nickel play in transformation toughening?",
                 "What role does copper precipitation play in secondary hardening?"
             ]
-            picked_prompt = st.selectbox("Benchmark questions:", sample_prompts, key="rag_sample_pick")
-            user_question = st.text_input("Or ask custom question:", value=picked_prompt, key="rag_custom_q")
+            picked_prompt = st.selectbox("Sample questions:", sample_prompts, key="rag_sample_pick")
+            user_question = st.text_input("Question:", value=picked_prompt, key="rag_custom_q")
 
-            if st.button("Query Evidence Grounding", type="primary", key="btn_run_rag"):
+            if st.button("Query Grounded Evidence", type="primary", key="btn_run_rag"):
                 loaded_idx = load_cached_index(str(chosen_index))
-                with st.spinner("Retrieving evidence chunks & synthesizing response..."):
+                with st.spinner("Retrieving evidence passages..."):
                     rag_res = ask(user_question, loaded_idx, dry_run=force_offline)
 
                 st.markdown(f"**Execution Mode:** `{rag_res['mode']}`")
