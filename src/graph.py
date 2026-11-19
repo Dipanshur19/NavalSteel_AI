@@ -105,20 +105,20 @@ def build_knowledge_graph(records: Optional[List[Dict[str, Any]]] = None) -> nx.
 
 def generate_graph_html(G: nx.MultiDiGraph, height: str = "520px") -> str:
     """Generates an interactive HTML string using PyVis with smooth physics simulation."""
-    net = Network(height=height, width="100%", directed=True, notebook=False, bgcolor="#111827", font_color="#F9FAFB")
+    net = Network(height=height, width="100%", directed=True, notebook=False, bgcolor="#11141c", font_color="#eef0f5")
     
     # Physics options for pleasant organic layout
     net.set_options("""
     {
       "nodes": {
-        "font": { "size": 14, "face": "Helvetica", "color": "#F9FAFB" },
-        "borderWidth": 2,
-        "shadow": true
+        "font": { "size": 13, "face": "Inter", "color": "#eef0f5" },
+        "borderWidth": 1.5,
+        "shadow": false
       },
       "edges": {
         "arrows": { "to": { "enabled": true, "scaleFactor": 0.8 } },
         "smooth": { "type": "cubicBezier", "roundness": 0.3 },
-        "shadow": true
+        "shadow": false
       },
       "physics": {
         "barnesHut": {
@@ -133,7 +133,7 @@ def generate_graph_html(G: nx.MultiDiGraph, height: str = "520px") -> str:
       "interaction": {
         "hover": true,
         "zoomView": true,
-        "navigationButtons": true
+        "navigationButtons": false
       }
     }
     """)
@@ -142,7 +142,7 @@ def generate_graph_html(G: nx.MultiDiGraph, height: str = "520px") -> str:
         net.add_node(
             node_id,
             label=data.get("label", node_id),
-            color=data.get("color", "#3B82F6"),
+            color=data.get("color", "#38BDF8"),
             shape=data.get("shape", "dot"),
             size=data.get("size", 20),
             title=data.get("title", node_id),
@@ -153,13 +153,21 @@ def generate_graph_html(G: nx.MultiDiGraph, height: str = "520px") -> str:
             u,
             v,
             label=data.get("label", ""),
-            color=data.get("color", "#10B981"),
-            width=data.get("width", 2),
+            color=data.get("color", "#4cc38a"),
+            width=data.get("width", 1.5),
             dashes=data.get("dashes", False),
             title=data.get("title", ""),
         )
 
-    return net.generate_html()
+    raw_html = net.generate_html()
+    styled_html = raw_html.replace(
+        "border: 1px solid lightgray;",
+        "border: 1px solid rgba(238, 240, 245, 0.08); border-radius: 8px;"
+    ).replace(
+        "<body>",
+        '<body style="margin:0; padding:0; background-color: #11141c; overflow: hidden;">'
+    )
+    return styled_html
 
 
 def find_causal_pathways(G: nx.MultiDiGraph, source: str, target: str, max_depth: int = 4) -> List[List[str]]:

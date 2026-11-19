@@ -339,8 +339,8 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("#### System Status")
     c_diag1, c_diag2 = st.columns(2)
-    c_diag1.metric("Training Heats", "40 heats", delta="Verified", delta_color="normal")
-    c_diag2.metric("ML Ensemble", "150 RF + GB", delta="R² = 0.895", delta_color="normal")
+    c_diag1.metric("Heats", "40 Heats", delta="Verified", delta_color="normal")
+    c_diag2.metric("Ensemble", "150 Trees", delta="R² 0.895", delta_color="normal")
     
     index_files = sorted(config.INDEX_DIR.glob("*.index.pkl"))
     llm_info = "Gemini 3.5 Flash" if config.GEMINI_API_KEY else "Offline Extractive"
