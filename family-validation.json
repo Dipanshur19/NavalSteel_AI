@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "rows": 40,
+  "families_count": 8,
+  "metric": "Mean absolute error",
+  "units": {
+    "yield_strength_mpa": "MPa",
+    "tensile_strength_mpa": "MPa",
+    "charpy_toughness_j": "J"
+  },
+  "pooled_mae": {
+    "row_wise": {
+      "yield_strength_mpa": 45.5756,
+      "tensile_strength_mpa": 51.525,
+      "charpy_toughness_j": 14.8024
+    },
+    "family_holdout": {
+      "yield_strength_mpa": 83.2597,
+      "tensile_strength_mpa": 77.7305,
+      "charpy_toughness_j": 25.3843
+    }
+  },
+  "families": [
+    {
+      "family": "AF1410",
+      "name_prefix": "AF1410_",
+      "rows": 4,
+      "heat_ids": [
+        "AF1410_Std",
+        "AF1410_SubZero",
+        "AF1410_480C",
+        "AF1410_535C"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 66.9305,
+          "tensile_strength_mpa": 70.3751,
+          "charpy_toughness_j": 12.1622
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 108.0781,
+          "tensile_strength_mpa": 80.3154,
+          "charpy_toughness_j": 39.1234
+        }
+      }
+    },
+    {
+      "family": "BlastAlloy160",
+      "name_prefix": "BlastAlloy160_",
+      "rows": 8,
+      "heat_ids": [
+        "BlastAlloy160_Opt",
+        "BlastAlloy160_LowT",
+        "BlastAlloy160_400C",
+        "BlastAlloy160_475C",
+        "BlastAlloy160_500C",
+        "BlastAlloy160_550C",
+        "BlastAlloy160_600C",
+        "BlastAlloy160_650C"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 68.6062,
+          "tensile_strength_mpa": 81.4477,
+          "charpy_toughness_j": 16.2088
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 84.8679,
+          "tensile_strength_mpa": 92.3827,
+          "charpy_toughness_j": 29.012
+        }
+      }
+    },
+    {
+      "family": "Cu secondary-hardening",
+      "name_prefix": "Cu_SecHard_",
+      "rows": 6,
+      "heat_ids": [
+        "Cu_SecHard_A1",
+        "Cu_SecHard_A2",
+        "Cu_SecHard_A3",
+        "Cu_SecHard_B1",
+        "Cu_SecHard_B2",
+        "Cu_SecHard_B3"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 50.3313,
+          "tensile_strength_mpa": 56.0544,
+          "charpy_toughness_j": 13.9222
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 85.6011,
+          "tensile_strength_mpa": 100.5044,
+          "charpy_toughness_j": 20.4846
+        }
+      }
+    },
+    {
+      "family": "HSLA-100",
+      "name_prefix": "HSLA-100_",
+      "rows": 5,
+      "heat_ids": [
+        "HSLA-100_Std",
+        "HSLA-100_SubZero",
+        "HSLA-100_550C",
+        "HSLA-100_500C",
+        "HSLA-100_650C"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 28.1905,
+          "tensile_strength_mpa": 35.1459,
+          "charpy_toughness_j": 14.5778
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 63.1553,
+          "tensile_strength_mpa": 45.5852,
+          "charpy_toughness_j": 10.9522
+        }
+      }
+    },
+    {
+      "family": "HSLA-115",
+      "name_prefix": "HSLA-115_",
+      "rows": 4,
+      "heat_ids": [
+        "HSLA-115_Std",
+        "HSLA-115_SubZero",
+        "HSLA-115_520C",
+        "HSLA-115_620C"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 34.3517,
+          "tensile_strength_mpa": 38.0027,
+          "charpy_toughness_j": 15.6632
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 115.3541,
+          "tensile_strength_mpa": 82.3336,
+          "charpy_toughness_j": 25.7862
+        }
+      }
+    },
+    {
+      "family": "HY-100",
+      "name_prefix": "HY-100_",
+      "rows": 4,
+      "heat_ids": [
+        "HY-100_Std",
+        "HY-100_SubZero",
+        "HY-100_580C",
+        "HY-100_650C"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 33.4329,
+          "tensile_strength_mpa": 45.7093,
+          "charpy_toughness_j": 10.4222
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 32.623,
+          "tensile_strength_mpa": 26.4137,
+          "charpy_toughness_j": 9.842
+        }
+      }
+    },
+    {
+      "family": "HY-80",
+      "name_prefix": "HY-80_",
+      "rows": 5,
+      "heat_ids": [
+        "HY-80_Std",
+        "HY-80_SubZero",
+        "HY-80_600C",
+        "HY-80_620C",
+        "HY-80_675C"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 28.0345,
+          "tensile_strength_mpa": 30.5509,
+          "charpy_toughness_j": 16.4326
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 99.7417,
+          "tensile_strength_mpa": 86.799,
+          "charpy_toughness_j": 16.1506
+        }
+      }
+    },
+    {
+      "family": "Low-carbon bainitic",
+      "name_prefix": "LowC_Bainitic_",
+      "rows": 4,
+      "heat_ids": [
+        "LowC_Bainitic_1",
+        "LowC_Bainitic_2",
+        "LowC_Bainitic_3",
+        "LowC_Bainitic_4"
+      ],
+      "mae": {
+        "row_wise": {
+          "yield_strength_mpa": 38.0508,
+          "tensile_strength_mpa": 32.0648,
+          "charpy_toughness_j": 17.7125
+        },
+        "family_holdout": {
+          "yield_strength_mpa": 74.7827,
+          "tensile_strength_mpa": 87.2401,
+          "charpy_toughness_j": 56.4616
+        }
+      }
+    }
+  ],
+  "method": {
+    "row_wise": "Shuffled five-fold cross-validation, random_state=42.",
+    "family_holdout": "Leave one named grade or research series out, including every tempering and test-temperature variant.",
+    "aggregation": "Each heat contributes once. Pooled MAE weights all 40 dataset rows equally; per-family MAE averages only the rows in that group.",
+    "models": {
+      "random_forest": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "random_state": 42
+      },
+      "gradient_boosting": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "learning_rate": 0.08,
+        "random_state": 42
+      },
+      "ensemble": "Arithmetic mean of both predictions for each target."
+    },
+    "features": [
+      "C",
+      "Mn",
+      "Si",
+      "Ni",
+      "Cr",
+      "Mo",
+      "Cu",
+      "V",
+      "Nb",
+      "Co",
+      "pcm",
+      "ce_iiw",
+      "ms_C",
+      "bs_C",
+      "temper_temp_C",
+      "temper_time_h",
+      "test_temp_C"
+    ],
+    "source": "data/dataset/naval_steels_dataset.csv",
+    "source_sha256": "fa3d3e4dbc11b9e968f3c27376933b576eab88cb8af0f8567e0358e400cd3846",
+    "scikit_learn": "1.8.0"
+  },
+  "limitations": [
+    "Only 40 rows from eight named groups are available. Related grades such as HY-80 and HY-100 can still occur on opposite sides of a family holdout.",
+    "The CSV has no paper IDs or citation per row. These splits do not establish transfer to unseen papers, independent experiments or industrial production.",
+    "The evaluation uses the project's 100-tree cross-validation estimators. The final serving models use 150 trees each and the final forest permits an extra depth level.",
+    "MAE is an average error in the property's units. It does not calibrate uncertainty for a single alloy."
+  ]
+}
